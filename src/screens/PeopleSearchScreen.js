@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   Image,
   SafeAreaView,
@@ -34,14 +35,28 @@ class PeopleSearchScreen extends React.Component {
   };
 
   handleEncodeURI = () => {
-    const testNamePerson = {
-      names: [
-        {
-          first: `Roxann`,
-          last: 'Collins'
-        }
-      ]
-    };
+    // const testNamePerson = {
+    //   names: [
+    //     {
+    //       first: `Roxann`,
+    //       last: 'Collins'
+    //     }
+    //   ]
+    // };
+    const person = {};
+    if (this.state.name.length) {
+      person.names = [];
+      let splitName = this.state.name.split(' ');
+      if (splitName.length === 2) {
+        person.names.push({ first: splitName[0], last: splitName[1] });
+      } else if (splitName.length === 3) {
+        person.names.push({
+          first: splitName[0],
+          middle: splitName[1],
+          last: splitName[2]
+        });
+      }
+    }
 
     const inputData = {
       person: {
@@ -105,14 +120,20 @@ class PeopleSearchScreen extends React.Component {
     };
     console.log(
       JSON.stringify({
-        person: encodeURI(JSON.stringify(testNamePerson))
+        person: encodeURI(JSON.stringify(person))
       })
     );
+    return JSON.stringify({
+      person: encodeURI(JSON.stringify(person))
+    });
   };
 
   handlePersonSubmit = () => {
-    this.handleEncodeURI();
-    this.setState({ isDisplaying: true });
+    const body = this.handleEncodeURI();
+    axios
+      .post('https://dev.search.connectourkids.org/api/search-v2', body)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -191,7 +212,11 @@ class PeopleSearchScreen extends React.Component {
                 </Tab>
               </Tabs>
 
-              <Button info style={styles.button} onPress={this.handleEncodeURI}>
+              <Button
+                info
+                style={styles.button}
+                onPress={this.handlePersonSubmit}
+              >
                 <Text style={styles.buttonText}> Search </Text>
               </Button>
 
