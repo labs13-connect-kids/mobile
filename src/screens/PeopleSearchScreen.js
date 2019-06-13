@@ -1,33 +1,28 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
 import {
   Image,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
-  TextInput
-} from 'react-native';
-import {
-  Container,
-  Content,
-  Button,
-  Icon,
-  H2,
-  Tabs,
-  Tab,
-  Input
-} from 'native-base';
-import logoImg from '../../assets/simple-logo.png';
-import { ScrollView } from 'react-native-gesture-handler';
+  Platform,
+  TouchableWithoutFeedback
+} from "react-native";
+import { Container, Button, Icon, Tabs, Tab, Input } from "native-base";
+import logoImg from "../../assets/simple-logo.png";
+import { ScrollView } from "react-native-gesture-handler";
+import HeaderTitle from "./../components/HeaderTitle";
+import headerConfig from "../helpers/headerConfig";
 
 class PeopleSearchScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => headerConfig("People Search", navigation);
   state = {
-    name: '',
-    cityState: '',
-    address: '',
-    phone: '',
-    url: '',
+    name: "",
+    cityState: "",
+    address: "",
+    phone: "",
+    url: "",
     isDisplaying: false
   };
   inputHandler = (name, value) => {
@@ -46,7 +41,7 @@ class PeopleSearchScreen extends React.Component {
     const person = {};
     if (this.state.name.length) {
       person.names = [];
-      let splitName = this.state.name.split(' ');
+      let splitName = this.state.name.split(" ");
       if (splitName.length === 2) {
         person.names.push({ first: splitName[0], last: splitName[1] });
       } else if (splitName.length === 3) {
@@ -62,57 +57,57 @@ class PeopleSearchScreen extends React.Component {
       names: [
         {
           first: `Ken`,
-          middle: 'Joseph',
-          last: 'Kent',
-          display: 'Clark Joseph Kent'
+          middle: "Joseph",
+          last: "Kent",
+          display: "Clark Joseph Kent"
         }
       ],
       emails: [
         {
-          address: 'clark.kent@example.com'
+          address: "clark.kent@example.com"
         }
       ],
       phones: [
         {
-          '@type': 'home_phone',
-          country_code: '1',
-          number: '9785550145',
-          display: '(978) 555-0145',
-          display_international: '+1 978-555-0145'
+          "@type": "home_phone",
+          country_code: "1",
+          number: "9785550145",
+          display: "(978) 555-0145",
+          display_international: "+1 978-555-0145"
         }
       ],
       addresses: [
         {
-          country: 'US',
-          state: 'KS',
-          city: 'Smallville',
-          street: 'Hickory Lane',
-          house: '10',
-          apartment: '1',
-          zip_code: '66605',
-          display: '10-1 Hickory Lane, Smallville, Kansas'
+          country: "US",
+          state: "KS",
+          city: "Smallville",
+          street: "Hickory Lane",
+          house: "10",
+          apartment: "1",
+          zip_code: "66605",
+          display: "10-1 Hickory Lane, Smallville, Kansas"
         },
         {
-          '@type': 'work',
-          country: 'US',
-          state: 'KS',
-          city: 'Metropolis',
-          street: 'Broadway',
-          house: '1000',
-          apartment: '355',
-          display: '1000-355 Broadway, Metropolis, Kansas'
+          "@type": "work",
+          country: "US",
+          state: "KS",
+          city: "Metropolis",
+          street: "Broadway",
+          house: "1000",
+          apartment: "355",
+          display: "1000-355 Broadway, Metropolis, Kansas"
         }
       ],
       urls: [
         {
-          '@domain': 'linkedin.com',
-          '@category': 'professional_and_business',
-          url: 'https://www.linkedin.com/pub/superman/20/7a/365'
+          "@domain": "linkedin.com",
+          "@category": "professional_and_business",
+          url: "https://www.linkedin.com/pub/superman/20/7a/365"
         },
         {
-          '@domain': 'facebook.com',
-          '@category': 'personal_profiles',
-          url: 'https://www.facebook.com/superman'
+          "@domain": "facebook.com",
+          "@category": "personal_profiles",
+          url: "https://www.facebook.com/superman"
         }
       ]
     };
@@ -129,7 +124,7 @@ class PeopleSearchScreen extends React.Component {
   handlePersonSubmit = () => {
     const body = this.handleEncodeURI();
     axios
-      .post('https://dev.search.connectourkids.org/api/search-v2', body)
+      .post("https://dev.search.connectourkids.org/api/search-v2", body)
       .then(res => console.log(res))
       .catch(err => console.log(err));
   };
@@ -139,23 +134,6 @@ class PeopleSearchScreen extends React.Component {
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <View style={styles.header}>
-              <Image
-                source={logoImg}
-                style={{ width: 40, height: 40 }}
-                resizeMode="contain"
-              />
-              <View>
-                <H2>Connect Our Kids</H2>
-                <H2>People Search</H2>
-              </View>
-              <Icon
-                ios="ios-menu"
-                android="md-menu"
-                style={{ fontSize: 40, color: '#000' }}
-              />
-            </View>
-
             <View>
               <Text style={styles.intro}>Search By:</Text>
             </View>
@@ -167,13 +145,13 @@ class PeopleSearchScreen extends React.Component {
                     placeholder="First and last, middle optional"
                     style={styles.textInput}
                     value={this.state.name}
-                    onChangeText={text => this.inputHandler('name', text)}
+                    onChangeText={text => this.inputHandler("name", text)}
                   />
                   <Input
                     placeholder="City, State"
                     style={[styles.textInput, styles.textInputSmall]}
                     value={this.state.cityState}
-                    onChangeText={text => this.inputHandler('cityState', text)}
+                    onChangeText={text => this.inputHandler("cityState", text)}
                   />
                 </Tab>
                 <Tab heading="Email">
@@ -181,7 +159,7 @@ class PeopleSearchScreen extends React.Component {
                     placeholder="Email address"
                     style={styles.textInput}
                     value={this.state.email}
-                    onChangeText={text => this.inputHandler('email', text)}
+                    onChangeText={text => this.inputHandler("email", text)}
                   />
                 </Tab>
                 <Tab heading="Address">
@@ -189,7 +167,7 @@ class PeopleSearchScreen extends React.Component {
                     placeholder="Mailing address"
                     style={styles.textInput}
                     value={this.state.address}
-                    onChangeText={text => this.inputHandler('address', text)}
+                    onChangeText={text => this.inputHandler("address", text)}
                   />
                 </Tab>
                 <Tab heading="Phone">
@@ -197,7 +175,7 @@ class PeopleSearchScreen extends React.Component {
                     placeholder="Phone any format, no letters"
                     style={styles.textInput}
                     value={this.state.phone}
-                    onChangeText={text => this.inputHandler('phone', text)}
+                    onChangeText={text => this.inputHandler("phone", text)}
                   />
                 </Tab>
                 <Tab heading="URL">
@@ -205,7 +183,7 @@ class PeopleSearchScreen extends React.Component {
                     placeholder="Social profile link or any URL"
                     style={styles.textInput}
                     value={this.state.url}
-                    onChangeText={text => this.inputHandler('url', text)}
+                    onChangeText={text => this.inputHandler("url", text)}
                   />
                 </Tab>
               </Tabs>
@@ -233,14 +211,14 @@ class PeopleSearchScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     margin: 5
   },
 
   header: {
-    flexDirection: 'row',
-    textAlign: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    textAlign: "center",
+    justifyContent: "space-between",
     marginBottom: 25
   },
 
@@ -250,9 +228,9 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    borderColor: '#64aab8',
+    borderColor: "#64aab8",
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     flex: 2
   },
 
@@ -261,7 +239,7 @@ const styles = StyleSheet.create({
   },
 
   nameInput: {
-    flexDirection: 'row'
+    flexDirection: "row"
   },
 
   button: {
@@ -270,18 +248,18 @@ const styles = StyleSheet.create({
   },
 
   tab: {
-    backgroundColor: 'white'
+    backgroundColor: "white"
   },
 
   buttonText: {
-    color: 'white'
+    color: "white"
   },
 
   link: {
-    color: '#64aab8',
+    color: "#64aab8",
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
+    backgroundColor: "rgb(216,236,240)",
     borderRadius: 10
   }
 });
