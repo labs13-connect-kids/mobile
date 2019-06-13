@@ -1,12 +1,13 @@
-import React from "react";
-import BestPracticesScreen from "./src/screens/BestPracticesScreen";
-import FamilyConnectionsScreen from "./src/screens/FamilyConnectionsScreen";
+import React from 'react';
+import BestPracticesScreen from './src/screens/BestPracticesScreen';
+import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
+import PeopleSearchScreen from './src/screens/PeopleSearchScreen';
 import {
   createAppContainer,
   createDrawerNavigator,
   createStackNavigator,
   createSwitchNavigator
-} from "react-navigation";
+} from 'react-navigation';
 
 export default function App() {
   return <AppContainer />;
@@ -32,7 +33,7 @@ const BestPracticeNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "BestPractices"
+    initialRouteName: 'BestPractices'
   }
 );
 const FamilyConnectionsNavigator = createStackNavigator(
@@ -42,7 +43,18 @@ const FamilyConnectionsNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "FamilyConnections"
+    initialRouteName: 'FamilyConnections'
+  }
+);
+
+const PeopleSearchNavigator = createStackNavigator(
+  {
+    PeopleSearch: {
+      screen: PeopleSearchScreen
+    }
+  },
+  {
+    initialRouteName: 'PeopleSearch'
   }
 );
 
@@ -55,6 +67,9 @@ const AppDrawerNavigator = createDrawerNavigator(
     },
     FamilyConnections: {
       screen: FamilyConnectionsNavigator
+    },
+    PeopleSearch: {
+      screen: PeopleSearchNavigator
     }
   }
   // To make drawer open on right side uncomment line below
@@ -63,7 +78,8 @@ const AppDrawerNavigator = createDrawerNavigator(
 
 const AppSwitchNavigator = createSwitchNavigator({
   BestPractices: { screen: AppDrawerNavigator },
-  FamilyConnections: { screen: AppDrawerNavigator }
+  FamilyConnections: { screen: AppDrawerNavigator },
+  PeopleSearch: { screen: AppDrawerNavigator }
 });
 
 const AppContainer = createAppContainer(AppSwitchNavigator);
