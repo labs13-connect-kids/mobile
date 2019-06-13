@@ -57,66 +57,64 @@ class PeopleSearchScreen extends React.Component {
         });
       }
     }
-
+    // Reference for proper API post
     const inputData = {
-      person: {
-        names: [
-          {
-            first: `Ken`,
-            middle: 'Joseph',
-            last: 'Kent',
-            display: 'Clark Joseph Kent'
-          }
-        ],
-        emails: [
-          {
-            address: 'clark.kent@example.com'
-          }
-        ],
-        phones: [
-          {
-            '@type': 'home_phone',
-            country_code: '1',
-            number: '9785550145',
-            display: '(978) 555-0145',
-            display_international: '+1 978-555-0145'
-          }
-        ],
-        addresses: [
-          {
-            country: 'US',
-            state: 'KS',
-            city: 'Smallville',
-            street: 'Hickory Lane',
-            house: '10',
-            apartment: '1',
-            zip_code: '66605',
-            display: '10-1 Hickory Lane, Smallville, Kansas'
-          },
-          {
-            '@type': 'work',
-            country: 'US',
-            state: 'KS',
-            city: 'Metropolis',
-            street: 'Broadway',
-            house: '1000',
-            apartment: '355',
-            display: '1000-355 Broadway, Metropolis, Kansas'
-          }
-        ],
-        urls: [
-          {
-            '@domain': 'linkedin.com',
-            '@category': 'professional_and_business',
-            url: 'https://www.linkedin.com/pub/superman/20/7a/365'
-          },
-          {
-            '@domain': 'facebook.com',
-            '@category': 'personal_profiles',
-            url: 'https://www.facebook.com/superman'
-          }
-        ]
-      }
+      names: [
+        {
+          first: `Ken`,
+          middle: 'Joseph',
+          last: 'Kent',
+          display: 'Clark Joseph Kent'
+        }
+      ],
+      emails: [
+        {
+          address: 'clark.kent@example.com'
+        }
+      ],
+      phones: [
+        {
+          '@type': 'home_phone',
+          country_code: '1',
+          number: '9785550145',
+          display: '(978) 555-0145',
+          display_international: '+1 978-555-0145'
+        }
+      ],
+      addresses: [
+        {
+          country: 'US',
+          state: 'KS',
+          city: 'Smallville',
+          street: 'Hickory Lane',
+          house: '10',
+          apartment: '1',
+          zip_code: '66605',
+          display: '10-1 Hickory Lane, Smallville, Kansas'
+        },
+        {
+          '@type': 'work',
+          country: 'US',
+          state: 'KS',
+          city: 'Metropolis',
+          street: 'Broadway',
+          house: '1000',
+          apartment: '355',
+          display: '1000-355 Broadway, Metropolis, Kansas'
+        }
+      ],
+      urls: [
+        {
+          '@domain': 'linkedin.com',
+          '@category': 'professional_and_business',
+          url: 'https://www.linkedin.com/pub/superman/20/7a/365'
+        },
+        {
+          '@domain': 'facebook.com',
+          '@category': 'personal_profiles',
+          url: 'https://www.facebook.com/superman'
+        }
+      ]
     };
     console.log(
       JSON.stringify({
