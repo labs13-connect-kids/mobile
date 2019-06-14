@@ -1,31 +1,36 @@
-import React from 'react';
-import BestPracticesScreen from './src/screens/BestPracticesScreen';
-import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
-import PeopleSearchScreen from './src/screens/PeopleSearchScreen';
+import React, { Component } from "react";
 import {
   createAppContainer,
   createDrawerNavigator,
   createStackNavigator,
   createSwitchNavigator
-} from 'react-navigation';
+} from "react-navigation";
+import { StyleSheet } from "react-native";
+import { Button } from "native-base";
 
-export default function App() {
-  return <AppContainer />;
+import BestPracticesScreen from "./src/screens/BestPracticesScreen";
+import FamilyConnectionsScreen from "./src/screens/FamilyConnectionsScreen";
+import PeopleSearchScreen from "./src/screens/PeopleSearchScreen";
+
+export default class App extends Component {
+  static navigationOptions = {
+    drawerLabel: "Notifications",
+    drawerIcon: () => (
+      <View style={styles.authContainer}>
+        <Button>
+          <Text>Log In</Text>
+        </Button>
+        <Button>
+          <Text>Sign Up</Text>
+        </Button>
+      </View>
+    )
+  };
+  render() {
+    return <AppContainer />;
+  }
 }
 
-// const AppNavigator = createStackNavigator(
-//   {
-//     BestPractices: {
-//       screen: BestPracticesScreen
-//     },
-//     FamilyConnections: {
-//       screen: FamilyConnectionsScreen
-//     }
-//   },
-//   {
-//     initialRouteName: "BestPractices",
-//   }
-// );
 const BestPracticeNavigator = createStackNavigator(
   {
     BestPractices: {
@@ -33,7 +38,7 @@ const BestPracticeNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'BestPractices'
+    initialRouteName: "BestPractices"
   }
 );
 const FamilyConnectionsNavigator = createStackNavigator(
@@ -43,7 +48,7 @@ const FamilyConnectionsNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'FamilyConnections'
+    initialRouteName: "FamilyConnections"
   }
 );
 
@@ -54,21 +59,19 @@ const PeopleSearchNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'PeopleSearch'
+    initialRouteName: "PeopleSearch"
   }
 );
 
-// const AppContainer = createAppContainer(AppNavigator);
-
 const AppDrawerNavigator = createDrawerNavigator(
   {
-    BestPractices: {
+    "Best Practices": {
       screen: BestPracticeNavigator
     },
-    FamilyConnections: {
+    "Family Connections": {
       screen: FamilyConnectionsNavigator
     },
-    PeopleSearch: {
+    "People Search": {
       screen: PeopleSearchNavigator
     }
   }
@@ -80,6 +83,12 @@ const AppSwitchNavigator = createSwitchNavigator({
   BestPractices: { screen: AppDrawerNavigator },
   FamilyConnections: { screen: AppDrawerNavigator },
   PeopleSearch: { screen: AppDrawerNavigator }
+});
+
+const styles = StyleSheet.create({
+  authContainer: {
+    flexDirection: "row"
+  }
 });
 
 const AppContainer = createAppContainer(AppSwitchNavigator);
