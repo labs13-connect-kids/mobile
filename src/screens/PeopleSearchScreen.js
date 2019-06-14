@@ -6,24 +6,38 @@ import {
   StyleSheet,
   Text,
   View,
-  Platform,
-  TouchableWithoutFeedback
+  TextInput
 } from "react-native";
-import { Container, Button, Icon, Tabs, Tab, Input } from "native-base";
+
+import {
+  Container,
+  Content,
+  Button,
+  Icon,
+  H2,
+  Tabs,
+  Tab,
+  Input
+} from "native-base";
+
 import logoImg from "../../assets/simple-logo.png";
-import { ScrollView } from "react-native-gesture-handler";
+
+import { ScrollView, FlatList } from "react-native-gesture-handler";
+
+import PersonsRow from "../components/PersonsRow";
 import HeaderTitle from "./../components/HeaderTitle";
 import headerConfig from "../helpers/headerConfig";
-
 class PeopleSearchScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => headerConfig("People Search", navigation);
+  static navigationOptions = ({ navigation }) =>
+    headerConfig("People Search", navigation);
   state = {
     name: "",
     cityState: "",
     address: "",
     phone: "",
     url: "",
-    isDisplaying: false
+    isDisplaying: false,
+    possiblePersons: []
   };
   inputHandler = (name, value) => {
     this.setState({ [name]: value });
@@ -52,64 +66,66 @@ class PeopleSearchScreen extends React.Component {
         });
       }
     }
-    // Reference for proper API post
+
     const inputData = {
-      names: [
-        {
-          first: `Ken`,
-          middle: "Joseph",
-          last: "Kent",
-          display: "Clark Joseph Kent"
-        }
-      ],
-      emails: [
-        {
-          address: "clark.kent@example.com"
-        }
-      ],
-      phones: [
-        {
-          "@type": "home_phone",
-          country_code: "1",
-          number: "9785550145",
-          display: "(978) 555-0145",
-          display_international: "+1 978-555-0145"
-        }
-      ],
-      addresses: [
-        {
-          country: "US",
-          state: "KS",
-          city: "Smallville",
-          street: "Hickory Lane",
-          house: "10",
-          apartment: "1",
-          zip_code: "66605",
-          display: "10-1 Hickory Lane, Smallville, Kansas"
-        },
-        {
-          "@type": "work",
-          country: "US",
-          state: "KS",
-          city: "Metropolis",
-          street: "Broadway",
-          house: "1000",
-          apartment: "355",
-          display: "1000-355 Broadway, Metropolis, Kansas"
-        }
-      ],
-      urls: [
-        {
-          "@domain": "linkedin.com",
-          "@category": "professional_and_business",
-          url: "https://www.linkedin.com/pub/superman/20/7a/365"
-        },
-        {
-          "@domain": "facebook.com",
-          "@category": "personal_profiles",
-          url: "https://www.facebook.com/superman"
-        }
-      ]
+      person: {
+        names: [
+          {
+            first: `Ken`,
+            middle: "Joseph",
+            last: "Kent",
+            display: "Clark Joseph Kent"
+          }
+        ],
+        emails: [
+          {
+            address: "clark.kent@example.com"
+          }
+        ],
+        phones: [
+          {
+            "@type": "home_phone",
+            country_code: "1",
+            number: "9785550145",
+            display: "(978) 555-0145",
+            display_international: "+1 978-555-0145"
+          }
+        ],
+        addresses: [
+          {
+            country: "US",
+            state: "KS",
+            city: "Smallville",
+            street: "Hickory Lane",
+            house: "10",
+            apartment: "1",
+            zip_code: "66605",
+            display: "10-1 Hickory Lane, Smallville, Kansas"
+          },
+          {
+            "@type": "work",
+            country: "US",
+            state: "KS",
+            city: "Metropolis",
+            street: "Broadway",
+            house: "1000",
+            apartment: "355",
+            display: "1000-355 Broadway, Metropolis, Kansas"
+          }
+        ],
+        urls: [
+          {
+            "@domain": "linkedin.com",
+            "@category": "professional_and_business",
+            url: "https://www.linkedin.com/pub/superman/20/7a/365"
+          },
+          {
+            "@domain": "facebook.com",
+            "@category": "personal_profiles",
+            url: "https://www.facebook.com/superman"
+          }
+        ]
+      }
     };
     console.log(
       JSON.stringify({
@@ -125,7 +141,9 @@ class PeopleSearchScreen extends React.Component {
     const body = this.handleEncodeURI();
     axios
       .post("https://dev.search.connectourkids.org/api/search-v2", body)
-      .then(res => console.log(res))
+      .then(res =>
+        this.setState({ possiblePersons: res.data.possible_persons })
+      )
       .catch(err => console.log(err));
   };
 
@@ -201,6 +219,16 @@ class PeopleSearchScreen extends React.Component {
                 access. Click here to find out more.
               </Text>
               {this.state.isDisplaying && <Text>{this.state.name}</Text>}
+
+              {this.state.possiblePersons.length ? (
+                <FlatList
+                  data={this.state.possiblePersons}
+                  renderItem={({ item }) => {
+                    return <PersonsRow item={item} />;
+                  }}
+                  keyExtractor={possiblePersons => Math.random()}
+                />
+              ) : null}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -237,7 +265,6 @@ const styles = StyleSheet.create({
   textInputSmall: {
     flex: 1
   },
-
   nameInput: {
     flexDirection: "row"
   },

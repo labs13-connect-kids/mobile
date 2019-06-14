@@ -76,30 +76,36 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20
   },
+
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 25
   },
+
   button: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row"
   },
+
   buttonText: {
     color: "rgb(80,141,179)",
     fontSize: 12,
     textDecorationLine: "underline"
   },
+
   textInput: {
     borderColor: "black",
     borderWidth: 1,
     borderStyle: "solid"
   },
+
   red: {
     backgroundColor: "red"
   },
+
   WebViewContainer: {
     marginTop: Platform.OS == "ios" ? 20 : 0
   }
