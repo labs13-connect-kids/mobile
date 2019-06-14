@@ -21,7 +21,7 @@ class BestPracticesScreen extends Component {
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <Text style={{ fontFamily: 'futura-light' }}>
+            <Text style={{ fontFamily: 'futura-light', fontSize: 18 }}>
               Connect Our Kids makes free tools for social workers engaged in
               permanency searches for foster kids. Watch the video below to
               learn more about the free tools and resources in this app.

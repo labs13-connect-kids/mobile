@@ -20,8 +20,8 @@ const HeaderTitle = ({ title }) => (
 const styles = StyleSheet.create({
   text: {
     color: '#008EB6',
-    fontSize: 18,
-    fontWeight: 'bold'
+    fontSize: 20,
+    fontFamily: 'futura-light'
   }
 });
 

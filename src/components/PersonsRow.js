@@ -61,8 +61,7 @@ export default function PersonsRow({ item }) {
 
 const styles = StyleSheet.create({
   rowContainer: {
-    flexDirection: 'row',
-    marginBottom: 10
+    flexDirection: 'row'
   },
   rowImage: {
     marginRight: 10,

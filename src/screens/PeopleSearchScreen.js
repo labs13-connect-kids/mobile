@@ -188,8 +188,17 @@ class PeopleSearchScreen extends React.Component {
             </View>
 
             <View>
-              <Tabs style={styles.container}>
-                <Tab heading="Name" style={styles.nameInput}>
+              <Tabs
+                style={styles.container}
+                activeTextStyle={{ color: '#64aab8' }}
+                tabBarUnderlineStyle={{ backgroundColor: '#000' }}
+              >
+                <Tab
+                  heading="Name"
+                  style={[styles.nameInput, { color: '#64aab8' }]}
+                  activeTextStyle={{ color: '#000' }}
+                  textStyle={{ color: '#64aab8' }}
+                >
                   <Input
                     placeholder="First and last, middle optional"
                     style={styles.textInput}
@@ -203,7 +212,11 @@ class PeopleSearchScreen extends React.Component {
                     onChangeText={text => this.inputHandler('cityState', text)}
                   />
                 </Tab>
-                <Tab heading="Email">
+                <Tab
+                  heading="Email"
+                  activeTextStyle={{ color: '#000' }}
+                  textStyle={{ color: '#64aab8' }}
+                >
                   <Input
                     placeholder="Email address"
                     style={styles.textInput}
@@ -211,7 +224,11 @@ class PeopleSearchScreen extends React.Component {
                     onChangeText={text => this.inputHandler('email', text)}
                   />
                 </Tab>
-                <Tab heading="Address">
+                <Tab
+                  heading="Address"
+                  activeTextStyle={{ color: '#000' }}
+                  textStyle={{ color: '#64aab8' }}
+                >
                   <Input
                     placeholder="Mailing address"
                     style={styles.textInput}
@@ -219,7 +236,11 @@ class PeopleSearchScreen extends React.Component {
                     onChangeText={text => this.inputHandler('address', text)}
                   />
                 </Tab>
-                <Tab heading="Phone">
+                <Tab
+                  heading="Phone"
+                  activeTextStyle={{ color: '#000' }}
+                  textStyle={{ color: '#64aab8' }}
+                >
                   <Input
                     placeholder="Phone any format, no letters"
                     style={styles.textInput}
@@ -227,7 +248,11 @@ class PeopleSearchScreen extends React.Component {
                     onChangeText={text => this.inputHandler('phone', text)}
                   />
                 </Tab>
-                <Tab heading="URL">
+                <Tab
+                  heading="URL"
+                  activeTextStyle={{ color: '#000' }}
+                  textStyle={{ color: '#64aab8' }}
+                >
                   <Input
                     placeholder="Social profile link or any URL"
                     style={styles.textInput}
@@ -273,7 +298,7 @@ class PeopleSearchScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     margin: 5
   },
 
@@ -305,7 +330,8 @@ const styles = StyleSheet.create({
 
   button: {
     margin: 10,
-    padding: 10
+    padding: 10,
+    backgroundColor: '#508DB3'
   },
 
   tab: {

@@ -46,7 +46,12 @@ const BestPracticeNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'BestPractices'
+    initialRouteName: 'BestPractices',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 80
+      }
+    }
   }
 );
 const FamilyConnectionsNavigator = createStackNavigator(
@@ -56,7 +61,12 @@ const FamilyConnectionsNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'FamilyConnections'
+    initialRouteName: 'FamilyConnections',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 80
+      }
+    }
   }
 );
 
@@ -67,7 +77,12 @@ const PeopleSearchNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'PeopleSearch'
+    initialRouteName: 'PeopleSearch',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 80
+      }
+    }
   }
 );
 
@@ -83,7 +98,7 @@ const AppDrawerNavigator = createDrawerNavigator(
       screen: PeopleSearchNavigator
     }
   },
-  { drawerPosition: 'right' }
+  { drawerPosition: 'right', contentOptions: { activeTintColor: '#508DB3' } }
 );
 
 const AppSwitchNavigator = createSwitchNavigator({
