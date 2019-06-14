@@ -252,13 +252,16 @@ class PeopleSearchScreen extends React.Component {
               {this.state.isDisplaying && <Text>{this.state.name}</Text>}
 
               {this.state.possiblePersons.length ? (
-                <FlatList
-                  data={this.state.possiblePersons}
-                  renderItem={({ item }) => {
-                    return <PersonsRow item={item} />;
-                  }}
-                  keyExtractor={(item, index) => index.toString()}
-                />
+                <>
+                  <Text style={styles.matchesText}>Possible Matches</Text>
+                  <FlatList
+                    data={this.state.possiblePersons}
+                    renderItem={({ item }) => {
+                      return <PersonsRow item={item} />;
+                    }}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </>
               ) : null}
             </View>
           </ScrollView>
@@ -318,7 +321,13 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     padding: 15,
     backgroundColor: 'rgb(216,236,240)',
-    borderRadius: 10
+    borderRadius: 10,
+    marginBottom: 20
+  },
+  matchesText: {
+    fontSize: 20,
+    color: '#508DB3',
+    marginBottom: 20
   }
 });
 
