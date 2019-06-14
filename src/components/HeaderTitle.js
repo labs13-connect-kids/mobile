@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, Platform } from "react-native";
+import { View, Text, Image, Platform, StyleSheet } from "react-native";
 import logoImg from "../../assets/simple-logo.png";
 
 const HeaderTitle = ({ title }) => (
@@ -13,10 +13,16 @@ const HeaderTitle = ({ title }) => (
         resizeMode="contain"
       />
     ) : null}
-    <Text
-      style={{ fontSize: 18, fontWeight: "bold" }}
-    >{`Connect Our Kids \n${title}`}</Text>
+    <Text style={styles.text}>{`Connect Our Kids \n${title}`}</Text>
   </View>
 );
+
+const styles = StyleSheet.create({
+  text: {
+    color: "#008EB6",
+    fontSize: 18,
+    fontWeight: "bold"
+  }
+});
 
 export default HeaderTitle;
