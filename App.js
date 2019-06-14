@@ -74,9 +74,8 @@ const AppDrawerNavigator = createDrawerNavigator(
     "People Search": {
       screen: PeopleSearchNavigator
     }
-  }
-  // To make drawer open on right side uncomment line below
-  // { drawerPosition: "right" }
+  },
+  { drawerPosition: "right" }
 );
 
 const AppSwitchNavigator = createSwitchNavigator({

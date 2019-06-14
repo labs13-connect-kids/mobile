@@ -35,7 +35,7 @@ class FamilyConnectionsScreen extends Component {
             <Button style={styles.button} block>
               <Text style={styles.buttonText}>
                 I Want To Access Family Connections
-              </Text> 
+              </Text>
             </Button>
           </ScrollView>
         </SafeAreaView>

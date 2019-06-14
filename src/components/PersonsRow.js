@@ -16,17 +16,17 @@ export default function PersonsRow({ item }) {
             <Text>{item.names[0].display}</Text>
             {item.dob ?
                 <Text>{item.dob.display}</Text>
-            : null}
+                : null}
             {item.gender ?
                 <Text>{item.gender.content}</Text>
-            : null}
+                : null}
             {item.addresses ?
                 item.addresses.map(address => {
                     return (
                         <Text>{address.city} , {address.state}</Text>
                     )
                 })
-            : null}
+                : null}
         </View>
     )
 }
