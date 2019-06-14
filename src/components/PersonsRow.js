@@ -42,11 +42,15 @@ export default function PersonsRow({ item }) {
               }}
             />
           )}
-          <View style={styles.informationText}>
+          <View>
             <Text style={styles.nameText}>{item.names[0].display}</Text>
-            {secondLine.length && <Text>{secondLine}</Text>}
+            {secondLine.length && (
+              <Text style={[styles.informationText, { marginBottom: 5 }]}>
+                {secondLine}
+              </Text>
+            )}
             {allAddresses.length ? (
-              <Text>
+              <Text style={styles.informationText}>
                 {allAddresses.length > 25
                   ? allAddresses.slice(0, 25) + '...'
                   : allAddresses}
@@ -69,10 +73,13 @@ const styles = StyleSheet.create({
     height: 75
   },
   nameText: {
-    fontSize: 18,
-    color: '#508DB3'
+    fontSize: 20,
+    color: '#508DB3',
+    fontFamily: 'futura-light',
+    marginBottom: 5
   },
   informationText: {
-    flexWrap: 'wrap'
+    fontFamily: 'futura-light',
+    fontSize: 14
   }
 });

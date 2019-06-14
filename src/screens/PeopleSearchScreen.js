@@ -196,8 +196,16 @@ class PeopleSearchScreen extends React.Component {
                 <Tab
                   heading="Name"
                   style={[styles.nameInput, { color: '#64aab8' }]}
-                  activeTextStyle={{ color: '#000' }}
-                  textStyle={{ color: '#64aab8' }}
+                  activeTextStyle={{
+                    color: '#000',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
+                  textStyle={{
+                    color: '#64aab8',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
                 >
                   <Input
                     placeholder="First and last, middle optional"
@@ -214,8 +222,16 @@ class PeopleSearchScreen extends React.Component {
                 </Tab>
                 <Tab
                   heading="Email"
-                  activeTextStyle={{ color: '#000' }}
-                  textStyle={{ color: '#64aab8' }}
+                  activeTextStyle={{
+                    color: '#000',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
+                  textStyle={{
+                    color: '#64aab8',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
                 >
                   <Input
                     placeholder="Email address"
@@ -226,8 +242,16 @@ class PeopleSearchScreen extends React.Component {
                 </Tab>
                 <Tab
                   heading="Address"
-                  activeTextStyle={{ color: '#000' }}
-                  textStyle={{ color: '#64aab8' }}
+                  activeTextStyle={{
+                    color: '#000',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
+                  textStyle={{
+                    color: '#64aab8',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
                 >
                   <Input
                     placeholder="Mailing address"
@@ -238,8 +262,16 @@ class PeopleSearchScreen extends React.Component {
                 </Tab>
                 <Tab
                   heading="Phone"
-                  activeTextStyle={{ color: '#000' }}
-                  textStyle={{ color: '#64aab8' }}
+                  activeTextStyle={{
+                    color: '#000',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
+                  textStyle={{
+                    color: '#64aab8',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
                 >
                   <Input
                     placeholder="Phone any format, no letters"
@@ -250,8 +282,16 @@ class PeopleSearchScreen extends React.Component {
                 </Tab>
                 <Tab
                   heading="URL"
-                  activeTextStyle={{ color: '#000' }}
-                  textStyle={{ color: '#64aab8' }}
+                  activeTextStyle={{
+                    color: '#000',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
+                  textStyle={{
+                    color: '#64aab8',
+                    fontFamily: 'futura-light',
+                    fontSize: 16
+                  }}
                 >
                   <Input
                     placeholder="Social profile link or any URL"
@@ -311,7 +351,9 @@ const styles = StyleSheet.create({
 
   intro: {
     padding: 10,
-    fontSize: 15
+
+    fontFamily: 'futura-light',
+    fontSize: 18
   },
 
   textInput: {
