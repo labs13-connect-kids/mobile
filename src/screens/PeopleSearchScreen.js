@@ -126,13 +126,23 @@ class PeopleSearchScreen extends React.Component {
     });
   };
 
-  handlePersonSubmit = () => {
-    const body = this.handleEncodeURI();
-    axios
-      .post('https://dev.search.connectourkids.org/api/search-v2', body)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-  };
+//   handlePersonSubmit = () => {
+//     const body = this.handleEncodeURI();
+//     axios
+//       .post('https://dev.search.connectourkids.org/api/search-v2', body)
+//       .then(res => console.log(res))
+//       .catch(err => console.log(err));
+//   };
+
+    handlePersonSubmit = () => {
+        const body = this.handleEncodeURI();
+        axios
+            .post('https://dev.search.connectourkids.org/api/search-v2', body)
+            .then(res => {
+                console.log(res.data.possible_persons);
+            })
+            .catch(err => console.log(err));
+    };
 
   render() {
     return (
