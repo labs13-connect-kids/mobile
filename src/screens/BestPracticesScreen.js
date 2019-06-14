@@ -1,86 +1,28 @@
 import React, { Component } from "react";
 import {
-  Image,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
   WebView,
   Platform,
-  TouchableWithoutFeedback,
   Linking
 } from "react-native";
-import { Container, Button, Icon, H3 } from "native-base";
-import logoImg from "../../assets/simple-logo.png";
+import { Container, Button } from "native-base";
 import { ScrollView } from "react-native-gesture-handler";
 
-const title = `Connect Our Kids \nBest Practices`;
-
-const HeaderTitle = () => (
-  <View style={{ flexDirection: "row" }}>
-    {Platform.OS === "android" ? (
-      <Image
-        source={logoImg}
-        style={{ width: 40, height: 40, marginHorizontal: 10 }}
-        resizeMode="contain"
-      />
-    ) : null}
-    <Text style={{ fontSize: 18, fontWeight: "bold" }}>{title}</Text>
-  </View>
-);
-
+import headerConfig from "../helpers/headerConfig";
 class BestPracticesScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerTitle: <HeaderTitle />,
-      headerLeft:
-        Platform.OS === "ios" ? (
-          <Image
-            source={logoImg}
-            style={{ width: 40, height: 40, marginHorizontal: 20 }}
-            resizeMode="contain"
-          />
-        ) : null,
-      headerRight: (
-        <TouchableWithoutFeedback
-          onPress={() => {
-            navigation.toggleDrawer();
-          }}
-        >
-          <Icon
-            ios="ios-menu"
-            android="md-menu"
-            style={{ fontSize: 40, color: "#000", paddingRight: 20 }}
-          />
-        </TouchableWithoutFeedback>
-      )
-    };
-  };
+  static navigationOptions = ({ navigation }) =>
+    headerConfig("Best Practices", navigation);
   render() {
     return (
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            {/* <View style={styles.header}>
-              <Image
-                source={logoImg}
-                style={{ width: 40, height: 40 }}
-                resizeMode="contain"
-              />
-              <View>
-                <H3>Connect Our Kids</H3>
-                <H3>Best Practices</H3>
-              </View>
-              <Icon
-                ios="ios-menu"
-                android="md-menu"
-                style={{ fontSize: 40, color: "#000" }}
-              />
-            </View> */}
-
             <Text>
               Connect Our Kids makes free tools for social workers engaged in
-              permanancy searches for foster kids. Watch the video below to
+              permanency searches for foster kids. Watch the video below to
               learn more about the free tools and resources in this app.
             </Text>
             <View style={{ height: 300, marginBottom: 30 }}>
@@ -134,30 +76,36 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20
   },
+
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 25
   },
+
   button: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row"
   },
+
   buttonText: {
     color: "rgb(80,141,179)",
     fontSize: 12,
     textDecorationLine: "underline"
   },
+
   textInput: {
     borderColor: "black",
     borderWidth: 1,
     borderStyle: "solid"
   },
+
   red: {
     backgroundColor: "red"
   },
+
   WebViewContainer: {
     marginTop: Platform.OS == "ios" ? 20 : 0
   }
