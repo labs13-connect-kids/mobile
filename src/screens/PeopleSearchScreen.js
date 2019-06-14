@@ -1,31 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  TextInput
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import {
-  Container,
-  Content,
-  Button,
-  Icon,
-  H2,
-  Tabs,
-  Tab,
-  Input
-} from 'native-base';
-
-import logoImg from '../../assets/simple-logo.png';
+import { Container, Button, Tabs, Tab, Input } from 'native-base';
 
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
 import PersonsRow from '../components/PersonsRow';
-import HeaderTitle from './../components/HeaderTitle';
 import headerConfig from '../helpers/headerConfig';
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -33,6 +14,7 @@ class PeopleSearchScreen extends React.Component {
   state = {
     name: '',
     cityState: '',
+    email: '',
     address: '',
     phone: '',
     url: '',
@@ -81,6 +63,39 @@ class PeopleSearchScreen extends React.Component {
       }
     }
     // Email constructor
+    if (this.state.email.length) {
+      person.emails = [];
+      let splitEmail = this.state.email.split(' ');
+      if (splitEmail.length === 1) {
+        person.emails.push({
+          address: splitEmail[0]
+        });
+      }
+    }
+
+    // Phone constructor
+    // Test with 3303303333 format
+    if (this.state.phone.length) {
+      person.phones = [];
+      let splitPhone = this.state.phone.split(' ');
+      if (splitPhone.length === 1) {
+        person.phones.push({
+          number: splitPhone[0]
+        });
+      }
+    }
+
+    // Url constructor
+    // Test with www.facebook.com/user
+    // if (this.state.url.length) {
+    //   person.urls = [];
+    //   let splitUrl = this.state.url.split(' ');
+    //   if (splitUrl.length === 1) {
+    //     person.urls.push({
+    //       url: splitUrl[0]
+    //     });
+    //   }
+    // }
 
     const inputData = {
       person: {
@@ -242,7 +257,7 @@ class PeopleSearchScreen extends React.Component {
                   renderItem={({ item }) => {
                     return <PersonsRow item={item} />;
                   }}
-                  keyExtractor={possiblePersons => Math.random()}
+                  keyExtractor={(item, index) => index.toString()}
                 />
               ) : null}
             </View>
