@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,20 +7,21 @@ import {
   WebView,
   Platform,
   Linking
-} from "react-native";
-import { Container, Button } from "native-base";
-import { ScrollView } from "react-native-gesture-handler";
+} from 'react-native';
+import { Container, Button } from 'native-base';
+import { ScrollView } from 'react-native-gesture-handler';
 
-import headerConfig from "../helpers/headerConfig";
+import headerConfig from '../helpers/headerConfig';
+
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
-    headerConfig("Best Practices", navigation);
+    headerConfig('Best Practices', navigation);
   render() {
     return (
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <Text>
+            <Text style={{ fontFamily: 'futura-light', fontSize: 18 }}>
               Connect Our Kids makes free tools for social workers engaged in
               permanency searches for foster kids. Watch the video below to
               learn more about the free tools and resources in this app.
@@ -30,7 +31,7 @@ class BestPracticesScreen extends Component {
                 style={styles.WebViewContainer}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
-                source={{ uri: "https://www.youtube.com/embed/eMivJgf7RNA" }}
+                source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
               />
             </View>
 
@@ -38,7 +39,7 @@ class BestPracticesScreen extends Component {
               style={styles.button}
               block
               transparent
-              onPress={() => this.props.navigation.navigate("PeopleSearch")}
+              onPress={() => this.props.navigation.navigate('PeopleSearch')}
             >
               <Text style={styles.buttonText}>
                 People Search - Find Contact Information for Anyone
@@ -48,7 +49,7 @@ class BestPracticesScreen extends Component {
               style={styles.button}
               transparent
               onPress={() =>
-                this.props.navigation.navigate("FamilyConnections")
+                this.props.navigation.navigate('FamilyConnections')
               }
             >
               <Text style={styles.buttonText}>
@@ -58,7 +59,7 @@ class BestPracticesScreen extends Component {
             <Button
               style={styles.button}
               transparent
-              onPress={() => Linking.openURL("https://connectourkids.org")}
+              onPress={() => Linking.openURL('https://connectourkids.org')}
             >
               <Text style={styles.buttonText}>
                 Resources - Useful Materials and Information
@@ -73,41 +74,41 @@ class BestPracticesScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 20
   },
 
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 25
   },
 
   button: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row"
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row'
   },
 
   buttonText: {
-    color: "rgb(80,141,179)",
+    color: 'rgb(80,141,179)',
     fontSize: 12,
-    textDecorationLine: "underline"
+    textDecorationLine: 'underline'
   },
 
   textInput: {
-    borderColor: "black",
+    borderColor: 'black',
     borderWidth: 1,
-    borderStyle: "solid"
+    borderStyle: 'solid'
   },
 
   red: {
-    backgroundColor: "red"
+    backgroundColor: 'red'
   },
 
   WebViewContainer: {
-    marginTop: Platform.OS == "ios" ? 20 : 0
+    marginTop: Platform.OS == 'ios' ? 20 : 0
   }
 });
 
