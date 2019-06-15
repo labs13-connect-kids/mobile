@@ -14,17 +14,12 @@ import PeopleSearchScreen from "./src/screens/PeopleSearchScreen";
 
 export default class App extends Component {
   static navigationOptions = {
-    drawerLabel: "Notifications",
-    drawerIcon: () => (
-      <View style={styles.authContainer}>
-        <Button>
-          <Text>Log In</Text>
-        </Button>
-        <Button>
-          <Text>Sign Up</Text>
-        </Button>
-      </View>
-    )
+    contentOptions: {
+      activeTintColor: "#e91e63",
+      itemsContainerStyle: {
+        marginVertical: 0
+      }
+    }
   };
   render() {
     return <AppContainer />;
@@ -75,7 +70,15 @@ const AppDrawerNavigator = createDrawerNavigator(
       screen: PeopleSearchNavigator
     }
   },
-  { drawerPosition: "right" }
+  {
+    drawerPosition: "right",
+    contentOptions: {
+      activeTintColor: "rgb(80,141,179)",
+      itemsContainerStyle: {
+        marginVertical: 0
+      }
+    }
+  }
 );
 
 const AppSwitchNavigator = createSwitchNavigator({

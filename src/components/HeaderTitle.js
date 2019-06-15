@@ -19,7 +19,7 @@ const HeaderTitle = ({ title }) => (
 
 const styles = StyleSheet.create({
   text: {
-    color: "#008EB6",
+    color: "rgb(80,141,179)",
     fontSize: 18,
     fontWeight: "bold"
   }
