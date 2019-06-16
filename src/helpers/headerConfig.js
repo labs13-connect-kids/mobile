@@ -31,3 +31,8 @@ export default (headerConfig = (title, navigation) => {
     )
   };
 });
+
+const styles = StyleSheet.create({
+  imageStyles: { width: 40, height: 40, marginHorizontal: 20 },
+  iconStyles: { fontSize: 40, color: '#000', paddingRight: 20 }
+});
