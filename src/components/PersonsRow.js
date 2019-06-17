@@ -6,6 +6,7 @@ import constants from '../helpers/constants';
 
 export default function PersonsRow({ item }) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     let allAddresses = '';
     let secondLine = '';
 
@@ -87,6 +88,8 @@ const styles = StyleSheet.create({
     }
 });
 =======
+=======
+>>>>>>> ce9e21dbae630488a3d61bebecbcc22b5b4ec6b9
   let allAddresses = '';
   let secondLine = '';
 
@@ -166,5 +169,9 @@ const styles = StyleSheet.create({
     fontFamily: constants.fontFamily,
     fontSize: 14
   }
+<<<<<<< HEAD
 });
 >>>>>>> 03f3eccfc1972ccc2e9e6fdfcd05184cdca44806
+=======
+});
+>>>>>>> ce9e21dbae630488a3d61bebecbcc22b5b4ec6b9
