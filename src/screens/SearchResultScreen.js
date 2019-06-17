@@ -317,7 +317,6 @@ class PeopleSearchScreen extends React.Component {
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
-              {this.state.isDisplaying && <Text>{this.state.name}</Text>}
               <PersonInfo item={this.props.navigation.state.params.item} />
             </View>
           </ScrollView>
