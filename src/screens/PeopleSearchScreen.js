@@ -315,8 +315,6 @@ class PeopleSearchScreen extends React.Component {
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
-              {this.state.isDisplaying && <Text>{this.state.name}</Text>}
-
               {this.state.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
@@ -328,7 +326,7 @@ class PeopleSearchScreen extends React.Component {
                           item={item}
                           handlePress={() =>
                             this.props.navigation.navigate('SearchResult', {
-                              item
+                              searchPointerHash: item['@search_pointer_hash']
                             })
                           }
                         />

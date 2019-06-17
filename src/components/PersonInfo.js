@@ -149,7 +149,6 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 20,
-    color: '#508DB3',
     fontFamily: constants.fontFamily,
     marginBottom: 5
   },
