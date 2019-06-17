@@ -15,7 +15,7 @@ import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import PersonsRow from '../components/PersonsRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
-import PersonInfo from '../components/PersonInfo';
+import PersonInfo from '../components/Person/PersonInfo';
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
