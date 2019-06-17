@@ -1,33 +1,37 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   createAppContainer,
   createDrawerNavigator,
   createStackNavigator,
   createSwitchNavigator
-} from "react-navigation";
-import { StyleSheet } from "react-native";
-import { Button } from "native-base";
+} from 'react-navigation';
+import * as Font from 'expo-font';
+import { StyleSheet } from 'react-native';
+import { Button } from 'native-base';
 
-import BestPracticesScreen from "./src/screens/BestPracticesScreen";
-import FamilyConnectionsScreen from "./src/screens/FamilyConnectionsScreen";
-import PeopleSearchScreen from "./src/screens/PeopleSearchScreen";
+import BestPracticesScreen from './src/screens/BestPracticesScreen';
+import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
+import PeopleSearchScreen from './src/screens/PeopleSearchScreen';
+import constants from './src/helpers/constants';
 
 export default class App extends Component {
+  state = { fontLoaded: false };
   static navigationOptions = {
-    drawerLabel: "Notifications",
-    drawerIcon: () => (
-      <View style={styles.authContainer}>
-        <Button>
-          <Text>Log In</Text>
-        </Button>
-        <Button>
-          <Text>Sign Up</Text>
-        </Button>
-      </View>
-    )
+    contentOptions: {
+      activeTintColor: '#e91e63',
+      itemsContainerStyle: {
+        marginVertical: 0
+      }
+    }
   };
+  async componentDidMount() {
+    await Font.loadAsync({
+      [constants.fontFamily]: require('./assets/fonts/Futura-Light.otf')
+    });
+    this.setState({ fontLoaded: true });
+  }
   render() {
-    return <AppContainer />;
+    return this.state.fontLoaded ? <AppContainer /> : null;
   }
 }
 
@@ -38,7 +42,12 @@ const BestPracticeNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "BestPractices"
+    initialRouteName: 'BestPractices',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 80
+      }
+    }
   }
 );
 const FamilyConnectionsNavigator = createStackNavigator(
@@ -48,7 +57,12 @@ const FamilyConnectionsNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "FamilyConnections"
+    initialRouteName: 'FamilyConnections',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 80
+      }
+    }
   }
 );
 
@@ -59,23 +73,28 @@ const PeopleSearchNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "PeopleSearch"
+    initialRouteName: 'PeopleSearch',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 80
+      }
+    }
   }
 );
 
 const AppDrawerNavigator = createDrawerNavigator(
   {
-    "Best Practices": {
+    'Best Practices': {
       screen: BestPracticeNavigator
     },
-    "Family Connections": {
+    'Family Connections': {
       screen: FamilyConnectionsNavigator
     },
-    "People Search": {
+    'People Search': {
       screen: PeopleSearchNavigator
     }
   },
-  { drawerPosition: "right" }
+  { drawerPosition: 'right', contentOptions: { activeTintColor: '#508DB3' } }
 );
 
 const AppSwitchNavigator = createSwitchNavigator({
@@ -86,7 +105,7 @@ const AppSwitchNavigator = createSwitchNavigator({
 
 const styles = StyleSheet.create({
   authContainer: {
-    flexDirection: "row"
+    flexDirection: 'row'
   }
 });
 
