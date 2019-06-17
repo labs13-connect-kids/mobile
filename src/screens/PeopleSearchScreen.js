@@ -8,6 +8,7 @@ import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
 import PersonsRow from '../components/PersonsRow';
 import headerConfig from '../helpers/headerConfig';
+import constants from '../helpers/constants';
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
@@ -170,7 +171,7 @@ class PeopleSearchScreen extends React.Component {
   handlePersonSubmit = () => {
     const body = this.handleEncodeURI();
     axios
-      .post('https://dev.search.connectourkids.org/api/search-v2', body)
+      .post(constants.devURL, body)
       .then(res => {
         console.log(res.data.possible_persons);
         this.setState({ possiblePersons: res.data.possible_persons });
@@ -198,12 +199,12 @@ class PeopleSearchScreen extends React.Component {
                   style={[styles.nameInput, { color: '#64aab8' }]}
                   activeTextStyle={{
                     color: '#000',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                   textStyle={{
                     color: '#64aab8',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                 >
@@ -224,12 +225,12 @@ class PeopleSearchScreen extends React.Component {
                   heading="Email"
                   activeTextStyle={{
                     color: '#000',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                   textStyle={{
                     color: '#64aab8',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                 >
@@ -244,12 +245,12 @@ class PeopleSearchScreen extends React.Component {
                   heading="Address"
                   activeTextStyle={{
                     color: '#000',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                   textStyle={{
                     color: '#64aab8',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                 >
@@ -264,12 +265,12 @@ class PeopleSearchScreen extends React.Component {
                   heading="Phone"
                   activeTextStyle={{
                     color: '#000',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                   textStyle={{
                     color: '#64aab8',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                 >
@@ -284,12 +285,12 @@ class PeopleSearchScreen extends React.Component {
                   heading="URL"
                   activeTextStyle={{
                     color: '#000',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                   textStyle={{
                     color: '#64aab8',
-                    fontFamily: 'futura-light',
+                    fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                 >
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
   intro: {
     padding: 10,
 
-    fontFamily: 'futura-light',
+    fontFamily: constants.fontFamily,
     fontSize: 18
   },
 

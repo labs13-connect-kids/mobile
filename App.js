@@ -12,6 +12,7 @@ import { Button } from 'native-base';
 import BestPracticesScreen from './src/screens/BestPracticesScreen';
 import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
 import PeopleSearchScreen from './src/screens/PeopleSearchScreen';
+import constants from './src/helpers/constants';
 
 export default class App extends Component {
   state = { fontLoaded: false };
@@ -25,7 +26,7 @@ export default class App extends Component {
   };
   async componentDidMount() {
     await Font.loadAsync({
-      'futura-light': require('./assets/fonts/Futura-Light.otf')
+      [constants.fontFamily]: require('./assets/fonts/Futura-Light.otf')
     });
     this.setState({ fontLoaded: true });
   }
