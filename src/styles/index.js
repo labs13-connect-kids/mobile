@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import constants from '../helpers/constants';
 
 export const styles = StyleSheet.create({
-  container: {
+  gridContainer: {
     padding: 20,
     alignItems: 'center'
   },
@@ -10,8 +10,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 20
   },
-  rowLabel: {},
-  labelText: {
+  rowLabelText: {
     textAlign: 'right',
     fontFamily: constants.fontFamily
   },
@@ -37,12 +36,12 @@ export const styles = StyleSheet.create({
     color: '#bbb',
     fontFamily: constants.fontFamily
   },
-  nameText: {
+  cardNameText: {
     fontSize: 20,
     fontFamily: constants.fontFamily,
     marginBottom: 5
   },
-  informationText: {
+  cardInformationText: {
     fontFamily: constants.fontFamily,
     fontSize: 14
   }

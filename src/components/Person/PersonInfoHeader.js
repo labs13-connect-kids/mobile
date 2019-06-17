@@ -31,11 +31,11 @@ const PersonInfoHeader = ({ item }) => {
         />
       </Col>
       <Col size={70} style={styles.colList}>
-        <Text style={styles.nameText}>
+        <Text style={styles.cardNameText}>
           {item.names && item.names[0].display}
         </Text>
         {secondLine.length && (
-          <Text style={[styles.informationText, { marginBottom: 5 }]}>
+          <Text style={[styles.cardInformationText, { marginBottom: 5 }]}>
             {secondLine}
           </Text>
         )}
