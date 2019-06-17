@@ -12,25 +12,21 @@ import { Button } from 'native-base';
 import BestPracticesScreen from './src/screens/BestPracticesScreen';
 import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
 import PeopleSearchScreen from './src/screens/PeopleSearchScreen';
+import constants from './src/helpers/constants';
 
 export default class App extends Component {
   state = { fontLoaded: false };
   static navigationOptions = {
-    drawerLabel: 'Notifications',
-    drawerIcon: () => (
-      <View style={styles.authContainer}>
-        <Button>
-          <Text>Log In</Text>
-        </Button>
-        <Button>
-          <Text>Sign Up</Text>
-        </Button>
-      </View>
-    )
+    contentOptions: {
+      activeTintColor: '#e91e63',
+      itemsContainerStyle: {
+        marginVertical: 0
+      }
+    }
   };
   async componentDidMount() {
     await Font.loadAsync({
-      'futura-light': require('./assets/fonts/Futura-Light.otf')
+      [constants.fontFamily]: require('./assets/fonts/Futura-Light.otf')
     });
     this.setState({ fontLoaded: true });
   }

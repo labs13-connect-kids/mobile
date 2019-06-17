@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, Card, Body, CardItem } from 'native-base';
 import { View, Image, StyleSheet } from 'react-native';
 
+import constants from '../helpers/constants';
+
 export default function PersonsRow({ item }) {
   let allAddresses = '';
   let secondLine = '';
@@ -75,11 +77,11 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 20,
     color: '#508DB3',
-    fontFamily: 'futura-light',
+    fontFamily: constants.fontFamily,
     marginBottom: 5
   },
   informationText: {
-    fontFamily: 'futura-light',
+    fontFamily: constants.fontFamily,
     fontSize: 14
   }
 });

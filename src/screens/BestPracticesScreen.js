@@ -12,6 +12,7 @@ import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import headerConfig from '../helpers/headerConfig';
+import constants from '../helpers/constants';
 
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
@@ -21,7 +22,7 @@ class BestPracticesScreen extends Component {
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <Text style={{ fontFamily: 'futura-light', fontSize: 18 }}>
+            <Text style={{ fontFamily: constants.fontFamily, fontSize: 18 }}>
               Connect Our Kids makes free tools for social workers engaged in
               permanency searches for foster kids. Watch the video below to
               learn more about the free tools and resources in this app.

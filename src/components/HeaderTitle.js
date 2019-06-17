@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, Platform, StyleSheet } from 'react-native';
 import logoImg from '../../assets/simple-logo.png';
+import constants from '../helpers/constants';
 
 const HeaderTitle = ({ title }) => (
   // title should be the string of the components name
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#008EB6',
     fontSize: 20,
-    fontFamily: 'futura-light'
+    fontFamily: constants.fontFamily
   }
 });
 
