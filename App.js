@@ -12,6 +12,7 @@ import { Button } from 'native-base';
 import BestPracticesScreen from './src/screens/BestPracticesScreen';
 import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
 import PeopleSearchScreen from './src/screens/PeopleSearchScreen';
+import SearchResultScreen from './src/screens/SearchResultScreen';
 import constants from './src/helpers/constants';
 
 export default class App extends Component {
@@ -70,6 +71,9 @@ const PeopleSearchNavigator = createStackNavigator(
   {
     PeopleSearch: {
       screen: PeopleSearchScreen
+    },
+    SearchResult: {
+      screen: SearchResultScreen
     }
   },
   {

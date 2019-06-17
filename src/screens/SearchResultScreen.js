@@ -9,6 +9,7 @@ import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import PersonsRow from '../components/PersonsRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
+import PersonInfo from '../components/PersonInfo';
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
@@ -180,6 +181,7 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -316,28 +318,7 @@ class PeopleSearchScreen extends React.Component {
                 access. Click here to find out more.
               </Text>
               {this.state.isDisplaying && <Text>{this.state.name}</Text>}
-
-              {this.state.possiblePersons.length ? (
-                <>
-                  <Text style={styles.matchesText}>Possible Matches</Text>
-                  <FlatList
-                    data={this.state.possiblePersons}
-                    renderItem={({ item }) => {
-                      return (
-                        <PersonsRow
-                          item={item}
-                          handlePress={() =>
-                            this.props.navigation.navigate('SearchResult', {
-                              item
-                            })
-                          }
-                        />
-                      );
-                    }}
-                    keyExtractor={(item, index) => index.toString()}
-                  />
-                </>
-              ) : null}
+              <PersonInfo item={this.props.navigation.state.params.item} />
             </View>
           </ScrollView>
         </SafeAreaView>

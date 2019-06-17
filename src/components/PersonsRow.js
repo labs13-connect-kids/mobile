@@ -4,7 +4,7 @@ import { View, Image, StyleSheet } from 'react-native';
 
 import constants from '../helpers/constants';
 
-export default function PersonsRow({ item }) {
+export default function PersonsRow({ handlePress, item }) {
   let allAddresses = '';
   let secondLine = '';
 
@@ -24,7 +24,7 @@ export default function PersonsRow({ item }) {
 
   return (
     <Card>
-      <CardItem>
+      <CardItem button onPress={handlePress}>
         <Body style={styles.rowContainer}>
           {item.images ? (
             <Image
