@@ -10,22 +10,18 @@ import {
 
 import { Container, Button, Tabs, Tab, Input } from 'native-base';
 
-import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 
-import PersonsRow from '../components/PersonsRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
+import SearchForm from '../components/SearchForm/SearchForm';
+
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
+
   state = {
-    name: '',
-    cityState: '',
-    email: '',
-    address: '',
-    phone: '',
-    url: '',
     isDisplaying: false,
     possiblePersons: [],
     person: null
@@ -35,9 +31,6 @@ class PeopleSearchScreen extends React.Component {
 
     this.handlePersonRequest(searchPointerHash);
   }
-  inputHandler = (name, value) => {
-    this.setState({ [name]: value });
-  };
 
   handleEncodeURI = () => {
     console.log(
@@ -50,16 +43,7 @@ class PeopleSearchScreen extends React.Component {
     });
   };
 
-  handlePersonSubmit = () => {
-    const body = this.handleEncodeURI();
-    axios
-      .post(constants.devURL, body)
-      .then(res => {
-        console.log(res.data.possible_persons);
-        this.setState({ possiblePersons: res.data.possible_persons });
-      })
-      .catch(err => console.log(err));
-  };
+  handlePersonSubmit = () => {};
 
   handlePersonRequest = searchPointer => {
     // const body = this.handleEncodeURI();
@@ -73,147 +57,27 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
-    console.log(this.props);
+    const { person } = this.state;
     return (
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
             <View>
-              <Text style={styles.intro}>Search By:</Text>
-            </View>
-
-            <View>
-              <Tabs
-                style={styles.container}
-                activeTextStyle={{ color: '#64aab8' }}
-                tabBarUnderlineStyle={{ backgroundColor: '#000' }}
-              >
-                <Tab
-                  heading="Name"
-                  style={[styles.nameInput, { color: '#64aab8' }]}
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color: '#64aab8',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="First and last, middle optional"
-                    style={styles.textInput}
-                    value={this.state.name}
-                    onChangeText={text => this.inputHandler('name', text)}
-                  />
-                  <Input
-                    placeholder="City, State"
-                    style={[styles.textInput, styles.textInputSmall]}
-                    value={this.state.cityState}
-                    onChangeText={text => this.inputHandler('cityState', text)}
-                  />
-                </Tab>
-                <Tab
-                  heading="Email"
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color: '#64aab8',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="Email address"
-                    style={styles.textInput}
-                    value={this.state.email}
-                    onChangeText={text => this.inputHandler('email', text)}
-                  />
-                </Tab>
-                <Tab
-                  heading="Address"
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color: '#64aab8',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="Mailing address"
-                    style={styles.textInput}
-                    value={this.state.address}
-                    onChangeText={text => this.inputHandler('address', text)}
-                  />
-                </Tab>
-                <Tab
-                  heading="Phone"
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color: '#64aab8',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="Phone any format, no letters"
-                    style={styles.textInput}
-                    value={this.state.phone}
-                    onChangeText={text => this.inputHandler('phone', text)}
-                  />
-                </Tab>
-                <Tab
-                  heading="URL"
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color: '#64aab8',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="Social profile link or any URL"
-                    style={styles.textInput}
-                    value={this.state.url}
-                    onChangeText={text => this.inputHandler('url', text)}
-                  />
-                </Tab>
-              </Tabs>
-
+              {/* <Text style={styles.intro}>Search By:</Text> */}
               <Button
-                info
                 style={styles.button}
-                onPress={this.handlePersonSubmit}
+                onPress={() => this.props.navigation.goBack()}
               >
-                <Text style={styles.buttonText}> Search </Text>
+                <Text style={styles.buttonText}>Back</Text>
               </Button>
-
+            </View>
+            {/* <SearchForm /> */}
+            <View>
               <Text style={styles.link}>
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
-              {!this.state.person ? (
-                <ActivityIndicator />
-              ) : (
-                <PersonInfo item={this.state.person} />
-              )}
+              {!person ? <ActivityIndicator /> : <PersonInfo item={person} />}
             </View>
           </ScrollView>
         </SafeAreaView>

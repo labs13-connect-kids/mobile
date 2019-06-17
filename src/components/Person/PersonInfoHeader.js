@@ -4,7 +4,8 @@ import { Col, Row, Text } from 'native-base';
 import constants from '../../helpers/constants';
 import { styles } from '../../styles';
 
-const PersonInfoHeader = ({ item }) => {
+const PersonInfoHeader = ({ item, listItem = false }) => {
+  let allAddresses = '';
   let secondLine = '';
   let uri = item.images
     ? `https://dev.search.connectourkids.org/api/thumbnail?tokens=${
@@ -20,8 +21,14 @@ const PersonInfoHeader = ({ item }) => {
     secondLine += `${item.dob.display}`;
   }
 
+  if (item.addresses && listItem) {
+    item.addresses.forEach(address => {
+      allAddresses += `${address.city}, ${address.state} `;
+    });
+  }
+
   return (
-    <Row style={styles.rowContainer}>
+    <Row style={[styles.rowContainer, { marginBottom: listItem ? 0 : 20 }]}>
       <Col size={30} style={styles.imageContainer}>
         <Image
           style={styles.rowImage}
@@ -39,6 +46,13 @@ const PersonInfoHeader = ({ item }) => {
             {secondLine}
           </Text>
         )}
+        {allAddresses.length ? (
+          <Text style={styles.cardInformationText}>
+            {allAddresses.length > 25
+              ? allAddresses.slice(0, 25) + '...'
+              : allAddresses}
+          </Text>
+        ) : null}
       </Col>
     </Row>
   );
