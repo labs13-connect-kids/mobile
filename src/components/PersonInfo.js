@@ -69,7 +69,19 @@ const PersonInfo = ({ item }) => {
           <Text style={styles.labelText}>Emails</Text>
         </Col>
         <Col size={70} style={styles.colList}>
-          <Text style={styles.colListText}>Shows emails</Text>
+          {item.emails &&
+            item.emails.map(email => {
+              return (
+                <View style={styles.colListContainer}>
+                  <Text style={styles.colListText}>{email.address}</Text>
+                  {email['@type'] && (
+                    <Text style={styles.colListLabelText}>
+                      {email['@type']}
+                    </Text>
+                  )}
+                </View>
+              );
+            })}
         </Col>
       </Row>
       <Row style={styles.rowContainer}>
@@ -85,6 +97,11 @@ const PersonInfo = ({ item }) => {
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(phone.display, 'phone')}
                   </Text>
+                  {phone['@type'] && (
+                    <Text style={styles.colListLabelText}>
+                      {phone['@type']}
+                    </Text>
+                  )}
                 </View>
               );
             })}
@@ -146,6 +163,11 @@ const styles = StyleSheet.create({
   colListText: {
     fontFamily: constants.fontFamily,
     color: constants.highlightColor
+  },
+  colListLabelText: {
+    fontSize: 12,
+    color: '#bbb',
+    fontFamily: constants.fontFamily
   },
   nameText: {
     fontSize: 20,
