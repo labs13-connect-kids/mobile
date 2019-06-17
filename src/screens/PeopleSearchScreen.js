@@ -81,10 +81,23 @@ class PeopleSearchScreen extends React.Component {
       let splitPhone = this.state.phone.split(' ');
       if (splitPhone.length === 1) {
         person.phones.push({
-          number: splitPhone[0]
+          number: parseInt(splitPhone[0])
         });
       }
     }
+    if (this.state.name.length) {
+          person.names = [];
+          let splitName = this.state.name.split(' ');
+          if (splitName.length === 2) {
+              person.names.push({ first: splitName[0], last: splitName[1] });
+          } else if (splitName.length === 3) {
+              person.names.push({
+                  first: splitName[0],
+                  middle: splitName[1],
+                  last: splitName[2]
+              });
+          }
+      }
 
     // Url constructor
     // Test with www.facebook.com/user
