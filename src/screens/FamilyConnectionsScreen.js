@@ -11,6 +11,7 @@ import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import headerConfig from '../helpers/headerConfig';
 
+import constants from '../helpers/constants';
 class FamilyConnectionsScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Family Connections', navigation);
@@ -19,7 +20,7 @@ class FamilyConnectionsScreen extends Component {
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <Text style={{ fontFamily: 'futura-light', fontSize: 18 }}>
+            <Text style={{ fontFamily: constants.fontFamily, fontSize: 18 }}>
               Learn about a revolutionary way to discover and engage extended
               families for at-risk foster youth.
             </Text>
