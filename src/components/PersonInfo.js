@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Text, Col, Row, Grid } from 'native-base';
+import constants from '../helpers/constants';
 
 const renderMaskedOrResult = (field, type) => {
   if (field !== 'value available in full api response' && type !== 'phone') {
@@ -32,9 +33,9 @@ const PersonInfo = ({ item }) => {
     secondLine += `${item.dob.display}`;
   }
   return (
-    <Grid>
+    <Grid style={styles.container}>
       <Row style={styles.rowContainer}>
-        <Col>
+        <Col size={30} style={styles.imageContainer}>
           {item.images ? (
             <Image
               style={styles.rowImage}
@@ -54,7 +55,7 @@ const PersonInfo = ({ item }) => {
             />
           )}
         </Col>
-        <Col>
+        <Col size={70} style={styles.colList}>
           <Text style={styles.nameText}>{item.names[0].display}</Text>
           {secondLine.length && (
             <Text style={[styles.informationText, { marginBottom: 5 }]}>
@@ -64,43 +65,45 @@ const PersonInfo = ({ item }) => {
         </Col>
       </Row>
       <Row style={styles.rowContainer}>
-        <Col styles={styles.rowLabel}>
+        <Col size={30} style={styles.rowLabel}>
           <Text style={styles.labelText}>Emails</Text>
         </Col>
-        <Col style={styles.rowList}>
-          <Text>Shows emails</Text>
+        <Col size={70} style={styles.colList}>
+          <Text style={styles.colListText}>Shows emails</Text>
         </Col>
       </Row>
       <Row style={styles.rowContainer}>
-        <Col style={styles.rowLabel}>
+        <Col size={30} style={styles.rowLabel}>
           <Text style={styles.labelText}>Phone Numbers</Text>
         </Col>
 
-        <Col style={styles.rowList}>
+        <Col size={70} style={styles.colList}>
           {item.phones &&
             item.phones.map(phone => {
               return (
-                <View>
-                  <Text>{renderMaskedOrResult(phone.display, 'phone')}</Text>
+                <View style={styles.colListContainer}>
+                  <Text style={styles.colListText}>
+                    {renderMaskedOrResult(phone.display, 'phone')}
+                  </Text>
                 </View>
               );
             })}
         </Col>
       </Row>
       <Row style={styles.rowContainer}>
-        <Col style={styles.rowLabel}>
+        <Col size={30} style={styles.rowLabel}>
           <Text style={styles.labelText}>Addresses</Text>
         </Col>
-        <Col style={styles.rowList}>
+        <Col size={70} style={styles.colList}>
           {item.addresses &&
             item.addresses.map(address => {
               return (
-                <View>
-                  <Text>
+                <View style={styles.colListContainer}>
+                  <Text style={styles.colListText}>
                     {renderMaskedOrResult(address.house, 'house')}{' '}
                     {renderMaskedOrResult(address.street, 'street')}
                   </Text>
-                  <Text>
+                  <Text style={styles.colListText}>
                     {address.display}{' '}
                     {renderMaskedOrResult(address.zip_code, 'zip_code')}
                   </Text>
@@ -119,29 +122,40 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   rowContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginBottom: 20
   },
-  rowLabel: {
-    width: '30%',
-    borderColor: 'black',
-    borderStyle: 'solid',
-    borderWidth: 1
-  },
+  rowLabel: {},
   labelText: {
-    textAlign: 'right'
+    textAlign: 'right',
+    fontFamily: constants.fontFamily
+  },
+  imageContainer: {
+    alignItems: 'flex-end'
   },
   rowImage: {
-    marginRight: 20,
     width: 75,
     height: 75
   },
-  rowList: {
-    marginBottom: 20,
-    width: '70%',
-    borderColor: 'black',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    marginRight: 20
+  colList: {
+    marginLeft: 20
+  },
+  colListContainer: {
+    marginBottom: 20
+  },
+  colListText: {
+    fontFamily: constants.fontFamily,
+    color: constants.highlightColor
+  },
+  nameText: {
+    fontSize: 20,
+    color: '#508DB3',
+    fontFamily: constants.fontFamily,
+    marginBottom: 5
+  },
+  informationText: {
+    fontFamily: constants.fontFamily,
+    fontSize: 14
   }
 });
 
