@@ -20,7 +20,8 @@ class PeopleSearchScreen extends React.Component {
     phone: '',
     url: '',
     isDisplaying: false,
-    possiblePersons: []
+    possiblePersons: [],
+    person: null
   };
   inputHandler = (name, value) => {
     this.setState({ [name]: value });
@@ -173,8 +174,37 @@ class PeopleSearchScreen extends React.Component {
     axios
       .post(constants.devURL, body)
       .then(res => {
-        console.log(res.data.possible_persons);
+        console.log(res.data);
         this.setState({ possiblePersons: res.data.possible_persons });
+      })
+      .catch(err => console.log(err));
+  };
+
+  handleSearchRequest = () => {
+    const body = this.handleEncodeURI();
+    axios
+      .post(constants.devURL, body)
+      .then(res => {
+        console.log(res.data);
+        if (res.data.possible_persons) {
+          this.setState({ possiblePersons: res.data.possible_persons });
+        } else if (res.data.person) {
+          this.setState({ person: res.data.person });
+          this.props.navigation.navigate('SearchResult', {
+            searchPointerHash: res.data.person['@search_pointer_hash']
+          });
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
+  handlePersonRequest = searchPointer => {
+    // const body = this.handleEncodeURI();
+    axios
+      .post(constants.devURL, { search_pointer_hash: searchPointer })
+      .then(res => {
+        console.log(res.data.person);
+        this.setState({ person: res.data.person });
       })
       .catch(err => console.log(err));
   };
