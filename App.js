@@ -6,19 +6,18 @@ import {
   createSwitchNavigator
 } from 'react-navigation';
 import * as Font from 'expo-font';
-import { StyleSheet } from 'react-native';
-import { Button } from 'native-base';
 
 import BestPracticesScreen from './src/screens/BestPracticesScreen';
 import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
 import PeopleSearchScreen from './src/screens/PeopleSearchScreen';
 import constants from './src/helpers/constants';
+import AuthenticationView from './src/screens/AuthenticationView';
 
 export default class App extends Component {
   state = { fontLoaded: false };
   static navigationOptions = {
     contentOptions: {
-      activeTintColor: '#e91e63',
+      activeTintColor: constants.highlightColor,
       itemsContainerStyle: {
         marginVertical: 0
       }
@@ -82,6 +81,22 @@ const PeopleSearchNavigator = createStackNavigator(
   }
 );
 
+const AuthenticationViewNavigator = createStackNavigator(
+  {
+    Authentication: {
+      screen: AuthenticationView
+    }
+  },
+  {
+    // initialRouteName: 'Login/Register',
+    // defaultNavigationOptions: {
+    //   headerStyle: {
+    //     height: 80
+    //   }
+    // }
+  }
+);
+
 const AppDrawerNavigator = createDrawerNavigator(
   {
     'Best Practices': {
@@ -92,21 +107,22 @@ const AppDrawerNavigator = createDrawerNavigator(
     },
     'People Search': {
       screen: PeopleSearchNavigator
+    },
+    'Login/Register': {
+      screen: AuthenticationViewNavigator
     }
   },
-  { drawerPosition: 'right', contentOptions: { activeTintColor: '#508DB3' } }
+  {
+    drawerPosition: 'right',
+    contentOptions: { activeTintColor: constants.highlightColor }
+  }
 );
 
 const AppSwitchNavigator = createSwitchNavigator({
   BestPractices: { screen: AppDrawerNavigator },
   FamilyConnections: { screen: AppDrawerNavigator },
-  PeopleSearch: { screen: AppDrawerNavigator }
-});
-
-const styles = StyleSheet.create({
-  authContainer: {
-    flexDirection: 'row'
-  }
+  PeopleSearch: { screen: AppDrawerNavigator },
+  Authentication: { screen: AuthenticationViewNavigator }
 });
 
 const AppContainer = createAppContainer(AppSwitchNavigator);
