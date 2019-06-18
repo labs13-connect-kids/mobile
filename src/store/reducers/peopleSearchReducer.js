@@ -12,7 +12,7 @@ const intialState = {
   error: null,
   isFetching: false,
   person: null,
-  possiblePeople: []
+  possiblePersons: []
 };
 
 export const peopleSearchReducer = (state = intialState, action) => {
@@ -27,7 +27,7 @@ export const peopleSearchReducer = (state = intialState, action) => {
       return {
         ...state,
         isFetching: false,
-        possiblePeople: [...action.payload],
+        possiblePersons: [...action.payload],
         error: null
       };
     case FETCH_PERSON_SUCCESS:
@@ -43,7 +43,7 @@ export const peopleSearchReducer = (state = intialState, action) => {
         error: action.payload,
         isFetching: false,
         person: null,
-        possiblePeople: []
+        possiblePersons: []
       };
     case RESET_STATE:
       return intialState;

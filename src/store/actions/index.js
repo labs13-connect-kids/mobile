@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   FETCH_PEOPLE_SUCCESS,
   FETCH_PERSON,
@@ -12,7 +13,7 @@ import constants from '../../helpers/constants';
 export const fetchSearchResult = body => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
   axios
-    .post(`${devURL}`, body)
+    .post(`${constants.devURL}`, body)
     .then(res => {
       if (res.data.possible_persons) {
         dispatch({
@@ -34,7 +35,7 @@ export const fetchSearchResult = body => dispatch => {
 export const fetchPerson = searchPointer => dispatch => {
   dispatch({ type: FETCH_PERSON });
   axios
-    .post(`${devURL}`, constants.devURL, { search_pointer_hash: searchPointer })
+    .post(`${constants.devURL}`, { search_pointer_hash: searchPointer })
     .then(res => {
       dispatch({
         type: FETCH_PERSON_SUCCESS,

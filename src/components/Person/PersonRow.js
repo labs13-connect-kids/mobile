@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardItem, Grid } from 'native-base';
 import { StyleSheet } from 'react-native';
-import PersonInfoHeader from './Person/PersonInfoHeader';
+import PersonInfoHeader from './PersonInfoHeader';
 
 const PersonRow = ({ handlePress, item }) => {
   return (

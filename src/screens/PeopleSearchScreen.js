@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
+import { connect } from 'react-redux';
+import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
 
 import { Container, Button, Tabs, Tab, Input } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
-import PersonsRow from '../components/PersonsRow';
+import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 class PeopleSearchScreen extends React.Component {
@@ -181,22 +183,22 @@ class PeopleSearchScreen extends React.Component {
 
   handleSearchRequest = () => {
     const body = this.handleEncodeURI();
-    // this.props.fetchSearchResult(body)
-    axios
-      .post(constants.devURL, body)
-      .then(res => {
-        console.log(res.data);
-        if (res.data.possible_persons) {
-          this.setState({ possiblePersons: res.data.possible_persons });
-        } else if (res.data.person) {
-          this.setState({ person: res.data.person });
-          this.props.navigation.navigate('SearchResult', {
-            person: res.data.person,
-            handlePersonRequest: this.handlePersonRequest
-          });
-        }
-      })
-      .catch(err => console.log(err));
+    this.props.fetchSearchResult(body);
+    // axios
+    //   .post(constants.devURL, body)
+    //   .then(res => {
+    //     console.log(res.data);
+    //     if (res.data.possible_persons) {
+    //       this.setState({ possiblePersons: res.data.possible_persons });
+    //     } else if (res.data.person) {
+    //       this.setState({ person: res.data.person });
+    //       this.props.navigation.navigate('SearchResult', {
+    //         person: res.data.person,
+    //         handlePersonRequest: this.handlePersonRequest
+    //       });
+    //     }
+    //   })
+    //   .catch(err => console.log(err));
   };
 
   handlePersonRequest = searchPointer => {
@@ -377,7 +379,7 @@ class PeopleSearchScreen extends React.Component {
                 <Button
                   info
                   style={styles.button}
-                  onPress={this.handlePersonSubmit}
+                  onPress={this.handleSearchRequest}
                 >
                   <Text style={styles.buttonText}> Search </Text>
                 </Button>
@@ -391,14 +393,14 @@ class PeopleSearchScreen extends React.Component {
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
-              {!!this.state.possiblePersons.length ? (
+              {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
                   <FlatList
-                    data={this.state.possiblePersons}
+                    data={this.props.possiblePersons}
                     renderItem={({ item }) => {
                       return (
-                        <PersonsRow
+                        <PersonRow
                           item={item}
                           handlePress={() =>
                             this.handleNavigateToResult(
@@ -489,4 +491,17 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PeopleSearchScreen;
+const mapStateToProps = state => {
+  const { error, isFetching, person, possiblePersons } = state.people;
+  return {
+    error,
+    isFetching,
+    person,
+    possiblePersons
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { fetchPerson, fetchSearchResult, resetState }
+)(PeopleSearchScreen);
