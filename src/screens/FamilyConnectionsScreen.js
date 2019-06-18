@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: 'rgb(80,141,179)'
+    backgroundColor: constants.highlightColor
   },
   buttonText: {
     color: '#fff',
