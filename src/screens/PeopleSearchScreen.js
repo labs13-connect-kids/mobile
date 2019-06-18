@@ -191,7 +191,8 @@ class PeopleSearchScreen extends React.Component {
         } else if (res.data.person) {
           this.setState({ person: res.data.person });
           this.props.navigation.navigate('SearchResult', {
-            searchPointerHash: res.data.person['@search_pointer_hash']
+            person: res.data.person,
+            handlePersonRequest: this.handlePersonRequest
           });
         }
       })
@@ -199,14 +200,22 @@ class PeopleSearchScreen extends React.Component {
   };
 
   handlePersonRequest = searchPointer => {
-    // const body = this.handleEncodeURI();
     axios
       .post(constants.devURL, { search_pointer_hash: searchPointer })
       .then(res => {
-        console.log(res.data.person);
         this.setState({ person: res.data.person });
       })
       .catch(err => console.log(err));
+  };
+
+  handleNavigateToResult = async searchPointer => {
+    const { person } = this.state;
+    if (!person) {
+      await this.handlePersonRequest(searchPointer);
+    }
+    await this.props.navigation.navigate('SearchResult', {
+      person: person
+    });
   };
 
   render() {
@@ -354,7 +363,7 @@ class PeopleSearchScreen extends React.Component {
               <Button
                 info
                 style={styles.button}
-                onPress={this.handlePersonSubmit}
+                onPress={this.handleSearchRequest}
               >
                 <Text style={styles.buttonText}> Search </Text>
               </Button>
@@ -363,7 +372,7 @@ class PeopleSearchScreen extends React.Component {
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
-              {this.state.possiblePersons.length ? (
+              {!!this.state.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
                   <FlatList
@@ -373,9 +382,9 @@ class PeopleSearchScreen extends React.Component {
                         <PersonsRow
                           item={item}
                           handlePress={() =>
-                            this.props.navigation.navigate('SearchResult', {
-                              searchPointerHash: item['@search_pointer_hash']
-                            })
+                            this.handleNavigateToResult(
+                              item['@search_pointer_hash']
+                            )
                           }
                         />
                       );

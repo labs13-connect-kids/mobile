@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -8,56 +7,20 @@ import {
   View
 } from 'react-native';
 
-import { Container, Button, Tabs, Tab, Input } from 'native-base';
+import { Container, Button } from 'native-base';
 
 import { ScrollView } from 'react-native-gesture-handler';
 
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
-import SearchForm from '../components/SearchForm/SearchForm';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
-  state = {
-    isDisplaying: false,
-    possiblePersons: [],
-    person: null
-  };
-  componentDidMount() {
-    const { searchPointerHash } = this.props.navigation.state.params;
-
-    this.handlePersonRequest(searchPointerHash);
-  }
-
-  handleEncodeURI = () => {
-    console.log(
-      JSON.stringify({
-        person: encodeURI(JSON.stringify(person))
-      })
-    );
-    return JSON.stringify({
-      person: encodeURI(JSON.stringify(person))
-    });
-  };
-
-  handlePersonSubmit = () => {};
-
-  handlePersonRequest = searchPointer => {
-    // const body = this.handleEncodeURI();
-    axios
-      .post(constants.devURL, { search_pointer_hash: searchPointer })
-      .then(res => {
-        console.log(res.data.person);
-        this.setState({ person: res.data.person });
-      })
-      .catch(err => console.log(err));
-  };
-
   render() {
-    const { person } = this.state;
+    const { person } = this.props.navigation.state.params;
     return (
       <Container style={styles.container}>
         <SafeAreaView>
