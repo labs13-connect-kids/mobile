@@ -10,6 +10,7 @@ import * as Font from 'expo-font';
 import BestPracticesScreen from './src/screens/BestPracticesScreen';
 import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
 import PeopleSearchScreen from './src/screens/PeopleSearchScreen';
+import SearchResultScreen from './src/screens/SearchResultScreen';
 import constants from './src/helpers/constants';
 import AuthenticationView from './src/screens/AuthenticationView';
 
@@ -69,6 +70,9 @@ const PeopleSearchNavigator = createStackNavigator(
   {
     PeopleSearch: {
       screen: PeopleSearchScreen
+    },
+    SearchResult: {
+      screen: SearchResultScreen
     }
   },
   {
