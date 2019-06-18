@@ -8,6 +8,7 @@ export default function PersonsRow({ item }) {
     
   let allAddresses = '';
   let secondLine = '';
+  let allPhoneNumbers = item.phones.number;
 
   if (item.dob && item.gender) {
     secondLine += `${item.dob.display}, ${item.gender.content}`;
@@ -17,9 +18,10 @@ export default function PersonsRow({ item }) {
     secondLine += `${item.dob.display}`;
   }
 
-  if (item.addresses) {
+    if (item.addresses && allPhoneNumbers) {
     item.addresses.forEach(address => {
       allAddresses += `${address.city}, ${address.state} `;
+      allPhoneNumbers += `${address.number}`
     });
   }
 
@@ -47,18 +49,20 @@ export default function PersonsRow({ item }) {
           )}
           <View>
             <Text style={styles.nameText}>{item.names[0].display}</Text>
+
             {secondLine.length && (
-              <Text style={[styles.informationText, { marginBottom: 5 }]}>
+            <Text style={[styles.informationText, { marginBottom: 5 }]}>
                 {secondLine}
-              </Text>
+            </Text>
             )}
             {allAddresses.length ? (
-              <Text style={styles.informationText}>
+            <Text style={styles.informationText}>
                 {allAddresses.length > 25
-                  ? allAddresses.slice(0, 25) + '...'
-                  : allAddresses}
-              </Text>
+                ? allAddresses.slice(0, 25) + '...'
+                : allAddresses}
+            </Text>
             ) : null}
+          
           </View>
         </Body>
       </CardItem>
