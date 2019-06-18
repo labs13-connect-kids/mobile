@@ -6,7 +6,6 @@ import {
   createSwitchNavigator
 } from 'react-navigation';
 import * as Font from 'expo-font';
-import { Button } from 'native-base';
 
 import BestPracticesScreen from './src/screens/BestPracticesScreen';
 import FamilyConnectionsScreen from './src/screens/FamilyConnectionsScreen';
