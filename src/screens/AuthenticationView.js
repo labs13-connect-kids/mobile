@@ -22,7 +22,11 @@ class AuthenticationView extends Component {
   };
 
   setModalVisible = visible => {
-    this.setState({ modalVisible: visible });
+    this.setState({
+      modalVisible: visible,
+      videoAgree: false,
+      videoVisible: false
+    });
   };
 
   advanceModal = () => {
@@ -51,8 +55,6 @@ class AuthenticationView extends Component {
         >
           <View style={styles.marginTop}>
             <View>
-              {/* modals rendered based on user feedback */}
-              {/* modal 1 */}
               {this.state.modalVisible &&
                 !this.state.videoAgree &&
                 !this.state.videoVisible && (
@@ -62,7 +64,6 @@ class AuthenticationView extends Component {
                     setModalVisible={this.setModalVisible}
                   />
                 )}
-              {/* modal 2 */}
               {!this.state.videoVisible && this.state.videoAgree && (
                 <VideoAgreeModal
                   modalVisible={this.state.modalVisible}
@@ -70,7 +71,6 @@ class AuthenticationView extends Component {
                   setModalVisible={this.setModalVisible}
                 />
               )}
-              {/* modal 3 */}
               {!this.state.videoAgree && this.state.videoVisible && (
                 <VideoModal setModalVisible={this.setModalVisible} />
               )}
