@@ -41,7 +41,7 @@ const PersonInfoHeader = ({ item, listItem = false }) => {
         <Text style={styles.cardNameText}>
           {item.names && item.names[0].display}
         </Text>
-        {secondLine.length && (
+        {!!secondLine.length && (
           <Text style={[styles.cardInformationText, { marginBottom: 5 }]}>
             {secondLine}
           </Text>
