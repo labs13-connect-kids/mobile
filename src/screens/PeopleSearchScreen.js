@@ -181,6 +181,7 @@ class PeopleSearchScreen extends React.Component {
 
   handleSearchRequest = () => {
     const body = this.handleEncodeURI();
+    // this.props.fetchSearchResult(body)
     axios
       .post(constants.devURL, body)
       .then(res => {

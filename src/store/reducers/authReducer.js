@@ -5,4 +5,9 @@ const intialState = {
   loadingUser: false
 };
 
-export const authReducer = (state = intialState, action) => {};
+export const authReducer = (state = intialState, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
