@@ -64,7 +64,7 @@ class PeopleSearchScreen extends React.Component {
             }
         }
         // Email constructor
-        if (this.state.email.length ) {
+        if (this.state.email.length) {
             person.emails = [];
             let splitEmail = this.state.email.split(' ');
             if (splitEmail.length === 1) {
@@ -88,7 +88,7 @@ class PeopleSearchScreen extends React.Component {
 
         // Url constructor
         // Test with https://twitter.com/elonmusk?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
-        if (this.state.url.length > 0 ) {
+        if (this.state.url.length > 0) {
             person.urls = [];
             let splitUrl = this.state.url.split(' ');
             if (splitUrl.length === 1) {
@@ -202,7 +202,7 @@ class PeopleSearchScreen extends React.Component {
                         </View>
 
                         <View>
-                            <Tabs
+                            {/* <Tabs
                                 style={styles.container}
                                 activeTextStyle={{ color: '#64aab8' }}
                                 tabBarUnderlineStyle={{ backgroundColor: '#000' }}
@@ -314,148 +314,161 @@ class PeopleSearchScreen extends React.Component {
                                         onChangeText={text => this.inputHandler('url', text)}
                                     />
                                 </Tab>
-                            </Tabs>
+                            </Tabs> */}
 
-            <View>
-              <Tabs
-                style={styles.container}
-                activeTextStyle={{ color: constants.highlightColor }}
-                tabBarUnderlineStyle={{ backgroundColor: '#000' }}
-              >
-                <Tab
-                  heading="Name"
-                  style={[
-                    styles.nameInput,
-                    { color: constants.highlightColor }
-                  ]}
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color:
-                      Platform.OS === 'android'
-                        ? '#fff'
-                        : constants.highlightColor,
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="First and last, middle optional"
-                    style={styles.textInput}
-                    value={this.state.name}
-                    onChangeText={text => this.inputHandler('name', text)}
-                  />
-                  <Input
-                    placeholder="City, State"
-                    style={[styles.textInput, styles.textInputSmall]}
-                    value={this.state.cityState}
-                    onChangeText={text => this.inputHandler('cityState', text)}
-                  />
-                </Tab>
-                <Tab
-                  heading="Email"
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color:
-                      Platform.OS === 'android'
-                        ? '#fff'
-                        : constants.highlightColor,
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="Email address"
-                    style={styles.textInput}
-                    value={this.state.email}
-                    onChangeText={text => this.inputHandler('email', text)}
-                  />
-                </Tab>
-                <Tab
-                  heading="Address"
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color:
-                      Platform.OS === 'android'
-                        ? '#fff'
-                        : constants.highlightColor,
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="Mailing address"
-                    style={styles.textInput}
-                    value={this.state.address}
-                    onChangeText={text => this.inputHandler('address', text)}
-                  />
-                </Tab>
-                <Tab
-                  heading="Phone"
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color:
-                      Platform.OS === 'android'
-                        ? '#fff'
-                        : constants.highlightColor,
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="Phone any format, no letters"
-                    style={styles.textInput}
-                    value={this.state.phone}
-                    onChangeText={text => this.inputHandler('phone', text)}
-                  />
-                </Tab>
-                <Tab
-                  heading="URL"
-                  activeTextStyle={{
-                    color: '#000',
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                  textStyle={{
-                    color:
-                      Platform.OS === 'android'
-                        ? '#fff'
-                        : constants.highlightColor,
-                    fontFamily: constants.fontFamily,
-                    fontSize: 16
-                  }}
-                >
-                  <Input
-                    placeholder="Social profile link or any URL"
-                    style={styles.textInput}
-                    value={this.state.url}
-                    onChangeText={text => this.inputHandler('url', text)}
-                  />
-                </Tab>
-              </Tabs>
 
-                                <Button
-                                    info
-                                    style={styles.greyButton}
-                                    onPress={this.startOver}
+
+                            <View>
+                                <Tabs
+                                    style={styles.container}
+                                    activeTextStyle={{ color: constants.highlightColor }}
+                                    tabBarUnderlineStyle={{ backgroundColor: '#000' }}
                                 >
-                                    <Text style={styles.buttonText}> Start Over </Text>
-                                </Button>
+                                    <Tab
+                                        heading="Name"
+                                        style={[
+                                            styles.nameInput,
+                                            { color: constants.highlightColor }
+                                        ]}
+                                        activeTextStyle={{
+                                            color: '#000',
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                        textStyle={{
+                                            color:
+                                                Platform.OS === 'android'
+                                                    ? '#fff'
+                                                    : constants.highlightColor,
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                    >
+                                        <Input
+                                            placeholder="First and last, middle optional"
+                                            style={styles.textInput}
+                                            value={this.state.name}
+                                            onChangeText={text => this.inputHandler('name', text)}
+                                        />
+                                        <Input
+                                            placeholder="City, State"
+                                            style={[styles.textInput, styles.textInputSmall]}
+                                            value={this.state.cityState}
+                                            onChangeText={text => this.inputHandler('cityState', text)}
+                                        />
+                                    </Tab>
+                                    <Tab
+                                        heading="Email"
+                                        activeTextStyle={{
+                                            color: '#000',
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                        textStyle={{
+                                            color:
+                                                Platform.OS === 'android'
+                                                    ? '#fff'
+                                                    : constants.highlightColor,
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                    >
+                                        <Input
+                                            placeholder="Email address"
+                                            style={styles.textInput}
+                                            value={this.state.email}
+                                            onChangeText={text => this.inputHandler('email', text)}
+                                        />
+                                    </Tab>
+                                    <Tab
+                                        heading="Address"
+                                        activeTextStyle={{
+                                            color: '#000',
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                        textStyle={{
+                                            color:
+                                                Platform.OS === 'android'
+                                                    ? '#fff'
+                                                    : constants.highlightColor,
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                    >
+                                        <Input
+                                            placeholder="Mailing address"
+                                            style={styles.textInput}
+                                            value={this.state.address}
+                                            onChangeText={text => this.inputHandler('address', text)}
+                                        />
+                                    </Tab>
+                                    <Tab
+                                        heading="Phone"
+                                        activeTextStyle={{
+                                            color: '#000',
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                        textStyle={{
+                                            color:
+                                                Platform.OS === 'android'
+                                                    ? '#fff'
+                                                    : constants.highlightColor,
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                    >
+                                        <Input
+                                            placeholder="Phone any format, no letters"
+                                            style={styles.textInput}
+                                            value={this.state.phone}
+                                            onChangeText={text => this.inputHandler('phone', text)}
+                                        />
+                                    </Tab>
+                                    <Tab
+                                        heading="URL"
+                                        activeTextStyle={{
+                                            color: '#000',
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                        textStyle={{
+                                            color:
+                                                Platform.OS === 'android'
+                                                    ? '#fff'
+                                                    : constants.highlightColor,
+                                            fontFamily: constants.fontFamily,
+                                            fontSize: 16
+                                        }}
+                                    >
+                                        <Input
+                                            placeholder="Social profile link or any URL"
+                                            style={styles.textInput}
+                                            value={this.state.url}
+                                            onChangeText={text => this.inputHandler('url', text)}
+                                        />
+                                    </Tab>
+                                </Tabs>
+
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Button
+                                        info
+                                        style={styles.button}
+                                        onPress={this.handlePersonSubmit}
+                                    >
+                                        <Text style={styles.buttonText}> Search </Text>
+                                    </Button>
+
+                                    <Button
+                                        info
+                                        style={styles.greyButton}
+                                        onPress={this.startOver}
+                                    >
+                                        <Text style={styles.buttonText}> Start Over </Text>
+                                    </Button>
+                                </View>
+
                             </View>
 
                             <Text style={styles.link}>
@@ -476,8 +489,7 @@ class PeopleSearchScreen extends React.Component {
                                         keyExtractor={(item, index) => index.toString()}
                                     />
                                 </>
-                            ) : null }
-
+                            ) : null}
                         </View>
                     </ScrollView>
                 </SafeAreaView>
@@ -506,12 +518,12 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
 
-  textInput: {
-    borderColor: constants.highlightColor,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    flex: 2
-  },
+    textInput: {
+        borderColor: constants.highlightColor,
+        borderWidth: 1,
+        borderStyle: 'solid',
+        flex: 2
+    },
 
     textInputSmall: {
         flex: 1
@@ -534,19 +546,25 @@ const styles = StyleSheet.create({
         color: 'white'
     },
 
-  link: {
-    color: '#fff',
-    lineHeight: 17,
-    padding: 15,
-    backgroundColor: constants.highlightColor,
-    borderRadius: 10,
-    marginBottom: 20
-  },
-  matchesText: {
-    fontSize: 20,
-    color: '#508DB3',
-    marginBottom: 20
-  }
+    link: {
+        color: '#fff',
+        lineHeight: 17,
+        padding: 15,
+        backgroundColor: constants.highlightColor,
+        borderRadius: 10,
+        marginBottom: 20
+    },
+    matchesText: {
+        fontSize: 20,
+        color: '#508DB3',
+        marginBottom: 20
+    },
+
+    greyButton: {
+        backgroundColor: 'grey',
+        margin: 10,
+        padding: 10
+    }
 });
 
 export default PeopleSearchScreen;
