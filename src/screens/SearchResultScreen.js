@@ -28,7 +28,6 @@ class PeopleSearchScreen extends React.Component {
   }
 
   render() {
-    console.log(this.props.navigation);
     const { person } = this.props;
     return (
       <Container style={styles.container}>
