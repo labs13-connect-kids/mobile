@@ -5,7 +5,7 @@ import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
 import { Container, Button, Tabs, Tab, Input } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
-import PersonsRow from '../components/PersonsRow';
+import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 class PeopleSearchScreen extends React.Component {
@@ -376,7 +376,7 @@ class PeopleSearchScreen extends React.Component {
                 <Button
                   info
                   style={styles.button}
-                  onPress={this.handlePersonSubmit}
+                  onPress={this.handleSearchRequest}
                 >
                   <Text style={styles.buttonText}> Search </Text>
                 </Button>
@@ -397,7 +397,7 @@ class PeopleSearchScreen extends React.Component {
                     data={this.state.possiblePersons}
                     renderItem={({ item }) => {
                       return (
-                        <PersonsRow
+                        <PersonRow
                           item={item}
                           handlePress={() =>
                             this.handleNavigateToResult(
