@@ -10,8 +10,9 @@ import {
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
-export const fetchSearchResult = body => dispatch => {
+export const fetchSearchResult = (body, cb) => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
+  let isPerson = false;
   axios
     .post(`${constants.devURL}`, body)
     .then(res => {
@@ -21,11 +22,15 @@ export const fetchSearchResult = body => dispatch => {
           payload: res.data.possible_persons
         });
       } else if (res.data.person) {
+        isPerson = true;
         dispatch({
           type: FETCH_PERSON_SUCCESS,
           payload: res.data.person
         });
       }
+    })
+    .then(() => {
+      if (isPerson) cb();
     })
     .catch(err => {
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });

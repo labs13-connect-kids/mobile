@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 
 import { Container, Button } from 'native-base';
-
+import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { fetchPerson } from '../store/actions';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
@@ -19,8 +19,17 @@ class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
+  componentDidMount() {
+    const { fetchPerson, person } = this.props;
+    if (!person) {
+      const { searchPointer } = this.props.navigation.state.params;
+      fetchPerson(searchPointer);
+    }
+  }
+
   render() {
-    const { person } = this.props.navigation.state.params;
+    console.log(this.props.navigation);
+    const { person } = this.props;
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -112,4 +121,17 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PeopleSearchScreen;
+const mapStateToProps = state => {
+  const { error, isFetching, person, possiblePersons } = state.people;
+  return {
+    error,
+    isFetching,
+    person,
+    possiblePersons
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { fetchPerson }
+)(PeopleSearchScreen);

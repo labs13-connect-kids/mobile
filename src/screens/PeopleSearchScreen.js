@@ -182,32 +182,9 @@ class PeopleSearchScreen extends React.Component {
   };
 
   handleSearchRequest = () => {
+    const { fetchSearchResult, navigation } = this.props;
     const body = this.handleEncodeURI();
-    this.props.fetchSearchResult(body);
-    // axios
-    //   .post(constants.devURL, body)
-    //   .then(res => {
-    //     console.log(res.data);
-    //     if (res.data.possible_persons) {
-    //       this.setState({ possiblePersons: res.data.possible_persons });
-    //     } else if (res.data.person) {
-    //       this.setState({ person: res.data.person });
-    //       this.props.navigation.navigate('SearchResult', {
-    //         person: res.data.person,
-    //         handlePersonRequest: this.handlePersonRequest
-    //       });
-    //     }
-    //   })
-    //   .catch(err => console.log(err));
-  };
-
-  handlePersonRequest = searchPointer => {
-    axios
-      .post(constants.devURL, { search_pointer_hash: searchPointer })
-      .then(res => {
-        this.setState({ person: res.data.person });
-      })
-      .catch(err => console.log(err));
+    fetchSearchResult(body, () => navigation.navigate('SearchResult'));
   };
 
   handleNavigateToResult = async searchPointer => {
@@ -221,6 +198,8 @@ class PeopleSearchScreen extends React.Component {
   };
 
   startOver = () => {
+    const { resetState } = this.props;
+    resetState();
     this.setState({
       name: '',
       cityState: '',
@@ -234,6 +213,7 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
+    console.log(this.props.navigation);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -403,9 +383,9 @@ class PeopleSearchScreen extends React.Component {
                         <PersonRow
                           item={item}
                           handlePress={() =>
-                            this.handleNavigateToResult(
-                              item['@search_pointer_hash']
-                            )
+                            this.props.navigation.navigate('SearchResult', {
+                              searchPointer: item['@search_pointer_hash']
+                            })
                           }
                         />
                       );
