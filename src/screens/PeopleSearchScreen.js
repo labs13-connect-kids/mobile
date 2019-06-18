@@ -489,7 +489,7 @@ class PeopleSearchScreen extends React.Component {
                                         keyExtractor={(item, index) => index.toString()}
                                     />
                                 </>
-                            ) : null}
+                            ) : null }
                         </View>
                     </ScrollView>
                 </SafeAreaView>
