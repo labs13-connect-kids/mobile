@@ -3,7 +3,6 @@ import axios from 'axios';
 import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
 
 import { Container, Button, Tabs, Tab, Input } from 'native-base';
-
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
 import PersonsRow from '../components/PersonsRow';
@@ -88,16 +87,16 @@ class PeopleSearchScreen extends React.Component {
     }
 
     // Url constructor
-    // Test with www.facebook.com/user
-    // if (this.state.url.length) {
-    //   person.urls = [];
-    //   let splitUrl = this.state.url.split(' ');
-    //   if (splitUrl.length === 1) {
-    //     person.urls.push({
-    //       url: splitUrl[0]
-    //     });
-    //   }
-    // }
+    // Test with https://twitter.com/elonmusk?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
+    if (this.state.url.length > 0) {
+      person.urls = [];
+      let splitUrl = this.state.url.split(' ');
+      if (splitUrl.length === 1) {
+        person.urls.push({
+          url: splitUrl[0]
+        });
+      }
+    }
 
     const inputData = {
       person: {
@@ -215,6 +214,19 @@ class PeopleSearchScreen extends React.Component {
     }
     await this.props.navigation.navigate('SearchResult', {
       person: person
+    });
+  };
+
+  startOver = () => {
+    this.setState({
+      name: '',
+      cityState: '',
+      email: '',
+      address: '',
+      phone: '',
+      url: '',
+      isDisplaying: false,
+      possiblePersons: []
     });
   };
 
@@ -360,13 +372,19 @@ class PeopleSearchScreen extends React.Component {
                 </Tab>
               </Tabs>
 
-              <Button
-                info
-                style={styles.button}
-                onPress={this.handleSearchRequest}
-              >
-                <Text style={styles.buttonText}> Search </Text>
-              </Button>
+              <View style={{ flexDirection: 'row' }}>
+                <Button
+                  info
+                  style={styles.button}
+                  onPress={this.handlePersonSubmit}
+                >
+                  <Text style={styles.buttonText}> Search </Text>
+                </Button>
+
+                <Button info style={styles.greyButton} onPress={this.startOver}>
+                  <Text style={styles.buttonText}> Start Over </Text>
+                </Button>
+              </View>
 
               <Text style={styles.link}>
                 This is a preview. Social workers can have completely free
@@ -461,6 +479,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#508DB3',
     marginBottom: 20
+  },
+
+  greyButton: {
+    backgroundColor: 'grey',
+    margin: 10,
+    padding: 10
   }
 });
 
