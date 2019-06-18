@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: 'rgb(80,141,179)',
+    color: constants.highlightColor,
     fontSize: 12,
     textDecorationLine: 'underline'
   },
