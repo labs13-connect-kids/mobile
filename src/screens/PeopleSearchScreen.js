@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
 
 import { Container, Button, Tabs, Tab, Input } from 'native-base';
 
@@ -191,19 +191,25 @@ class PeopleSearchScreen extends React.Component {
             <View>
               <Tabs
                 style={styles.container}
-                activeTextStyle={{ color: '#64aab8' }}
+                activeTextStyle={{ color: constants.highlightColor }}
                 tabBarUnderlineStyle={{ backgroundColor: '#000' }}
               >
                 <Tab
                   heading="Name"
-                  style={[styles.nameInput, { color: '#64aab8' }]}
+                  style={[
+                    styles.nameInput,
+                    { color: constants.highlightColor }
+                  ]}
                   activeTextStyle={{
                     color: '#000',
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -229,7 +235,10 @@ class PeopleSearchScreen extends React.Component {
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -249,7 +258,10 @@ class PeopleSearchScreen extends React.Component {
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -269,7 +281,10 @@ class PeopleSearchScreen extends React.Component {
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -289,7 +304,10 @@ class PeopleSearchScreen extends React.Component {
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -358,7 +376,7 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    borderColor: '#64aab8',
+    borderColor: constants.highlightColor,
     borderWidth: 1,
     borderStyle: 'solid',
     flex: 2
@@ -386,10 +404,10 @@ const styles = StyleSheet.create({
   },
 
   link: {
-    color: '#64aab8',
+    color: '#fff',
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
+    backgroundColor: constants.highlightColor,
     borderRadius: 10,
     marginBottom: 20
   },
