@@ -1,9 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
 
 import { Container, Button, Tabs, Tab, Input } from 'native-base';
-
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
 import PersonsRow from '../components/PersonsRow';
@@ -20,7 +19,8 @@ class PeopleSearchScreen extends React.Component {
     phone: '',
     url: '',
     isDisplaying: false,
-    possiblePersons: []
+    possiblePersons: [],
+    person: null
   };
   inputHandler = (name, value) => {
     this.setState({ [name]: value });
@@ -87,16 +87,16 @@ class PeopleSearchScreen extends React.Component {
     }
 
     // Url constructor
-    // Test with www.facebook.com/user
-    // if (this.state.url.length) {
-    //   person.urls = [];
-    //   let splitUrl = this.state.url.split(' ');
-    //   if (splitUrl.length === 1) {
-    //     person.urls.push({
-    //       url: splitUrl[0]
-    //     });
-    //   }
-    // }
+    // Test with https://twitter.com/elonmusk?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
+    if (this.state.url.length > 0) {
+      person.urls = [];
+      let splitUrl = this.state.url.split(' ');
+      if (splitUrl.length === 1) {
+        person.urls.push({
+          url: splitUrl[0]
+        });
+      }
+    }
 
     const inputData = {
       person: {
@@ -173,10 +173,61 @@ class PeopleSearchScreen extends React.Component {
     axios
       .post(constants.devURL, body)
       .then(res => {
-        console.log(res.data.possible_persons);
+        console.log(res.data);
         this.setState({ possiblePersons: res.data.possible_persons });
       })
       .catch(err => console.log(err));
+  };
+
+  handleSearchRequest = () => {
+    const body = this.handleEncodeURI();
+    axios
+      .post(constants.devURL, body)
+      .then(res => {
+        console.log(res.data);
+        if (res.data.possible_persons) {
+          this.setState({ possiblePersons: res.data.possible_persons });
+        } else if (res.data.person) {
+          this.setState({ person: res.data.person });
+          this.props.navigation.navigate('SearchResult', {
+            person: res.data.person,
+            handlePersonRequest: this.handlePersonRequest
+          });
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
+  handlePersonRequest = searchPointer => {
+    axios
+      .post(constants.devURL, { search_pointer_hash: searchPointer })
+      .then(res => {
+        this.setState({ person: res.data.person });
+      })
+      .catch(err => console.log(err));
+  };
+
+  handleNavigateToResult = async searchPointer => {
+    const { person } = this.state;
+    if (!person) {
+      await this.handlePersonRequest(searchPointer);
+    }
+    await this.props.navigation.navigate('SearchResult', {
+      person: person
+    });
+  };
+
+  startOver = () => {
+    this.setState({
+      name: '',
+      cityState: '',
+      email: '',
+      address: '',
+      phone: '',
+      url: '',
+      isDisplaying: false,
+      possiblePersons: []
+    });
   };
 
   render() {
@@ -191,19 +242,25 @@ class PeopleSearchScreen extends React.Component {
             <View>
               <Tabs
                 style={styles.container}
-                activeTextStyle={{ color: '#64aab8' }}
+                activeTextStyle={{ color: constants.highlightColor }}
                 tabBarUnderlineStyle={{ backgroundColor: '#000' }}
               >
                 <Tab
                   heading="Name"
-                  style={[styles.nameInput, { color: '#64aab8' }]}
+                  style={[
+                    styles.nameInput,
+                    { color: constants.highlightColor }
+                  ]}
                   activeTextStyle={{
                     color: '#000',
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -229,7 +286,10 @@ class PeopleSearchScreen extends React.Component {
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -249,7 +309,10 @@ class PeopleSearchScreen extends React.Component {
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -269,7 +332,10 @@ class PeopleSearchScreen extends React.Component {
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -289,7 +355,10 @@ class PeopleSearchScreen extends React.Component {
                     fontSize: 16
                   }}
                   textStyle={{
-                    color: '#64aab8',
+                    color:
+                      Platform.OS === 'android'
+                        ? '#fff'
+                        : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
                   }}
@@ -303,27 +372,40 @@ class PeopleSearchScreen extends React.Component {
                 </Tab>
               </Tabs>
 
-              <Button
-                info
-                style={styles.button}
-                onPress={this.handlePersonSubmit}
-              >
-                <Text style={styles.buttonText}> Search </Text>
-              </Button>
+              <View style={{ flexDirection: 'row' }}>
+                <Button
+                  info
+                  style={styles.button}
+                  onPress={this.handlePersonSubmit}
+                >
+                  <Text style={styles.buttonText}> Search </Text>
+                </Button>
+
+                <Button info style={styles.greyButton} onPress={this.startOver}>
+                  <Text style={styles.buttonText}> Start Over </Text>
+                </Button>
+              </View>
 
               <Text style={styles.link}>
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
-              {this.state.isDisplaying && <Text>{this.state.name}</Text>}
-
-              {this.state.possiblePersons.length ? (
+              {!!this.state.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
                   <FlatList
                     data={this.state.possiblePersons}
                     renderItem={({ item }) => {
-                      return <PersonsRow item={item} />;
+                      return (
+                        <PersonsRow
+                          item={item}
+                          handlePress={() =>
+                            this.handleNavigateToResult(
+                              item['@search_pointer_hash']
+                            )
+                          }
+                        />
+                      );
                     }}
                     keyExtractor={(item, index) => index.toString()}
                   />
@@ -358,7 +440,7 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    borderColor: '#64aab8',
+    borderColor: constants.highlightColor,
     borderWidth: 1,
     borderStyle: 'solid',
     flex: 2
@@ -386,10 +468,10 @@ const styles = StyleSheet.create({
   },
 
   link: {
-    color: '#64aab8',
+    color: '#fff',
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
+    backgroundColor: constants.highlightColor,
     borderRadius: 10,
     marginBottom: 20
   },
@@ -397,6 +479,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#508DB3',
     marginBottom: 20
+  },
+
+  greyButton: {
+    backgroundColor: 'grey',
+    margin: 10,
+    padding: 10
   }
 });
 
