@@ -11,3 +11,6 @@ export const FETCH_PERSON_SUCCESS = 'FETCH_PERSON_SUCCESS';
 export const FETCH_PERSON_FAILURE = 'FETCH_PERSON_FAILURE';
 
 export const RESET_STATE = 'RESET_STATE';
+
+export const SET_USER_CREDS = 'SET_USER_CREDS';
+export const LOG_OUT = 'LOG_OUT';
