@@ -9,7 +9,12 @@ import {
   Linking
 } from 'react-native';
 import { Container, Button } from 'native-base';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
+import { AsyncStorage } from 'react-native';
+import { setUserCreds, logOut } from '../store/actions';
+import { connect } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
@@ -17,7 +22,22 @@ import constants from '../helpers/constants';
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Best Practices', navigation);
+  async componentDidMount() {
+    // NOTE: TODO check for JWT expiration to confirm if logged in
+    let confirmedUser = await AsyncStorage.getItem('auth0Data');
+
+    if (confirmedUser) {
+      confirmedUser = JSON.parse(confirmedUser);
+
+      const jwtToken = confirmedUser.params.id_token;
+      const decoded = jwtDecode(jwtToken);
+
+      this.props.setUserCreds(decoded, confirmedUser);
+    }
+  }
+
   render() {
+    console.log('BEST PRACTICES PROPS', this.props);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -35,7 +55,13 @@ class BestPracticesScreen extends Component {
                 source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
               />
             </View>
-
+            {this.props.isLoggedIn ? (
+              <TouchableOpacity onPress={this.props.logOut}>
+                <Text>Log Out</Text>
+              </TouchableOpacity>
+            ) : (
+              <LoginWithAuth0 />
+            )}
             <Button
               style={styles.button}
               block
@@ -113,4 +139,14 @@ const styles = StyleSheet.create({
   }
 });
 
-export default BestPracticesScreen;
+const mapStateToProps = state => {
+  const { isLoggedIn } = state.auth;
+  return {
+    isLoggedIn
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { setUserCreds, logOut }
+)(BestPracticesScreen);
