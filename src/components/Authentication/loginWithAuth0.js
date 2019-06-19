@@ -1,5 +1,8 @@
+
 import { AuthSession } from 'expo';
 import React, { Component } from 'react';
+import { StyleSheet, Text, TouchableHighlight } from 'react-native';
+import jwtDecode from 'jwt-decode';
 
 const auth0Domain = `https://lambda-connect-kids.auth0.com`;
 const auth0ClientId = 'CxJ6UkC11uAAwCyvdTW20fudtLtJ21gz';
@@ -17,6 +20,10 @@ function toQueryString(params) {
 }
 
 export default class Auth0LoginContainer extends Component {
+    state = {
+        name: null,
+    };
+
     _loginWithAuth0 = async () => {
         console.log('fired');
         const redirectUrl = AuthSession.getRedirectUrl();
@@ -37,29 +44,44 @@ export default class Auth0LoginContainer extends Component {
             });
         console.log(`Redirect URL (add this to Auth0): ${redirectUrl}`);
         console.log(`AuthURL is:  ${authUrl}`);
+
         const result = await AuthSession.startAsync({ authUrl });
         console.log('RESULT', result);
+
         if (result.type === 'success') {
-            console.log(result);
-            let token = result.params.access_token;
-            console.log(token);
-            // this.props.setToken(token);
-            // this.props.navigation.navigate("Next Screen");
+            this.handleResponse(result.params)
         }
     };
 
+    handleResponse = (result) => {
+        if (result.error) {
+            Alert('Authentication error', result.error_description || 'something went wrong');
+            return;
+        }
+
+        // Retrieve the JWT token and decode it
+        const jwtToken = result.id_token;
+        const decoded = jwtDecode(jwtToken);
+
+        const { name } = decoded;
+        this.setState({ name });
+    };
+
     render() {
+        const { name } = this.state;
+
         return (
+            name ? 
+            <Text style={styles.title}>Hello {name}!</Text> :
             <Login
                 navigation={this.props.navigation}
-                onLogin={() => this._loginWithAuth0()}
-            />
+                onLogin={() => this._loginWithAuth0()} 
+            /> 
         );
     }
 }
 
 // import React from 'react'
-import { View, Text, TouchableHighlight } from 'react-native';
 
 const Login = props => {
     return (
@@ -68,6 +90,12 @@ const Login = props => {
         </TouchableHighlight>
     );
 };
+const styles = StyleSheet.create({
+    title: {
+        fontSize: 20,
+        textAlign: 'center',
+    },
+});
 
 // export default loginWithAuth0
 
