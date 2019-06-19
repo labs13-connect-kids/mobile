@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
+import { connect } from 'react-redux';
+import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
 
 import { Container, Button, Tabs, Tab, Input } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
-import PersonsRow from '../components/PersonsRow';
+import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 class PeopleSearchScreen extends React.Component {
@@ -74,32 +76,6 @@ class PeopleSearchScreen extends React.Component {
             }
         }
 
-        //ADDRESS
-        //Test with 8901 Garden Gate Fairfax VA 22031
-        if (this.state.address.length) {
-            person.addresses = [];
-            let splitAddress = this.state.address.split(' ');
-            if (splitAddress.length === 5) {
-                person.addresses.push({
-                    house: splitAddress[0],
-                    street: splitAddress[1],
-                    city: splitAddress[2],
-                    state: splitAddress[3],
-                    zip_code: splitAddress[4]
-                });
-            }
-            if (splitAddress.length === 6) {
-                person.addresses.push({
-                    house: splitAddress[0],
-                    street: splitAddress[1],
-                    street: splitAddress[2],
-                    city: splitAddress[3],
-                    state: splitAddress[4],
-                    zip_code: splitAddress[5]
-                });
-            }
-        }
-
         // Phone constructor
         // Test with 3303303333 format
         if (this.state.phone.length) {
@@ -110,8 +86,6 @@ class PeopleSearchScreen extends React.Component {
                     number: splitPhone[0]
                 });
             }
-        } else {
-            console.log('no results found')
         }
 
         // Url constructor
@@ -208,31 +182,9 @@ class PeopleSearchScreen extends React.Component {
     };
 
     handleSearchRequest = () => {
+        const { fetchSearchResult, navigation } = this.props;
         const body = this.handleEncodeURI();
-        axios
-            .post(constants.devURL, body)
-            .then(res => {
-                console.log(res.data);
-                if (res.data.possible_persons) {
-                    this.setState({ possiblePersons: res.data.possible_persons });
-                } else if (res.data.person) {
-                    this.setState({ person: res.data.person });
-                    this.props.navigation.navigate('SearchResult', {
-                        person: res.data.person,
-                        handlePersonRequest: this.handlePersonRequest
-                    });
-                }
-            })
-            .catch(err => console.log(err));
-    };
-
-    handlePersonRequest = searchPointer => {
-        axios
-            .post(constants.devURL, { search_pointer_hash: searchPointer })
-            .then(res => {
-                this.setState({ person: res.data.person });
-            })
-            .catch(err => console.log(err));
+        fetchSearchResult(body, () => navigation.navigate('SearchResult'));
     };
 
     handleNavigateToResult = async searchPointer => {
@@ -246,6 +198,8 @@ class PeopleSearchScreen extends React.Component {
     };
 
     startOver = () => {
+        const { resetState } = this.props;
+        resetState();
         this.setState({
             name: '',
             cityState: '',
@@ -259,6 +213,7 @@ class PeopleSearchScreen extends React.Component {
     };
 
     render() {
+        console.log(this.props.navigation);
         return (
             <Container style={styles.container}>
                 <SafeAreaView>
@@ -404,7 +359,7 @@ class PeopleSearchScreen extends React.Component {
                                 <Button
                                     info
                                     style={styles.button}
-                                    onPress={this.handlePersonSubmit}
+                                    onPress={this.handleSearchRequest}
                                 >
                                     <Text style={styles.buttonText}> Search </Text>
                                 </Button>
@@ -418,20 +373,19 @@ class PeopleSearchScreen extends React.Component {
                                 This is a preview. Social workers can have completely free
                                 access. Click here to find out more.
                             </Text>
-
-                            {!!this.state.possiblePersons.length ? (
+                            {!!this.props.possiblePersons.length ? (
                                 <>
                                     <Text style={styles.matchesText}>Possible Matches</Text>
                                     <FlatList
-                                        data={this.state.possiblePersons}
+                                        data={this.props.possiblePersons}
                                         renderItem={({ item }) => {
                                             return (
-                                                <PersonsRow
+                                                <PersonRow
                                                     item={item}
                                                     handlePress={() =>
-                                                        this.handleNavigateToResult(
-                                                            item['@search_pointer_hash']
-                                                        )
+                                                        this.props.navigation.navigate('SearchResult', {
+                                                            searchPointer: item['@search_pointer_hash']
+                                                        })
                                                     }
                                                 />
                                             );
@@ -439,8 +393,7 @@ class PeopleSearchScreen extends React.Component {
                                         keyExtractor={(item, index) => index.toString()}
                                     />
                                 </>
-                            ) : null }
-
+                            ) : null}
                         </View>
                     </ScrollView>
                 </SafeAreaView>
@@ -518,4 +471,17 @@ const styles = StyleSheet.create({
     }
 });
 
-export default PeopleSearchScreen;
+const mapStateToProps = state => {
+    const { error, isFetching, person, possiblePersons } = state.people;
+    return {
+        error,
+        isFetching,
+        person,
+        possiblePersons
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    { fetchPerson, fetchSearchResult, resetState }
+)(PeopleSearchScreen);
