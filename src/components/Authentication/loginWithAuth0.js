@@ -1,55 +1,13 @@
-import { AuthSession } from 'expo';
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import jwtDecode from 'jwt-decode';
-import AsyncStorage from '@react-native-community/async-storage';
+import authHelpers from '../../helpers/authHelpers';
+import { connect } from 'react-redux';
+import { setUserCreds } from '../../store/actions';
 
-const auth0Domain = `lambda-connect-kids.auth0.com`;
-const auth0ClientId = 'CxJ6UkC11uAAwCyvdTW20fudtLtJ21gz';
-
-function toQueryString(params) {
-  return (
-    '?' +
-    Object.entries(params)
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-      )
-      .join('&')
-  );
-}
-export default class Auth0LoginContainer extends Component {
+class Auth0LoginContainer extends Component {
   state = {
     name: null
-  };
-
-  _loginWithAuth0 = async () => {
-    console.log('fired');
-    const redirectUrl = AuthSession.getRedirectUrl();
-    let authUrl =
-      `https://${auth0Domain}/authorize` +
-      toQueryString({
-        client_id: auth0ClientId,
-        response_type: 'token',
-        scope: 'openid profile email',
-        redirect_uri: redirectUrl,
-        nonce:
-          Math.random()
-            .toString(36)
-            .substring(2, 15) +
-          Math.random()
-            .toString(36)
-            .substring(2, 15)
-      });
-    console.log(`Redirect URL (add this to Auth0): ${redirectUrl}`);
-    console.log(`AuthURL is:  ${authUrl}`);
-
-    const result = await AuthSession.startAsync({ authUrl });
-    console.log('RESULT', result);
-
-    if (result.type === 'success') {
-      this.handleResponse(result.params);
-    }
   };
 
   handleResponse = result => {
@@ -64,21 +22,23 @@ export default class Auth0LoginContainer extends Component {
     // Retrieve the JWT token and decode it
     const jwtToken = result.id_token;
     const decoded = jwtDecode(jwtToken);
-    console.log('DECODED HANDLE RESPONSE', decoded);
 
-    storeData = async () => {
-      try {
-        await AsyncStorage.setItem('token', decoded);
-      } catch (e) {
-        console.log('ERROR', e); // bad error handling I know #REFACTOR
-      }
-    };
+    console.log('RESULT', result);
+    console.log('DECODED HANDLE RESPONSE', decoded);
+    console.log('jwt TOKEN HANDLE RESPONSE', jwtToken);
 
     const { name } = decoded;
     this.setState({ name });
+    authHelpers.setToken(decoded);
   };
 
   render() {
+    console.log(
+      'loginWithAuth State',
+      this.state,
+      'loginWithAuth Props',
+      this.props
+    );
     const { name } = this.state;
 
     return name ? (
@@ -86,18 +46,8 @@ export default class Auth0LoginContainer extends Component {
         <Text style={styles.title}>Hello {name}!</Text>
         <TouchableHighlight
           onPress={() => {
-            getData = async () => {
-              try {
-                const value = await AsyncStorage.getItem('token');
-                if (value !== null) {
-                  // value previously stored
-                  console.log('NOTHING HERE');
-                }
-              } catch (e) {
-                // error reading value
-                console.log('ERROR IN GET DATA');
-              }
-            };
+            console.log('PRESSED');
+            authHelpers.getToken();
           }}
         >
           <Text>Read ME </Text>
@@ -106,13 +56,11 @@ export default class Auth0LoginContainer extends Component {
     ) : (
       <Login
         navigation={this.props.navigation}
-        onLogin={() => this._loginWithAuth0()}
+        onLogin={() => authHelpers._loginWithAuth0(this.handleResponse)}
       />
     );
   }
 }
-
-// import React from 'react'
 
 const Login = props => {
   return (
@@ -128,4 +76,12 @@ const styles = StyleSheet.create({
   }
 });
 
-// export default loginWithAuth0
+const mapStateToProps = state => {
+  const { email, isLoggedIn, authToken, idToken } = state.auth;
+  return { email, isLoggedIn, authToken, idToken };
+};
+
+export default connect(
+  mapStateToProps,
+  { setUserCreds }
+)(Auth0LoginContainer);

@@ -11,3 +11,6 @@ export const FETCH_PERSON_SUCCESS = 'FETCH_PERSON_SUCCESS';
 export const FETCH_PERSON_FAILURE = 'FETCH_PERSON_FAILURE';
 
 export const RESET_STATE = 'RESET_STATE';
+
+export const GET_TOKEN = 'GET_TOKEN';
+export const SET_TOKEN = 'SET_TOKEN';
