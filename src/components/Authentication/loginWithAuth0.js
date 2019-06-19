@@ -4,13 +4,9 @@ import jwtDecode from 'jwt-decode';
 import authHelpers from '../../helpers/authHelpers';
 import { connect } from 'react-redux';
 import { setUserCreds } from '../../store/actions';
-// import { AsyncStorage } from 'react-native';
+import AuthenticationView from '../../screens/AuthenticationView';
 
 class Auth0LoginContainer extends Component {
-  state = {
-    name: null
-  };
-
   handleResponse = result => {
     if (result.params.error) {
       Alert(
@@ -24,60 +20,50 @@ class Auth0LoginContainer extends Component {
     const jwtToken = result.params.id_token;
     const decoded = jwtDecode(jwtToken);
 
-    console.log('RESULT ', result);
-    console.log('RESULT params', result.params);
-    console.log('DECODED HANDLE RESPONSE', decoded);
-    console.log('jwt TOKEN HANDLE RESPONSE', jwtToken);
-
-    const { name } = decoded;
-    this.setState({ name });
     authHelpers.setItem('auth0Data', result);
     this.props.setUserCreds(decoded, result);
   };
 
-  render() {
-    const { name } = this.state;
+  onRegister = () => {};
 
-    return name ? (
-      <View>
-        <Text style={styles.title}>Hello {name}!</Text>
-        <TouchableHighlight
-          onPress={() => {
-            console.log('PRESSED');
-            authHelpers.getToken();
-          }}
-        >
-          <Text>Read ME </Text>
-        </TouchableHighlight>
-      </View>
-    ) : (
+  render() {
+    return (
       <Login
         navigation={this.props.navigation}
         onLogin={() => authHelpers._loginWithAuth0(this.handleResponse)}
+        onRegister={this.onRegister}
       />
     );
   }
 }
-
 const Login = props => {
+  console.log('LOGIN PROPS', props);
   return (
-    <TouchableHighlight onPress={props.onLogin}>
-      <Text>Login </Text>
-    </TouchableHighlight>
+    <View style={styles.logInBtns}>
+      <TouchableHighlight onPress={props.onLogin}>
+        <Text>Login </Text>
+      </TouchableHighlight>
+      {/* <TouchableHighlight onPress={props.onRegister}>
+        <Text>Register </Text>
+      </TouchableHighlight> */}
+      <AuthenticationView onLogin={props.onLogin} />
+    </View>
   );
 };
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    textAlign: 'center'
-  }
-});
 
 const mapStateToProps = state => {
   console.log('REDUX STATE', state);
   const { user, isLoggedIn, authToken, idToken } = state.auth;
   return { user, isLoggedIn, authToken, idToken };
 };
+
+const styles = StyleSheet.create({
+  logInBtns: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-evenly'
+  }
+});
 
 export default connect(
   mapStateToProps,

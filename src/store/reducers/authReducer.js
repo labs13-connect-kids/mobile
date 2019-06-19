@@ -12,12 +12,6 @@ const intialState = {
 
 export const authReducer = (state = intialState, action) => {
   switch (action.type) {
-    // case SET_USER_CREDS:
-    //   return {
-    //     ...state,
-    //     loadingUser: true,
-    //     error: null
-    //   };
     case SET_USER_CREDS:
       console.log('Set user cred action', action);
       return {
@@ -30,12 +24,6 @@ export const authReducer = (state = intialState, action) => {
         error: null,
         loadingUser: false
       };
-    // case SET_USER_CREDS_FAILURE:
-    //   return {
-    //     ...state,
-    //     error: action.payload,
-    //     loadingUser: false
-    //   }
     default:
       return state;
   }

@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Dimensions,
   WebView,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
@@ -14,6 +15,14 @@ const VideoModal = props => {
   return (
     <>
       <View style={styles.videoWrapper}>
+        <TouchableOpacity
+          style={styles.close}
+          onPress={() => {
+            props.setModalVisible(!props.modalVisible);
+          }}
+        >
+          <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
+        </TouchableOpacity>
         <WebView
           style={styles.WebViewContainer}
           javaScriptEnabled={true}
@@ -22,11 +31,7 @@ const VideoModal = props => {
             uri: 'https://www.youtube.com/embed/04V1mNZxNE0'
           }}
         />
-        <Button
-          style={styles.noButton}
-          block
-          onPress={() => props.setModalVisible(false)}
-        >
+        <Button style={styles.noButton} block onPress={props.onLogin}>
           <Text style={styles.btnText}>Take me to sign up</Text>
         </Button>
       </View>
