@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
+import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
@@ -35,7 +36,7 @@ class BestPracticesScreen extends Component {
                 source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
               />
             </View>
-
+            <LoginWithAuth0 />
             <Button
               style={styles.button}
               block
