@@ -2,8 +2,9 @@ import { AuthSession } from 'expo';
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableHighlight } from 'react-native';
 import jwtDecode from 'jwt-decode';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const auth0Domain = `https://lambda-connect-kids.auth0.com`;
+const auth0Domain = `lambda-connect-kids.auth0.com`;
 const auth0ClientId = 'CxJ6UkC11uAAwCyvdTW20fudtLtJ21gz';
 
 function toQueryString(params) {
@@ -26,7 +27,7 @@ export default class Auth0LoginContainer extends Component {
     console.log('fired');
     const redirectUrl = AuthSession.getRedirectUrl();
     let authUrl =
-      `${auth0Domain}/authorize` +
+      `https://${auth0Domain}/authorize` +
       toQueryString({
         client_id: auth0ClientId,
         response_type: 'token',
@@ -63,6 +64,15 @@ export default class Auth0LoginContainer extends Component {
     // Retrieve the JWT token and decode it
     const jwtToken = result.id_token;
     const decoded = jwtDecode(jwtToken);
+    console.log('DECODED HANDLE RESPONSE', decoded);
+
+    storeData = async () => {
+      try {
+        await AsyncStorage.setItem('token', decoded);
+      } catch (e) {
+        console.log('ERROR', e); // bad error handling I know #REFACTOR
+      }
+    };
 
     const { name } = decoded;
     this.setState({ name });
@@ -72,7 +82,27 @@ export default class Auth0LoginContainer extends Component {
     const { name } = this.state;
 
     return name ? (
-      <Text style={styles.title}>Hello {name}!</Text>
+      <View>
+        <Text style={styles.title}>Hello {name}!</Text>
+        <TouchableHighlight
+          onPress={() => {
+            getData = async () => {
+              try {
+                const value = await AsyncStorage.getItem('token');
+                if (value !== null) {
+                  // value previously stored
+                  console.log('NOTHING HERE');
+                }
+              } catch (e) {
+                // error reading value
+                console.log('ERROR IN GET DATA');
+              }
+            };
+          }}
+        >
+          <Text>Read ME </Text>
+        </TouchableHighlight>
+      </View>
     ) : (
       <Login
         navigation={this.props.navigation}
