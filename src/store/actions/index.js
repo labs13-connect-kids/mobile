@@ -6,7 +6,9 @@ import {
   FETCH_PERSON_SUCCESS,
   FETCH_SEARCH_RESULT,
   FETCH_SEARCH_RESULT_FAILURE,
-  RESET_STATE
+  RESET_STATE,
+  SET_USER_CREDS,
+  LOG_OUT
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -54,4 +56,12 @@ export const fetchPerson = searchPointer => dispatch => {
 
 export const resetState = () => {
   return { type: RESET_STATE };
+};
+
+export const setUserCreds = (decodedToken, auth0Data) => {
+  return { type: SET_USER_CREDS, decodedToken, auth0Data };
+};
+
+export const logOut = () => {
+  return { type: LOG_OUT };
 };
