@@ -37,22 +37,17 @@ class Auth0LoginContainer extends Component {
   }
 }
 const Login = props => {
-  console.log('LOGIN PROPS', props);
   return (
     <View style={styles.logInBtns}>
       <TouchableHighlight onPress={props.onLogin}>
         <Text>Login </Text>
       </TouchableHighlight>
-      {/* <TouchableHighlight onPress={props.onRegister}>
-        <Text>Register </Text>
-      </TouchableHighlight> */}
       <AuthenticationView onLogin={props.onLogin} />
     </View>
   );
 };
 
 const mapStateToProps = state => {
-  console.log('REDUX STATE', state);
   const { user, isLoggedIn, authToken, idToken } = state.auth;
   return { user, isLoggedIn, authToken, idToken };
 };

@@ -36,10 +36,6 @@ class BestPracticesScreen extends Component {
     }
   }
 
-  // logOut = () => {
-
-  // }
-
   render() {
     console.log('BEST PRACTICES PROPS', this.props);
     return (
