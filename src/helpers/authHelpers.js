@@ -1,4 +1,3 @@
-import jwtDecode from 'jwt-decode';
 import { AsyncStorage } from 'react-native';
 import { AuthSession } from 'expo';
 
@@ -30,11 +29,11 @@ const getToken = async () => {
     console.log('ERROR IN GET DATA');
   }
 };
-const setToken = async decoded => {
+const setItem = async (key, value) => {
   try {
-    await AsyncStorage.setItem('token', JSON.stringify(decoded));
+    await AsyncStorage.setItem(key, JSON.stringify(value));
   } catch (e) {
-    console.log('ERROR', e); // bad error handling I know #REFACTOR
+    console.log('SET TOKEN ERROR', e);
   }
 };
 const _loginWithAuth0 = async handleResponse => {
@@ -59,13 +58,13 @@ const _loginWithAuth0 = async handleResponse => {
   console.log('RESULT', result);
 
   if (result.type === 'success') {
-    handleResponse(result.params);
+    handleResponse(result);
   }
 };
 
 export default {
   toQueryString,
-  setToken,
+  setItem,
   getToken,
   _loginWithAuth0
 };

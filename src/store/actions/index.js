@@ -6,7 +6,10 @@ import {
   FETCH_PERSON_SUCCESS,
   FETCH_SEARCH_RESULT,
   FETCH_SEARCH_RESULT_FAILURE,
-  RESET_STATE
+  RESET_STATE,
+  SET_USER_CREDS,
+  SET_USER_CREDS_SUCCESS,
+  SET_USER_CREDS_FAILURE
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -55,3 +58,13 @@ export const fetchPerson = searchPointer => dispatch => {
 export const resetState = () => {
   return { type: RESET_STATE };
 };
+
+export const setUserCreds = (decodedToken, auth0Data) => {
+  return { type: SET_USER_CREDS, decodedToken, auth0Data };
+};
+// export const setUserCreds = token => {
+//   dispatch({ type: SET_USER_CREDS});
+// };
+// export const setUserCreds = token => {
+//   dispatch({ type: SET_USER_CREDS});
+// };

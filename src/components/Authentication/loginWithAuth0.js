@@ -4,6 +4,7 @@ import jwtDecode from 'jwt-decode';
 import authHelpers from '../../helpers/authHelpers';
 import { connect } from 'react-redux';
 import { setUserCreds } from '../../store/actions';
+// import { AsyncStorage } from 'react-native';
 
 class Auth0LoginContainer extends Component {
   state = {
@@ -11,34 +12,30 @@ class Auth0LoginContainer extends Component {
   };
 
   handleResponse = result => {
-    if (result.error) {
+    if (result.params.error) {
       Alert(
         'Authentication error',
-        result.error_description || 'something went wrong'
+        result.params.error_description || 'something went wrong'
       );
       return;
     }
 
     // Retrieve the JWT token and decode it
-    const jwtToken = result.id_token;
+    const jwtToken = result.params.id_token;
     const decoded = jwtDecode(jwtToken);
 
-    console.log('RESULT', result);
+    console.log('RESULT ', result);
+    console.log('RESULT params', result.params);
     console.log('DECODED HANDLE RESPONSE', decoded);
     console.log('jwt TOKEN HANDLE RESPONSE', jwtToken);
 
     const { name } = decoded;
     this.setState({ name });
-    authHelpers.setToken(decoded);
+    authHelpers.setItem('auth0Data', result);
+    this.props.setUserCreds(decoded, result);
   };
 
   render() {
-    console.log(
-      'loginWithAuth State',
-      this.state,
-      'loginWithAuth Props',
-      this.props
-    );
     const { name } = this.state;
 
     return name ? (
@@ -77,8 +74,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { email, isLoggedIn, authToken, idToken } = state.auth;
-  return { email, isLoggedIn, authToken, idToken };
+  console.log('REDUX STATE', state);
+  const { user, isLoggedIn, authToken, idToken } = state.auth;
+  return { user, isLoggedIn, authToken, idToken };
 };
 
 export default connect(
