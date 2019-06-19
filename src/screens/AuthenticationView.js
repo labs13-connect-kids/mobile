@@ -5,18 +5,16 @@ import {
   TouchableHighlight,
   View,
   Alert,
-  Image,
   StyleSheet,
   Dimensions
 } from 'react-native';
-import logo from '../../assets/logo.png';
 import VideoAgreeModal from './../components/AuthModals/VideoAgreeModal';
 import VideoModal from '../components/AuthModals/VideoModal';
 import SocialWorkerModal from '../components/AuthModals/SocialWorkerModal';
 
 class AuthenticationView extends Component {
   state = {
-    modalVisible: true,
+    modalVisible: false,
     videoAgree: false,
     videoVisible: false
   };
@@ -69,21 +67,24 @@ class AuthenticationView extends Component {
                   modalVisible={this.state.modalVisible}
                   advanceModal={this.advanceModal}
                   setModalVisible={this.setModalVisible}
+                  onLogin={this.props.onLogin}
                 />
               )}
               {!this.state.videoAgree && this.state.videoVisible && (
-                <VideoModal setModalVisible={this.setModalVisible} />
+                <VideoModal
+                  setModalVisible={this.setModalVisible}
+                  onLogin={this.props.onLogin}
+                />
               )}
             </View>
           </View>
         </Modal>
-        <Image source={logo} style={styles.logo} />
         <TouchableHighlight
           onPress={() => {
             this.setModalVisible(true);
           }}
         >
-          <Text>Show Modal</Text>
+          <Text>Register</Text>
         </TouchableHighlight>
       </View>
     );

@@ -34,11 +34,7 @@ const VideoAgreeModal = props => {
         <Button style={styles.yesButton} block onPress={props.advanceModal}>
           <Text style={styles.btnText}>Show me the video</Text>
         </Button>
-        <Button
-          style={styles.noButton}
-          block
-          onPress={() => props.setModalVisible(false)}
-        >
+        <Button style={styles.noButton} block onPress={props.onLogin}>
           <Text style={styles.btnText}>Skip the video</Text>
         </Button>
       </View>
