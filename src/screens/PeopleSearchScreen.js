@@ -88,16 +88,6 @@ class PeopleSearchScreen extends React.Component {
       }
     }
 
-    if (this.state.address.length > 0) {
-      person.addresses = [];
-      let splitAddress = this.state.address.split(' ');
-      if (splitAddress.length === 1) {
-        person.addresses.push({
-          addresses: splitAddress[0]
-        });
-      }
-    }
-
     // Url constructor
     // Test with https://twitter.com/elonmusk?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
     if (this.state.url.length > 0) {
@@ -233,7 +223,6 @@ class PeopleSearchScreen extends React.Component {
             </View>
 
             <View>
-            
               <Tabs
                 style={styles.container}
                 activeTextStyle={{ color: constants.highlightColor }}
@@ -272,7 +261,6 @@ class PeopleSearchScreen extends React.Component {
                     onChangeText={text => this.inputHandler('cityState', text)}
                   />
                 </Tab>
-                :
                 <Tab
                   heading="Email"
                   activeTextStyle={{
@@ -287,8 +275,8 @@ class PeopleSearchScreen extends React.Component {
                         : constants.highlightColor,
                     fontFamily: constants.fontFamily,
                     fontSize: 16
-                  }} 
-                > 
+                  }}
+                >
                   <Input
                     placeholder="Email address"
                     style={styles.textInput}
@@ -296,7 +284,6 @@ class PeopleSearchScreen extends React.Component {
                     onChangeText={text => this.inputHandler('email', text)}
                   />
                 </Tab>
-
                 <Tab
                   heading="Address"
                   activeTextStyle={{
@@ -366,7 +353,7 @@ class PeopleSearchScreen extends React.Component {
                     onChangeText={text => this.inputHandler('url', text)}
                   />
                 </Tab>
-              </Tabs> 
+              </Tabs>
 
               <View style={{ flexDirection: 'row' }}>
                 <Button
