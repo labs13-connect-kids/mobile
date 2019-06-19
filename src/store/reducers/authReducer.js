@@ -1,6 +1,7 @@
-import { SET_USER_CREDS } from './../actions/actionTypes';
+import { SET_USER_CREDS, LOG_OUT } from './../actions/actionTypes';
+import { AsyncStorage } from 'react-native';
 
-const intialState = {
+const initialState = {
   user: null,
   error: null,
   isLoggedIn: false,
@@ -10,7 +11,7 @@ const intialState = {
   idToken: null
 };
 
-export const authReducer = (state = intialState, action) => {
+export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER_CREDS:
       console.log('Set user cred action', action);
@@ -24,6 +25,9 @@ export const authReducer = (state = intialState, action) => {
         error: null,
         loadingUser: false
       };
+    case LOG_OUT:
+      AsyncStorage.removeItem('auth0Data');
+      return initialState;
     default:
       return state;
   }

@@ -9,10 +9,10 @@ import {
   Linking
 } from 'react-native';
 import { Container, Button } from 'native-base';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 import { AsyncStorage } from 'react-native';
-import { setUserCreds } from '../store/actions';
+import { setUserCreds, logOut } from '../store/actions';
 import { connect } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 
@@ -22,7 +22,6 @@ import constants from '../helpers/constants';
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Best Practices', navigation);
-
   async componentDidMount() {
     // NOTE: TODO check for JWT expiration to confirm if logged in
     let confirmedUser = await AsyncStorage.getItem('auth0Data');
@@ -36,6 +35,10 @@ class BestPracticesScreen extends Component {
       this.props.setUserCreds(decoded, confirmedUser);
     }
   }
+
+  // logOut = () => {
+
+  // }
 
   render() {
     console.log('BEST PRACTICES PROPS', this.props);
@@ -56,7 +59,13 @@ class BestPracticesScreen extends Component {
                 source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
               />
             </View>
-            <LoginWithAuth0 />
+            {this.props.isLoggedIn ? (
+              <TouchableOpacity onPress={this.props.logOut}>
+                <Text>Log Out</Text>
+              </TouchableOpacity>
+            ) : (
+              <LoginWithAuth0 />
+            )}
             <Button
               style={styles.button}
               block
@@ -143,5 +152,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { setUserCreds }
+  { setUserCreds, logOut }
 )(BestPracticesScreen);

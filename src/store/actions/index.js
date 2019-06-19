@@ -8,8 +8,7 @@ import {
   FETCH_SEARCH_RESULT_FAILURE,
   RESET_STATE,
   SET_USER_CREDS,
-  SET_USER_CREDS_SUCCESS,
-  SET_USER_CREDS_FAILURE
+  LOG_OUT
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -62,9 +61,7 @@ export const resetState = () => {
 export const setUserCreds = (decodedToken, auth0Data) => {
   return { type: SET_USER_CREDS, decodedToken, auth0Data };
 };
-// export const setUserCreds = token => {
-//   dispatch({ type: SET_USER_CREDS});
-// };
-// export const setUserCreds = token => {
-//   dispatch({ type: SET_USER_CREDS});
-// };
+
+export const logOut = () => {
+  return { type: LOG_OUT };
+};
