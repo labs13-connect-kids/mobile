@@ -6,10 +6,12 @@ import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
 
 import { Container, Button, Tabs, Tab, Input } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import { eventTrack } from '../helpers/eventTracking';
 
 import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
+
 class PeopleSearchScreen extends React.Component {
     static navigationOptions = ({ navigation }) =>
         headerConfig('People Search', navigation);
@@ -173,18 +175,35 @@ class PeopleSearchScreen extends React.Component {
     handlePersonSubmit = () => {
         const body = this.handleEncodeURI();
         axios
-            .post(constants.devURL, body)
-            .then(res => {
-                console.log(res.data);
+            .post( constants.devURL, body )
+            .then( res => {
+                console.log( 'res data from place' , res.data );
                 this.setState({ possiblePersons: res.data.possible_persons });
             })
-            .catch(err => console.log(err));
+            .catch( err => console.log( err ));
     };
+
+    createEvent = ( success ) => {
+        let emailAddress;
+        const options = { possibleMatches: this.state.possiblePersons.length , personMatch: this.state.possiblePersons.length === 0 ? true : false }
+        if ( !this.props.user ) {
+            emailAddress = 'anonymous@unknown.org'
+        } else {
+            emailAddress = this.props.user.email
+        }
+        const event = {
+            emailAddress,
+            event: `person-search-${success}`,
+            options
+        }
+        console.log( 'event:' , event )
+        return event;
+    }
 
     handleSearchRequest = () => {
         const { fetchSearchResult, navigation } = this.props;
         const body = this.handleEncodeURI();
-        fetchSearchResult(body, () => navigation.navigate('SearchResult'));
+        fetchSearchResult(body, () => navigation.navigate('SearchResult') , this.createEvent );
     };
 
     handleNavigateToResult = async searchPointer => {
@@ -211,6 +230,25 @@ class PeopleSearchScreen extends React.Component {
             possiblePersons: []
         });
     };
+    
+    //ALL ARE 502 status codes
+    
+    // {event: "search-person-success", emailAddress: "anonymous@unknown.org",…}
+    // emailAddress: "anonymous@unknown.org"
+    // event: "search-person-success"
+    // options: {possibleMatches: 29, personMatch: false}
+    
+    //SINGLE RETURN
+    // {event: "search-person-success", emailAddress: "anonymous@unknown.org",…}
+    // emailAddress: "anonymous@unknown.org"
+    // event: "search-person-success"
+    // options: {possibleMatches: 0, personMatch: true}
+    
+    //LOGGED IN
+    // {event: "search-person-success", emailAddress: "rytwalker@gmail.com",…}
+    // emailAddress: "rytwalker@gmail.com"
+    // event: "search-person-success"
+    // options: {possibleMatches: 30, personMatch: false}
 
     render() {
         console.log(this.props.navigation);
@@ -473,11 +511,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     const { error, isFetching, person, possiblePersons } = state.people;
+    const { user } = state.auth;
     return {
         error,
         isFetching,
         person,
-        possiblePersons
+        possiblePersons,
+        user
     };
 };
 
@@ -485,3 +525,4 @@ export default connect(
     mapStateToProps,
     { fetchPerson, fetchSearchResult, resetState }
 )(PeopleSearchScreen);
+
