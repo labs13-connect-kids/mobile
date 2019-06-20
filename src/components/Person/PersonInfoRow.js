@@ -12,10 +12,10 @@ const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
           <Text style={styles.rowLabelText}>{title}</Text>
         </Col>
         <Col size={70} style={styles.colList}>
-          {item[itemKey].map(key => {
+          {item[itemKey].map((key, index) => {
             if (itemKey === 'addresses') {
               return (
-                <TouchableOpacity style={styles.colListContainer}>
+                <TouchableOpacity style={styles.colListContainer} key={index}>
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(key.house, 'house')}{' '}
                     {renderMaskedOrResult(key.street, 'street')}
@@ -27,7 +27,7 @@ const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
               );
             } else {
               return (
-                <TouchableOpacity style={styles.colListContainer}>
+                <TouchableOpacity style={styles.colListContainer} key={index}>
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(key[itemValue], itemKey)}
                   </Text>
