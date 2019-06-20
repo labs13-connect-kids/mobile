@@ -97,7 +97,8 @@ class SearchForm extends Component {
     let name;
 
     for (let key in this.state) {
-      if (key !== 'cityState') {
+      console.log(key);
+      if (key !== 'cityState' && key !== 'tabPage') {
         if (this.state[key].length) {
           input = this.state[key];
           name = key;
@@ -117,14 +118,17 @@ class SearchForm extends Component {
     switch (type) {
       case 'name':
         person.names = [];
-        let splitName = inputValue.trim().split(' ');
+        let splitName = inputValue
+          .trim()
+          .replace(/,/g, '')
+          .split(' ');
         if (splitName.length === 2) {
           person.names.push({ first: splitName[0], last: splitName[1] });
         } else if (splitName.length === 3) {
           person.names.push({
             first: splitName[0],
-            middle: splitName[1],
-            last: splitName[2]
+            middle: splitName[2],
+            last: splitName[1]
           });
         }
 
@@ -197,7 +201,7 @@ class SearchForm extends Component {
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
           >
-            <View>
+            <View style={styles.nameInputFullWidth}>
               <Input
                 placeholder="First and last, middle optional"
                 style={styles.textInput}
@@ -344,6 +348,9 @@ const styles = StyleSheet.create({
     color: '#64aab8',
     fontFamily: constants.fontFamily,
     fontSize: 16
+  },
+  nameInputFullWidth: {
+    width: '100%'
   }
 });
 
