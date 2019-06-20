@@ -15,22 +15,8 @@ import SearchForm from '../components/SearchForm/SearchForm';
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
-  state = {
-    name: '',
-    cityState: '',
-    email: '',
-    address: '',
-    phone: '',
-    url: '',
-    isDisplaying: false,
-    possiblePersons: [],
-    person: null
-  };
-  inputHandler = (name, value) => {
-    this.setState({ [name]: value });
-  };
 
-  handleEncodeURI = (person) => {
+  handleEncodeURI = person => {
     console.log(
       JSON.stringify({
         person: encodeURI(JSON.stringify(person))
@@ -41,7 +27,7 @@ class PeopleSearchScreen extends React.Component {
     });
   };
 
-  handleSearchRequest = (person) => {
+  handleSearchRequest = person => {
     const { fetchSearchResult, navigation } = this.props;
     const body = this.handleEncodeURI(person);
     fetchSearchResult(body, () => navigation.navigate('SearchResult'));
@@ -57,19 +43,9 @@ class PeopleSearchScreen extends React.Component {
     });
   };
 
-  startOver = () => {
+  resetReduxState = () => {
     const { resetState } = this.props;
     resetState();
-    this.setState({
-      name: '',
-      cityState: '',
-      email: '',
-      address: '',
-      phone: '',
-      url: '',
-      isDisplaying: false,
-      possiblePersons: []
-    });
   };
 
   render() {
@@ -83,7 +59,10 @@ class PeopleSearchScreen extends React.Component {
             </View>
 
             <View>
-              <SearchForm handleSearch={this.handleSearchRequest}/>
+              <SearchForm
+                handleSearch={this.handleSearchRequest}
+                resetReduxState={this.resetReduxState}
+              />
 
               <Text style={styles.link}>
                 This is a preview. Social workers can have completely free
@@ -201,3 +180,7 @@ export default connect(
   mapStateToProps,
   { fetchPerson, fetchSearchResult, resetState }
 )(PeopleSearchScreen);
+
+
+
+
