@@ -97,7 +97,6 @@ class SearchForm extends Component {
     let name;
 
     for (let key in this.state) {
-      console.log(key);
       if (key !== 'cityState' && key !== 'tabPage') {
         if (this.state[key].length) {
           input = this.state[key];

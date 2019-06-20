@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
