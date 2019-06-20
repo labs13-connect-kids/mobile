@@ -1,10 +1,9 @@
 import React from 'react';
-import axios from 'axios';
-import { SafeAreaView, StyleSheet, Text, View, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
 
-import { Container, Button, Tabs, Tab, Input } from 'native-base';
+import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
 import PersonRow from '../components/Person/PersonRow';
