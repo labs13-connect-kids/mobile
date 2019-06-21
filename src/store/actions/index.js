@@ -8,11 +8,13 @@ import {
   FETCH_SEARCH_RESULT_FAILURE,
   RESET_STATE,
   SET_USER_CREDS,
-  LOG_OUT
+  LOG_OUT,
+  EVENT_ERROR,
+  EVENT_SUCCESS
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
-export const fetchSearchResult = (body, cb , eventTrack ) => dispatch => {
+export const fetchSearchResult = (body, cb, eventTrack) => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
   axios
@@ -32,11 +34,11 @@ export const fetchSearchResult = (body, cb , eventTrack ) => dispatch => {
       }
     })
     .then(() => {
-      if (isPerson) cb() , eventTrack( 'success' );
+      if (isPerson) cb(), eventTrack('success');
     })
     .catch(err => {
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
-      eventTrack( 'failed' )
+      eventTrack('failed');
     });
 };
 
@@ -66,3 +68,21 @@ export const setUserCreds = (decodedToken, auth0Data) => {
 export const logOut = () => {
   return { type: LOG_OUT };
 };
+
+export const eventTrack = event => dispatch =>
+  axios
+    .post(constants.devEventTrackingURL, event)
+    .then(res => {
+      console.log('EVENT TRACK RES: ', res);
+      if (res.status !== 502) {
+        dispatch({ type: EVENT_ERROR });
+        console.log('Event Error .then');
+      } else {
+        dispatch({ type: EVENT_SUCCESS });
+        console.log('Event Success');
+      }
+    })
+    .catch(err => {
+      dispatch({ type: EVENT_ERROR });
+      console.log('Event Error .catch');
+    });

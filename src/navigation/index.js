@@ -88,9 +88,6 @@ const AppDrawerNavigator = createDrawerNavigator(
     },
     'People Search': {
       screen: PeopleSearchNavigator
-    },
-    'Login/Register': {
-      screen: AuthenticationViewNavigator
     }
   },
   {
