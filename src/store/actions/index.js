@@ -12,7 +12,7 @@ import {
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
-export const fetchSearchResult = (body, cb) => dispatch => {
+export const fetchSearchResult = (body, cb , eventTrack ) => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
   axios
@@ -32,10 +32,11 @@ export const fetchSearchResult = (body, cb) => dispatch => {
       }
     })
     .then(() => {
-      if (isPerson) cb();
+      if (isPerson) cb() , eventTrack( 'success' );
     })
     .catch(err => {
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
+      eventTrack( 'failed' )
     });
 };
 

@@ -6,6 +6,7 @@ import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
 
 import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import { eventTrack } from '../helpers/eventTracking';
 
 import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
@@ -15,6 +16,26 @@ import SearchForm from '../components/SearchForm/SearchForm';
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
+
+  createEvent = success => {
+    let emailAddress;
+    const options = {
+      possibleMatches: this.props.possiblePersons.length,
+      personMatch: this.props.possiblePersons.length === 0 ? true : false
+    };
+    if (!this.props.user) {
+      emailAddress = 'anonymous@unknown.org';
+    } else {
+      emailAddress = this.props.user.email;
+    }
+    const event = {
+      emailAddress,
+      event: `person-search-${success}`,
+      options
+    };
+    console.log('event:', event);
+    return event;
+  };
 
   handleEncodeURI = person => {
     console.log(
@@ -30,7 +51,11 @@ class PeopleSearchScreen extends React.Component {
   handleSearchRequest = person => {
     const { fetchSearchResult, navigation } = this.props;
     const body = this.handleEncodeURI(person);
-    fetchSearchResult(body, () => navigation.navigate('SearchResult'));
+    fetchSearchResult(
+      body,
+      () => navigation.navigate('SearchResult'),
+      this.createEvent
+    );
   };
 
   handleNavigateToResult = async searchPointer => {
@@ -168,11 +193,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { error, isFetching, person, possiblePersons } = state.people;
+  const { user } = state.auth;
   return {
     error,
     isFetching,
     person,
-    possiblePersons
+    possiblePersons,
+    user
   };
 };
 
