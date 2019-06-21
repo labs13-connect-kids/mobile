@@ -9,6 +9,7 @@ import {
   isPhone,
   isUrl
 } from '../../helpers/inputValidators';
+import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
 
 class SearchForm extends Component {
   state = {
@@ -128,51 +129,13 @@ class SearchForm extends Component {
     switch (type) {
       case 'name':
         person.names = [];
-        let splitName = inputValue
-          .trim()
-          .replace(/,/g, '')
-          .split(' ');
-        if (splitName.length === 2) {
-          person.names.push({ first: splitName[0], last: splitName[1] });
-        } else if (splitName.length === 3) {
-          person.names.push({
-            first: splitName[0],
-            middle: splitName[2],
-            last: splitName[1]
-          });
-        }
-
-        const statesWithTwoWords = new Set([
-          'hampshire',
-          'jersey',
-          'york',
-          'mexico',
-          'carolina',
-          'dakota',
-          'island',
-          'virginia'
-        ]);
+        const parsedName = parseName(inputValue);
+        person.names.push(parsedName);
 
         if (this.state.cityState.length) {
           person.addresses = [];
-          let splitAddress = this.state.cityState.trim().split(' ');
-          if (splitAddress.length > 1) {
-            let state = splitAddress.pop();
-            if (statesWithTwoWords.has(state.toLowerCase())) {
-              if (
-                state.toLowerCase() === 'virginia' &&
-                splitAddress[splitAddress.length - 1].toLowerCase() !== 'west'
-              ) {
-              } else {
-                state = splitAddress.pop() + ' ' + state;
-              }
-            }
-            let city = splitAddress.join(' ').replace(/,/g, '');
-            person.addresses.push({
-              state: state,
-              city: city
-            });
-          }
+          const location = parseCityState(this.state.cityState);
+          person.addresses.push(location);
         }
         break;
 
@@ -184,14 +147,9 @@ class SearchForm extends Component {
         break;
       case 'address':
         person.addresses = [];
-        person.addresses.push({
-          state: 'OH',
-          city: 'Youngstown',
-          street: 'North Cadillac Dr',
-          house: '231',
-          zip_code: '44512'
-        });
-        console.log('address');
+        const addresses = parseAddress(inputValue);
+        person.addresses.push(addresses);
+        break;
 
       case 'phone':
         person.phones = [];
