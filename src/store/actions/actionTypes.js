@@ -14,3 +14,6 @@ export const RESET_STATE = 'RESET_STATE';
 
 export const SET_USER_CREDS = 'SET_USER_CREDS';
 export const LOG_OUT = 'LOG_OUT';
+
+export const EVENT_ERROR = 'EVENT_ERROR';
+export const EVENT_SUCCESS = 'EVENT_SUCCESS';
