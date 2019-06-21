@@ -148,7 +148,7 @@ class SearchForm extends Component {
           address: inputValue
         });
         break;
-
+        
       case 'phone':
         person.phones = [];
         person.phones.push({
