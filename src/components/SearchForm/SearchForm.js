@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, Tabs, Tab, Input } from 'native-base';
 import constants from '../../helpers/constants';
-import { isName, isEmail, isPhone, isUrl } from '../../helpers/inputValidators';
+import {
+  isName,
+  isEmail,
+  isAddress,
+  isPhone,
+  isUrl
+} from '../../helpers/inputValidators';
 
 class SearchForm extends Component {
   state = {
@@ -72,6 +78,11 @@ class SearchForm extends Component {
         this.setState({ email: inputValue, [inputKey]: '', tabPage: 1 });
       }
       formattedObject = this.formatRequestObject(inputValue, 'email');
+    } else if (isAddress(inputValue)) {
+      if (!this.state.address) {
+        this.setState({ address: inputValue, [inputKey]: '', tabPage: 2 });
+      }
+      formattedObject = this.formatRequestObject(inputValue, 'address');
     } else if (isPhone(inputValue)) {
       if (!this.state.phone) {
         this.setState({ phone: inputValue, [inputKey]: '', tabPage: 3 });
@@ -171,6 +182,16 @@ class SearchForm extends Component {
           address: inputValue
         });
         break;
+      case 'address':
+        person.addresses = [];
+        person.addresses.push({
+          state: 'OH',
+          city: 'Youngstown',
+          street: 'North Cadillac Dr',
+          house: '231',
+          zip_code: '44512'
+        });
+        console.log('address');
 
       case 'phone':
         person.phones = [];
