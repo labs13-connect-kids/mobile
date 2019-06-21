@@ -117,7 +117,10 @@ class SearchForm extends Component {
     switch (type) {
       case 'name':
         person.names = [];
-        let splitName = inputValue.trim().replace(/,/g, '').split(' ');
+        let splitName = inputValue
+          .trim()
+          .replace(/,/g, '')
+          .split(' ');
         if (splitName.length === 2) {
           person.names.push({ first: splitName[0], last: splitName[1] });
         } else if (splitName.length === 3) {
@@ -346,7 +349,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   nameInputFullWidth: {
-    width: '100%',
+    width: '100%'
   }
 });
 
