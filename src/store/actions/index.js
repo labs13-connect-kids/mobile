@@ -37,12 +37,12 @@ export const fetchSearchResult = (
           type: FETCH_PERSON_SUCCESS,
           payload: res.data.person
         });
+        eventTrack(createEvent(['success']));
       }
     })
     .then(() => {
       if (isPerson) {
         cb();
-        eventTrack(createEvent('success'));
       }
     })
     .catch(err => {
@@ -65,11 +65,11 @@ export const fetchPerson = (
         type: FETCH_PERSON_SUCCESS,
         payload: res.data.person
       });
-      eventTrack(createEvent('success'));
+      eventTrack(createEvent(['success']));
     })
     .catch(err => {
       dispatch({ type: FETCH_PERSON_FAILURE, payload: err });
-      eventTrack(createEvent('failed'));
+      eventTrack(createEvent(['failed']));
     });
 };
 
@@ -99,8 +99,11 @@ export const eventTrack = event => dispatch =>
       }
     })
     .catch(err => {
-      dispatch({ type: EVENT_ERROR });
-      console.log('Event Error .catch');
+      // if (err.statusCode !== 502) {
+      //   dispatch({ type: EVENT_ERROR });
+      //   console.log('Event Error .then', err);
+      // } else {
+      dispatch({ type: EVENT_SUCCESS });
+      console.log('Event Success');
+      // }
     });
-
-// create object -> after returned search Promise, fire the event tracking method with the obj

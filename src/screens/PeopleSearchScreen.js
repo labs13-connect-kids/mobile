@@ -24,11 +24,19 @@ class PeopleSearchScreen extends React.Component {
     headerConfig('People Search', navigation);
 
   createEvent = success => {
-    let emailAddress;
-    const options = {
-      possibleMatches: this.props.possiblePersons.length,
-      personMatch: this.props.possiblePersons.length === 0 ? true : false
-    };
+    let emailAddress = '';
+    let options = {};
+    if (typeof success === 'string') {
+      options = {
+        possibleMatches: this.props.possiblePersons.length,
+        personMatch: false
+      };
+    } else {
+      options = {
+        possibleMatches: 0,
+        personMatch: true
+      };
+    }
     if (!this.props.user) {
       emailAddress = 'anonymous@unknown.org';
     } else {
@@ -36,11 +44,14 @@ class PeopleSearchScreen extends React.Component {
     }
     const event = {
       emailAddress,
-      event: `person-search-${success}`,
+      event:
+        typeof success === 'string'
+          ? `person-search-${success}`
+          : `person-search-${success[0]}`,
       options
     };
     console.log('event:', event);
-    return this.props.eventTrack(event);
+    return event;
   };
 
   handleEncodeURI = person => {
