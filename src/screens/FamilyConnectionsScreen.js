@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,20 +6,21 @@ import {
   View,
   WebView,
   Platform
-} from "react-native";
-import { Container, Button } from "native-base";
-import { ScrollView } from "react-native-gesture-handler";
-import headerConfig from "../helpers/headerConfig";
+} from 'react-native';
+import { Container, Button } from 'native-base';
+import { ScrollView } from 'react-native-gesture-handler';
+import headerConfig from '../helpers/headerConfig';
 
+import constants from '../helpers/constants';
 class FamilyConnectionsScreen extends Component {
   static navigationOptions = ({ navigation }) =>
-    headerConfig("Family Connections", navigation);
+    headerConfig('Family Connections', navigation);
   render() {
     return (
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <Text>
+            <Text style={{ fontFamily: constants.fontFamily, fontSize: 18 }}>
               Learn about a revolutionary way to discover and engage extended
               families for at-risk foster youth.
             </Text>
@@ -28,7 +29,7 @@ class FamilyConnectionsScreen extends Component {
                 style={styles.WebViewContainer}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
-                source={{ uri: "https://www.youtube.com/embed/eMivJgf7RNA" }}
+                source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
               />
             </View>
 
@@ -46,35 +47,35 @@ class FamilyConnectionsScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 20
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 25
   },
   button: {
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: "rgb(80,141,179)"
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: constants.highlightColor
   },
   buttonText: {
-    color: "#fff",
-    fontWeight: "700"
+    color: '#fff',
+    fontWeight: '700'
   },
   textInput: {
-    borderColor: "black",
+    borderColor: 'black',
     borderWidth: 1,
-    borderStyle: "solid"
+    borderStyle: 'solid'
   },
   red: {
-    backgroundColor: "red"
+    backgroundColor: 'red'
   },
   WebViewContainer: {
-    marginTop: Platform.OS == "ios" ? 20 : 0
+    marginTop: Platform.OS == 'ios' ? 20 : 0
   }
 });
 

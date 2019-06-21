@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,20 +7,42 @@ import {
   WebView,
   Platform,
   Linking
-} from "react-native";
-import { Container, Button } from "native-base";
-import { ScrollView } from "react-native-gesture-handler";
+} from 'react-native';
+import { Container, Button } from 'native-base';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
+import { AsyncStorage } from 'react-native';
+import { setUserCreds, logOut } from '../store/actions';
+import { connect } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 
-import headerConfig from "../helpers/headerConfig";
+import headerConfig from '../helpers/headerConfig';
+import constants from '../helpers/constants';
+
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
-    headerConfig("Best Practices", navigation);
+    headerConfig('Best Practices', navigation);
+  async componentDidMount() {
+    // NOTE: TODO check for JWT expiration to confirm if logged in
+    let confirmedUser = await AsyncStorage.getItem('auth0Data');
+
+    if (confirmedUser) {
+      confirmedUser = JSON.parse(confirmedUser);
+
+      const jwtToken = confirmedUser.params.id_token;
+      const decoded = jwtDecode(jwtToken);
+
+      this.props.setUserCreds(decoded, confirmedUser);
+    }
+  }
+
   render() {
+    console.log('BEST PRACTICES PROPS', this.props);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <Text>
+            <Text style={{ fontFamily: constants.fontFamily, fontSize: 18 }}>
               Connect Our Kids makes free tools for social workers engaged in
               permanency searches for foster kids. Watch the video below to
               learn more about the free tools and resources in this app.
@@ -30,15 +52,21 @@ class BestPracticesScreen extends Component {
                 style={styles.WebViewContainer}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
-                source={{ uri: "https://www.youtube.com/embed/eMivJgf7RNA" }}
+                source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
               />
             </View>
-
+            {this.props.isLoggedIn ? (
+              <TouchableOpacity onPress={this.props.logOut}>
+                <Text>Log Out</Text>
+              </TouchableOpacity>
+            ) : (
+              <LoginWithAuth0 />
+            )}
             <Button
               style={styles.button}
               block
               transparent
-              onPress={() => this.props.navigation.navigate("PeopleSearch")}
+              onPress={() => this.props.navigation.navigate('PeopleSearch')}
             >
               <Text style={styles.buttonText}>
                 People Search - Find Contact Information for Anyone
@@ -48,7 +76,7 @@ class BestPracticesScreen extends Component {
               style={styles.button}
               transparent
               onPress={() =>
-                this.props.navigation.navigate("FamilyConnections")
+                this.props.navigation.navigate('FamilyConnections')
               }
             >
               <Text style={styles.buttonText}>
@@ -58,7 +86,7 @@ class BestPracticesScreen extends Component {
             <Button
               style={styles.button}
               transparent
-              onPress={() => Linking.openURL("https://connectourkids.org")}
+              onPress={() => Linking.openURL('https://connectourkids.org')}
             >
               <Text style={styles.buttonText}>
                 Resources - Useful Materials and Information
@@ -73,42 +101,52 @@ class BestPracticesScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 20
   },
 
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 25
   },
 
   button: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row"
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row'
   },
 
   buttonText: {
-    color: "rgb(80,141,179)",
+    color: constants.highlightColor,
     fontSize: 12,
-    textDecorationLine: "underline"
+    textDecorationLine: 'underline'
   },
 
   textInput: {
-    borderColor: "black",
+    borderColor: 'black',
     borderWidth: 1,
-    borderStyle: "solid"
+    borderStyle: 'solid'
   },
 
   red: {
-    backgroundColor: "red"
+    backgroundColor: 'red'
   },
 
   WebViewContainer: {
-    marginTop: Platform.OS == "ios" ? 20 : 0
+    marginTop: Platform.OS == 'ios' ? 20 : 0
   }
 });
 
-export default BestPracticesScreen;
+const mapStateToProps = state => {
+  const { isLoggedIn } = state.auth;
+  return {
+    isLoggedIn
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { setUserCreds, logOut }
+)(BestPracticesScreen);

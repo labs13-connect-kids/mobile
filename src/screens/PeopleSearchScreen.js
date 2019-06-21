@@ -1,162 +1,44 @@
 import React from 'react';
-import axios from 'axios';
+
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
+import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
 
-import { Container, Button, Tabs, Tab, Input } from 'native-base';
-
+import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
+// import { eventTrack } from '../helpers/eventTracking';
 
-import PersonsRow from '../components/PersonsRow';
+import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
+import constants from '../helpers/constants';
+import SearchForm from '../components/SearchForm/SearchForm';
+import Loader from '../components/Loader/Loader';
+
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
-  state = {
-    name: '',
-    cityState: '',
-    email: '',
-    address: '',
-    phone: '',
-    url: '',
-    isDisplaying: false,
-    possiblePersons: []
-  };
-  inputHandler = (name, value) => {
-    this.setState({ [name]: value });
-  };
 
-  handleEncodeURI = () => {
-    // const testNamePerson = {
-    //   names: [
-    //     {
-    //       first: `Roxann`,
-    //       last: 'Collins'
-    //     }
-    //   ]
-    // };
-    const person = {};
-
-    // Name constructor
-    if (this.state.name.length) {
-      person.names = [];
-      let splitName = this.state.name.split(' ');
-      if (splitName.length === 2) {
-        person.names.push({ first: splitName[0], last: splitName[1] });
-      } else if (splitName.length === 3) {
-        person.names.push({
-          first: splitName[0],
-          middle: splitName[1],
-          last: splitName[2]
-        });
-      }
-    }
-    // City State constructor
-    // Right now acccounts for 2 length string City ST or State
-    if (this.state.cityState.length) {
-      person.addresses = [];
-      let splitAddress = this.state.cityState.split(' ');
-      if (splitAddress.length === 2) {
-        person.addresses.push({
-          state: splitAddress[1],
-          city: splitAddress[0]
-        });
-      }
-    }
-    // Email constructor
-    if (this.state.email.length) {
-      person.emails = [];
-      let splitEmail = this.state.email.split(' ');
-      if (splitEmail.length === 1) {
-        person.emails.push({
-          address: splitEmail[0]
-        });
-      }
-    }
-
-    // Phone constructor
-    // Test with 3303303333 format
-    if (this.state.phone.length) {
-      person.phones = [];
-      let splitPhone = this.state.phone.split(' ');
-      if (splitPhone.length === 1) {
-        person.phones.push({
-          number: splitPhone[0]
-        });
-      }
-    }
-
-    // Url constructor
-    // Test with www.facebook.com/user
-    // if (this.state.url.length) {
-    //   person.urls = [];
-    //   let splitUrl = this.state.url.split(' ');
-    //   if (splitUrl.length === 1) {
-    //     person.urls.push({
-    //       url: splitUrl[0]
-    //     });
-    //   }
-    // }
-
-    const inputData = {
-      person: {
-        names: [
-          {
-            first: `Ken`,
-            middle: 'Joseph',
-            last: 'Kent',
-            display: 'Clark Joseph Kent'
-          }
-        ],
-        emails: [
-          {
-            address: 'clark.kent@example.com'
-          }
-        ],
-        phones: [
-          {
-            '@type': 'home_phone',
-            country_code: '1',
-            number: '9785550145',
-            display: '(978) 555-0145',
-            display_international: '+1 978-555-0145'
-          }
-        ],
-        addresses: [
-          {
-            country: 'US',
-            state: 'KS',
-            city: 'Smallville',
-            street: 'Hickory Lane',
-            house: '10',
-            apartment: '1',
-            zip_code: '66605',
-            display: '10-1 Hickory Lane, Smallville, Kansas'
-          },
-          {
-            '@type': 'work',
-            country: 'US',
-            state: 'KS',
-            city: 'Metropolis',
-            street: 'Broadway',
-            house: '1000',
-            apartment: '355',
-            display: '1000-355 Broadway, Metropolis, Kansas'
-          }
-        ],
-        urls: [
-          {
-            '@domain': 'linkedin.com',
-            '@category': 'professional_and_business',
-            url: 'https://www.linkedin.com/pub/superman/20/7a/365'
-          },
-          {
-            '@domain': 'facebook.com',
-            '@category': 'personal_profiles',
-            url: 'https://www.facebook.com/superman'
-          }
-        ]
-      }
+  createEvent = success => {
+    let emailAddress;
+    const options = {
+      possibleMatches: this.props.possiblePersons.length,
+      personMatch: this.props.possiblePersons.length === 0 ? true : false
     };
+    if (!this.props.user) {
+      emailAddress = 'anonymous@unknown.org';
+    } else {
+      emailAddress = this.props.user.email;
+    }
+    const event = {
+      emailAddress,
+      event: `person-search-${success}`,
+      options
+    };
+    console.log('event:', event);
+    return event;
+  };
+
+  handleEncodeURI = person => {
     console.log(
       JSON.stringify({
         person: encodeURI(JSON.stringify(person))
@@ -167,18 +49,33 @@ class PeopleSearchScreen extends React.Component {
     });
   };
 
-  handlePersonSubmit = () => {
-    const body = this.handleEncodeURI();
-    axios
-      .post('https://dev.search.connectourkids.org/api/search-v2', body)
-      .then(res => {
-        console.log(res.data.possible_persons);
-        this.setState({ possiblePersons: res.data.possible_persons });
-      })
-      .catch(err => console.log(err));
+  handleSearchRequest = person => {
+    const { fetchSearchResult, navigation } = this.props;
+    const body = this.handleEncodeURI(person);
+    fetchSearchResult(
+      body,
+      () => navigation.navigate('SearchResult'),
+      this.createEvent
+    );
+  };
+
+  handleNavigateToResult = async searchPointer => {
+    const { person } = this.state;
+    if (!person) {
+      await this.handlePersonRequest(searchPointer);
+    }
+    await this.props.navigation.navigate('SearchResult', {
+      person: person
+    });
+  };
+
+  resetReduxState = () => {
+    const { resetState } = this.props;
+    resetState();
   };
 
   render() {
+    // console.log(this.props.navigation);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -188,77 +85,36 @@ class PeopleSearchScreen extends React.Component {
             </View>
 
             <View>
-              <Tabs style={styles.container}>
-                <Tab heading="Name" style={styles.nameInput}>
-                  <Input
-                    placeholder="First and last, middle optional"
-                    style={styles.textInput}
-                    value={this.state.name}
-                    onChangeText={text => this.inputHandler('name', text)}
-                  />
-                  <Input
-                    placeholder="City, State"
-                    style={[styles.textInput, styles.textInputSmall]}
-                    value={this.state.cityState}
-                    onChangeText={text => this.inputHandler('cityState', text)}
-                  />
-                </Tab>
-                <Tab heading="Email">
-                  <Input
-                    placeholder="Email address"
-                    style={styles.textInput}
-                    value={this.state.email}
-                    onChangeText={text => this.inputHandler('email', text)}
-                  />
-                </Tab>
-                <Tab heading="Address">
-                  <Input
-                    placeholder="Mailing address"
-                    style={styles.textInput}
-                    value={this.state.address}
-                    onChangeText={text => this.inputHandler('address', text)}
-                  />
-                </Tab>
-                <Tab heading="Phone">
-                  <Input
-                    placeholder="Phone any format, no letters"
-                    style={styles.textInput}
-                    value={this.state.phone}
-                    onChangeText={text => this.inputHandler('phone', text)}
-                  />
-                </Tab>
-                <Tab heading="URL">
-                  <Input
-                    placeholder="Social profile link or any URL"
-                    style={styles.textInput}
-                    value={this.state.url}
-                    onChangeText={text => this.inputHandler('url', text)}
-                  />
-                </Tab>
-              </Tabs>
-
-              <Button
-                info
-                style={styles.button}
-                onPress={this.handlePersonSubmit}
-              >
-                <Text style={styles.buttonText}> Search </Text>
-              </Button>
+              <SearchForm
+                handleSearch={this.handleSearchRequest}
+                resetReduxState={this.resetReduxState}
+              />
 
               <Text style={styles.link}>
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
-              {this.state.isDisplaying && <Text>{this.state.name}</Text>}
-
-              {this.state.possiblePersons.length ? (
-                <FlatList
-                  data={this.state.possiblePersons}
-                  renderItem={({ item }) => {
-                    return <PersonsRow item={item} />;
-                  }}
-                  keyExtractor={(item, index) => index.toString()}
-                />
+              {this.props.isFetching && <Loader />}
+              {!!this.props.possiblePersons.length ? (
+                <>
+                  <Text style={styles.matchesText}>Possible Matches</Text>
+                  <FlatList
+                    data={this.props.possiblePersons}
+                    renderItem={({ item }) => {
+                      return (
+                        <PersonRow
+                          item={item}
+                          handlePress={() =>
+                            this.props.navigation.navigate('SearchResult', {
+                              searchPointer: item['@search_pointer_hash']
+                            })
+                          }
+                        />
+                      );
+                    }}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </>
               ) : null}
             </View>
           </ScrollView>
@@ -270,7 +126,7 @@ class PeopleSearchScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     margin: 5
   },
 
@@ -283,11 +139,13 @@ const styles = StyleSheet.create({
 
   intro: {
     padding: 10,
-    fontSize: 15
+
+    fontFamily: constants.fontFamily,
+    fontSize: 18
   },
 
   textInput: {
-    borderColor: '#64aab8',
+    borderColor: constants.highlightColor,
     borderWidth: 1,
     borderStyle: 'solid',
     flex: 2
@@ -302,7 +160,8 @@ const styles = StyleSheet.create({
 
   button: {
     margin: 10,
-    padding: 10
+    padding: 10,
+    backgroundColor: '#508DB3'
   },
 
   tab: {
@@ -314,12 +173,39 @@ const styles = StyleSheet.create({
   },
 
   link: {
-    color: '#64aab8',
+    color: '#fff',
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
-    borderRadius: 10
+    backgroundColor: constants.highlightColor,
+    borderRadius: 10,
+    marginBottom: 20
+  },
+  matchesText: {
+    fontSize: 20,
+    color: '#508DB3',
+    marginBottom: 20
+  },
+
+  greyButton: {
+    backgroundColor: 'grey',
+    margin: 10,
+    padding: 10
   }
 });
 
-export default PeopleSearchScreen;
+const mapStateToProps = state => {
+  const { error, isFetching, person, possiblePersons } = state.people;
+  const { user } = state.auth;
+  return {
+    error,
+    isFetching,
+    person,
+    possiblePersons,
+    user
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { fetchPerson, fetchSearchResult, resetState }
+)(PeopleSearchScreen);
