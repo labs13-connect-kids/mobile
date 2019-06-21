@@ -18,7 +18,6 @@ export const fetchSearchResult = (body, cb, eventTrack) => dispatch => {
   axios
     .post(`${constants.devURL}`, body)
     .then(res => {
-      console.log(res.data);
       if (res.data.possible_persons) {
         dispatch({
           type: FETCH_PEOPLE_SUCCESS,
