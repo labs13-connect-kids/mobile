@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 import { Container, Button } from 'native-base';
 import { connect } from 'react-redux';

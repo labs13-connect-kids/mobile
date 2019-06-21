@@ -1,13 +1,6 @@
 import React from 'react';
 
-import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
 
