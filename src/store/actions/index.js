@@ -14,7 +14,12 @@ import {
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
-export const fetchSearchResult = (body, cb, eventTrack) => dispatch => {
+export const fetchSearchResult = (
+  body,
+  cb,
+  eventTrack,
+  createEvent
+) => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
   axios
@@ -25,6 +30,7 @@ export const fetchSearchResult = (body, cb, eventTrack) => dispatch => {
           type: FETCH_PEOPLE_SUCCESS,
           payload: res.data.possible_persons
         });
+        eventTrack(createEvent('success'));
       } else if (res.data.person) {
         isPerson = true;
         dispatch({
@@ -34,15 +40,23 @@ export const fetchSearchResult = (body, cb, eventTrack) => dispatch => {
       }
     })
     .then(() => {
-      if (isPerson) cb(), eventTrack('success');
+      if (isPerson) {
+        cb();
+        eventTrack(createEvent('success'));
+      }
     })
     .catch(err => {
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
-      eventTrack('failed');
+
+      eventTrack(createEvent('failed'));
     });
 };
 
-export const fetchPerson = searchPointer => dispatch => {
+export const fetchPerson = (
+  searchPointer,
+  eventTrack,
+  createEvent
+) => dispatch => {
   dispatch({ type: FETCH_PERSON });
   axios
     .post(`${constants.devURL}`, { search_pointer_hash: searchPointer })
@@ -51,9 +65,11 @@ export const fetchPerson = searchPointer => dispatch => {
         type: FETCH_PERSON_SUCCESS,
         payload: res.data.person
       });
+      eventTrack(createEvent('success'));
     })
     .catch(err => {
       dispatch({ type: FETCH_PERSON_FAILURE, payload: err });
+      eventTrack(createEvent('failed'));
     });
 };
 
@@ -86,3 +102,5 @@ export const eventTrack = event => dispatch =>
       dispatch({ type: EVENT_ERROR });
       console.log('Event Error .catch');
     });
+
+// create object -> after returned search Promise, fire the event tracking method with the obj

@@ -67,15 +67,15 @@ const AuthenticationViewNavigator = createStackNavigator(
     Authentication: {
       screen: AuthenticationView
     }
-  },
-  {
-    // initialRouteName: 'Login/Register',
-    // defaultNavigationOptions: {
-    //   headerStyle: {
-    //     height: 80
-    //   }
-    // }
   }
+  // {
+  //   initialRouteName: 'BestPractices'
+  //   // defaultNavigationOptions: {
+  //   //   headerStyle: {
+  //   //     height: 80
+  //   //   }
+  //   // }
+  // }
 );
 
 const AppDrawerNavigator = createDrawerNavigator(
@@ -88,6 +88,9 @@ const AppDrawerNavigator = createDrawerNavigator(
     },
     'People Search': {
       screen: PeopleSearchNavigator
+    },
+    'Login/Register': {
+      screen: AuthenticationViewNavigator
     }
   },
   {
