@@ -34,13 +34,13 @@ You can find the project repo at [Connect Our Kids RN Repo](https://github.com/l
 
 ## Mission Statement
 
-> Our mission is to empower social workers with free modern technology to find permanent loving homes for foster kids
+> Our mission is to empower social workers with free modern technology to find permanent loving homes for foster kids.
 
 Social workers who are not familiar with Connect Our Kids will learn about us through their personal connections, social media, emails, and training programs. The social worker will use their browser on their desktop or the mobile phone to learn more at [connectourkids.org](https://connectourkids.org). That user will then click a “download mobile app” button that will drive them to the app store.
 
-Once they’ve downloaded the app, they’ll have basic access to each of the sections of the app (but not full access). They’ll be prompted to login or signup. Once authenticated, they’ll have full access to the People Search features.
+Once they’ve downloaded the app, they’ll have basic access to each of the sections of the app (but not full access). At that point, they will be prompted to login or signup. Once authenticated, they’ll have full access to the People Search features.
 
-In the future, the user will have access to full features of Family Connections and Best Practices in the mobile app.
+In the future, the registered user will have access to full features of Family Connections and Best Practices in the mobile app.
 
 ![](header.png)
 
