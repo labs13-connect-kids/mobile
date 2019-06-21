@@ -1,17 +1,25 @@
 import React from 'react';
 
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 import { connect } from 'react-redux';
 import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
 
 import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
-import { eventTrack } from '../helpers/eventTracking';
+// import { eventTrack } from '../helpers/eventTracking';
 
 import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import SearchForm from '../components/SearchForm/SearchForm';
+import Loader from '../components/Loader/Loader';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -93,6 +101,7 @@ class PeopleSearchScreen extends React.Component {
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
+              {this.props.isFetching && <Loader />}
               {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
