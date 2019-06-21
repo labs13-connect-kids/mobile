@@ -17,6 +17,14 @@ export const isEmail = email => {
   return false;
 };
 
+export const isAddress = address => {
+  if (address.length) {
+    let isValidAddress = address.trim().split(' ').length;
+    return isValidAddress > 3;
+  }
+  return false;
+};
+
 export const isPhone = phone => {
   if (phone.length) {
     let numbersOnly = phone.replace(/[^0-9]+/g, '');

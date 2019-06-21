@@ -13,6 +13,7 @@ import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Loader from '../components/Loader/Loader';
+import ErrorMessage from '../components/Messages/ErrorMessage';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -95,6 +96,7 @@ class PeopleSearchScreen extends React.Component {
                 access. Click here to find out more.
               </Text>
               {this.props.isFetching && <Loader />}
+              {this.props.error && <ErrorMessage />}
               {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
