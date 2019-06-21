@@ -9,6 +9,7 @@ import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
 import Loader from '../components/Loader/Loader';
+import ErrorMessage from '../components/Messages/ErrorMessage';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -43,6 +44,7 @@ class PeopleSearchScreen extends React.Component {
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
+              {this.props.error && <ErrorMessage />}
               {!person ? <Loader /> : <PersonInfo item={person} />}
             </View>
           </ScrollView>

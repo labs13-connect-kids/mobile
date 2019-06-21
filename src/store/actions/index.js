@@ -12,12 +12,13 @@ import {
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
-export const fetchSearchResult = (body, cb , eventTrack ) => dispatch => {
+export const fetchSearchResult = (body, cb, eventTrack) => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
   axios
     .post(`${constants.devURL}`, body)
     .then(res => {
+      console.log(res.data);
       if (res.data.possible_persons) {
         dispatch({
           type: FETCH_PEOPLE_SUCCESS,
@@ -29,14 +30,20 @@ export const fetchSearchResult = (body, cb , eventTrack ) => dispatch => {
           type: FETCH_PERSON_SUCCESS,
           payload: res.data.person
         });
+      } else if (res.data.persons_count === 0) {
+        dispatch({
+          type: FETCH_SEARCH_RESULT_FAILURE,
+          payload: true
+        });
       }
     })
     .then(() => {
-      if (isPerson) cb() , eventTrack( 'success' );
+      if (isPerson) cb(), eventTrack('success');
     })
     .catch(err => {
+      console.log('did we make it to this error', err);
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
-      eventTrack( 'failed' )
+      eventTrack('failed');
     });
 };
 

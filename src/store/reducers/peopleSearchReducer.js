@@ -39,6 +39,7 @@ export const peopleSearchReducer = (state = intialState, action) => {
       };
     case FETCH_PERSON_FAILURE:
     case FETCH_SEARCH_RESULT_FAILURE:
+      console.log(action.payload);
       return {
         error: action.payload,
         isFetching: false,
