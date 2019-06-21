@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 import { Container, Button } from 'native-base';
 import { connect } from 'react-redux';
@@ -14,6 +8,7 @@ import { fetchPerson } from '../store/actions';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
+import Loader from '../components/Loader/Loader';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -28,7 +23,6 @@ class PeopleSearchScreen extends React.Component {
   }
 
   render() {
-    console.log(this.props.navigation);
     const { person } = this.props;
     return (
       <Container style={styles.container}>
@@ -49,7 +43,7 @@ class PeopleSearchScreen extends React.Component {
                 This is a preview. Social workers can have completely free
                 access. Click here to find out more.
               </Text>
-              {!person ? <ActivityIndicator /> : <PersonInfo item={person} />}
+              {!person ? <Loader /> : <PersonInfo item={person} />}
             </View>
           </ScrollView>
         </SafeAreaView>
