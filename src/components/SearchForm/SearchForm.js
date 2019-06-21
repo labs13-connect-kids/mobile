@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, Tabs, Tab, Input } from 'native-base';
 import constants from '../../helpers/constants';
-import { isName, isEmail, isPhone, isUrl } from '../../helpers/inputValidators';
+import {
+  isName,
+  isEmail,
+  isAddress,
+  isPhone,
+  isUrl
+} from '../../helpers/inputValidators';
+import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
 
 class SearchForm extends Component {
   state = {
@@ -72,6 +79,11 @@ class SearchForm extends Component {
         this.setState({ email: inputValue, [inputKey]: '', tabPage: 1 });
       }
       formattedObject = this.formatRequestObject(inputValue, 'email');
+    } else if (isAddress(inputValue)) {
+      if (!this.state.address) {
+        this.setState({ address: inputValue, [inputKey]: '', tabPage: 2 });
+      }
+      formattedObject = this.formatRequestObject(inputValue, 'address');
     } else if (isPhone(inputValue)) {
       if (!this.state.phone) {
         this.setState({ phone: inputValue, [inputKey]: '', tabPage: 3 });
@@ -117,31 +129,13 @@ class SearchForm extends Component {
     switch (type) {
       case 'name':
         person.names = [];
-        let splitName = inputValue
-          .trim()
-          .replace(/,/g, '')
-          .split(' ');
-        if (splitName.length === 2) {
-          person.names.push({ first: splitName[0], last: splitName[1] });
-        } else if (splitName.length === 3) {
-          person.names.push({
-            first: splitName[0],
-            middle: splitName[2],
-            last: splitName[1]
-          });
-        }
+        const parsedName = parseName(inputValue);
+        person.names.push(parsedName);
 
         if (this.state.cityState.length) {
           person.addresses = [];
-          let splitAddress = this.state.cityState.trim().split(' ');
-          if (splitAddress.length > 1) {
-            let state = splitAddress.pop();
-            let city = splitAddress.join(' ').replace(/,/g, '');
-            person.addresses.push({
-              state: state,
-              city: city
-            });
-          }
+          const location = parseCityState(this.state.cityState);
+          person.addresses.push(location);
         }
         break;
 
@@ -150,6 +144,11 @@ class SearchForm extends Component {
         person.emails.push({
           address: inputValue
         });
+        break;
+      case 'address':
+        person.addresses = [];
+        const addresses = parseAddress(inputValue);
+        person.addresses.push(addresses);
         break;
 
       case 'phone':

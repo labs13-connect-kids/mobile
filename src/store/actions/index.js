@@ -46,6 +46,7 @@ export const fetchSearchResult = (
       }
     })
     .catch(err => {
+      console.log('did we make it to this error', err);
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
 
       eventTrack(createEvent('failed'));
