@@ -131,11 +131,31 @@ class SearchForm extends Component {
           });
         }
 
+        const statesWithTwoWords = new Set([
+          'hampshire',
+          'jersey',
+          'york',
+          'mexico',
+          'carolina',
+          'dakota',
+          'island',
+          'virginia'
+        ]);
+
         if (this.state.cityState.length) {
           person.addresses = [];
           let splitAddress = this.state.cityState.trim().split(' ');
           if (splitAddress.length > 1) {
             let state = splitAddress.pop();
+            if (statesWithTwoWords.has(state.toLowerCase())) {
+              if (
+                state.toLowerCase() === 'virginia' &&
+                splitAddress[splitAddress.length - 1].toLowerCase() !== 'west'
+              ) {
+              } else {
+                state = splitAddress.pop() + ' ' + state;
+              }
+            }
             let city = splitAddress.join(' ').replace(/,/g, '');
             person.addresses.push({
               state: state,
