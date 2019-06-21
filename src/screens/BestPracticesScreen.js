@@ -18,6 +18,7 @@ import jwtDecode from 'jwt-decode';
 
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
+import ErrorMessage from '../components/Messages/ErrorMessage';
 
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
