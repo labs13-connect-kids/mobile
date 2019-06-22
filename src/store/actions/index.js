@@ -38,6 +38,12 @@ export const fetchSearchResult = (
           payload: res.data.person
         });
         eventTrack(createEvent(['success']));
+      } else if (res.data.persons_count === 0) {
+        dispatch({
+          type: FETCH_SEARCH_RESULT_FAILURE,
+          payload: true
+        });
+        eventTrack(createEvent(['failed']));
       }
     })
     .then(() => {
