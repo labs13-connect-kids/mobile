@@ -2,7 +2,12 @@ import React from 'react';
 
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
-import { fetchPerson, fetchSearchResult, resetState } from '../store/actions';
+import {
+  fetchPerson,
+  fetchSearchResult,
+  resetState,
+  eventTrack
+} from '../store/actions';
 
 import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
@@ -20,11 +25,19 @@ class PeopleSearchScreen extends React.Component {
     headerConfig('People Search', navigation);
 
   createEvent = success => {
-    let emailAddress;
-    const options = {
-      possibleMatches: this.props.possiblePersons.length,
-      personMatch: this.props.possiblePersons.length === 0 ? true : false
-    };
+    let emailAddress = '';
+    let options = {};
+    if (typeof success === 'string') {
+      options = {
+        possibleMatches: this.props.possiblePersons.length,
+        personMatch: false
+      };
+    } else {
+      options = {
+        possibleMatches: 0,
+        personMatch: true
+      };
+    }
     if (!this.props.user) {
       emailAddress = 'anonymous@unknown.org';
     } else {
@@ -32,7 +45,10 @@ class PeopleSearchScreen extends React.Component {
     }
     const event = {
       emailAddress,
-      event: `person-search-${success}`,
+      event:
+        typeof success === 'string'
+          ? `person-search-${success}`
+          : `person-search-${success[0]}`,
       options
     };
     console.log('event:', event);
@@ -56,6 +72,7 @@ class PeopleSearchScreen extends React.Component {
     fetchSearchResult(
       body,
       () => navigation.navigate('SearchResult'),
+      this.props.eventTrack,
       this.createEvent
     );
   };
@@ -76,7 +93,7 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
-    // console.log(this.props.navigation);
+    console.log('PROPS PEOPLE SEARCH SCREEN: ', this.props);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -209,5 +226,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchPerson, fetchSearchResult, resetState }
+  { fetchPerson, fetchSearchResult, resetState, eventTrack }
 )(PeopleSearchScreen);
