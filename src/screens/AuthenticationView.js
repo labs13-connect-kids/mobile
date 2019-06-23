@@ -5,7 +5,10 @@ import VideoModal from '../components/AuthModals/VideoModal';
 import SocialWorkerModal from '../components/AuthModals/SocialWorkerModal';
 import { Button } from 'native-base';
 import constants from '../helpers/constants';
+import headerConfig from '../helpers/headerConfig';
 class AuthenticationView extends Component {
+  static navigationOptions = ({ navigation }) =>
+    headerConfig('Login / Register', navigation);
   state = {
     modalVisible: false,
     videoAgree: false,
@@ -72,15 +75,24 @@ class AuthenticationView extends Component {
             </View>
           </View>
         </Modal>
-        <Button
-          style={styles.button}
-          block
-          onPress={() => {
-            this.setModalVisible(true);
-          }}
-        >
-          <Text style={styles.btnText}>Register</Text>
-        </Button>
+        {this.props.isLoggedIn ? (
+          <TouchableOpacity onPress={this.props.logOut}>
+            <Text>Log Out</Text>
+          </TouchableOpacity>
+        ) : (
+          <View>
+            {/* <LoginWithAuth0 /> */}
+            <Button
+              style={styles.button}
+              block
+              onPress={() => {
+                this.setModalVisible(true);
+              }}
+            >
+              <Text style={styles.btnText}>Register</Text>
+            </Button>
+          </View>
+        )}
       </View>
     );
   }
@@ -108,4 +120,5 @@ const styles = StyleSheet.create({
     color: '#fff'
   }
 });
+
 export default AuthenticationView;

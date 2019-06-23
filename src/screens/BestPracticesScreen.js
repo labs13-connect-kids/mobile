@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Container, Button } from 'native-base';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
+// import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 import { AsyncStorage } from 'react-native';
 import { setUserCreds, logOut } from '../store/actions';
 import { connect } from 'react-redux';
@@ -18,7 +18,7 @@ import jwtDecode from 'jwt-decode';
 
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
-import ErrorMessage from '../components/Messages/ErrorMessage';
+// import ErrorMessage from '../components/Messages/ErrorMessage';
 
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
@@ -59,13 +59,6 @@ class BestPracticesScreen extends Component {
                 source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
               />
             </View>
-            {this.props.isLoggedIn ? (
-              <TouchableOpacity onPress={this.props.logOut}>
-                <Text>Log Out</Text>
-              </TouchableOpacity>
-            ) : (
-              <LoginWithAuth0 />
-            )}
             <Button
               style={styles.button}
               block
