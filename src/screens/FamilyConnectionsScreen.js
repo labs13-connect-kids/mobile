@@ -30,6 +30,7 @@ class FamilyConnectionsScreen extends Component {
 
   trackInterest = () => {
     this.props.trackEmail({ emailAddress: this.props.email });
+    this.toggleModal();
   };
 
   render() {
@@ -51,6 +52,9 @@ class FamilyConnectionsScreen extends Component {
               />
             ) : (
               <SafeAreaView style={styles.loginContainer}>
+                <Text style={styles.loginText}>
+                  Please take a moment to login or register before continuing
+                </Text>
                 <LoginWithAuth0 />
               </SafeAreaView>
             )}
@@ -58,7 +62,7 @@ class FamilyConnectionsScreen extends Component {
         </Modal>
         <SafeAreaView>
           <ScrollView>
-            <Text style={{ fontFamily: constants.fontFamily, fontSize: 18 }}>
+            <Text style={styles.mainText}>
               Learn about a revolutionary way to discover and engage extended
               families for at-risk foster youth.
             </Text>
@@ -93,6 +97,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 25
+  },
+  mainText: {
+    fontFamily: constants.fontFamily,
+    fontSize: 18,
+    lineHeight: 26,
+    marginBottom: 20
   },
   button: {
     justifyContent: 'center',

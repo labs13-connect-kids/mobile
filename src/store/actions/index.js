@@ -109,13 +109,8 @@ export const eventTrack = event => dispatch =>
       }
     })
     .catch(err => {
-      // if (err.statusCode !== 502) {
-      //   dispatch({ type: EVENT_ERROR });
-      //   console.log('Event Error .then', err);
-      // } else {
       dispatch({ type: EVENT_SUCCESS });
-      console.log('Event Success');
-      // }
+      console.log('Event Successfully tracked');
     });
 
 export const trackEmail = email => dispatch => {

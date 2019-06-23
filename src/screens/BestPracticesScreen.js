@@ -43,12 +43,15 @@ class BestPracticesScreen extends Component {
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <Text style={{ fontFamily: constants.fontFamily, fontSize: 18 }}>
+            <Text style={styles.mainText}>
               Connect Our Kids makes free tools for social workers engaged in
-              permanency searches for foster kids. Watch the video below to
-              learn more about the free tools and resources in this app.
+              permanency searches for foster kids.
             </Text>
-            <View style={{ height: 300, marginBottom: 30 }}>
+            <Text style={styles.videoText}>
+              Watch the video below to learn more about the free tools and
+              resources in this app.
+            </Text>
+            <View style={styles.videoContainer}>
               <WebView
                 style={styles.WebViewContainer}
                 javaScriptEnabled={true}
@@ -105,7 +108,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20
   },
-
+  mainText: {
+    fontFamily: constants.fontFamily,
+    fontSize: 18,
+    lineHeight: 26,
+    marginBottom: 5
+  },
+  videoText: {
+    color: constants.highlightColor,
+    fontWeight: 'bold',
+    marginBottom: 5
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -134,7 +147,11 @@ const styles = StyleSheet.create({
   red: {
     backgroundColor: 'red'
   },
-
+  videoContainer: {
+    justifyContent: 'center',
+    height: 300,
+    marginBottom: 30
+  },
   WebViewContainer: {
     marginTop: Platform.OS == 'ios' ? 20 : 0
   }
