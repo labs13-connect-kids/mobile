@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import authHelpers from '../../helpers/authHelpers';
 import { connect } from 'react-redux';
 import { setUserCreds, logOut } from '../../store/actions';
+import Login from './Login';
 
 class Auth0LoginContainer extends Component {
   handleResponse = result => {
@@ -31,6 +32,7 @@ class Auth0LoginContainer extends Component {
         onLogin={() => authHelpers._loginWithAuth0(this.handleResponse)}
         onRegister={this.onRegister}
         isLoggedIn={this.props.isLoggedIn}
+        logOut={this.props.logOut}
       />
     );
   }

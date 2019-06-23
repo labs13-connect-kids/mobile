@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Modal, Text, View, Alert, StyleSheet, Dimensions } from 'react-native';
+import { Modal, View, Alert, StyleSheet, Dimensions } from 'react-native';
 import VideoAgreeModal from './../components/AuthModals/VideoAgreeModal';
 import VideoModal from '../components/AuthModals/VideoModal';
 import SocialWorkerModal from '../components/AuthModals/SocialWorkerModal';
-import { Button } from 'native-base';
 import constants from '../helpers/constants';
 import headerConfig from '../helpers/headerConfig';
+import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 class AuthenticationView extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Login / Register', navigation);
@@ -37,6 +37,7 @@ class AuthenticationView extends Component {
   };
 
   render() {
+    console.log('auth view props: ', this.props);
     return (
       <View style={styles.registerContainer}>
         <Modal
@@ -75,24 +76,10 @@ class AuthenticationView extends Component {
             </View>
           </View>
         </Modal>
-        {this.props.isLoggedIn ? (
-          <TouchableOpacity onPress={this.props.logOut}>
-            <Text>Log Out</Text>
-          </TouchableOpacity>
-        ) : (
-          <View>
-            {/* <LoginWithAuth0 /> */}
-            <Button
-              style={styles.button}
-              block
-              onPress={() => {
-                this.setModalVisible(true);
-              }}
-            >
-              <Text style={styles.btnText}>Register</Text>
-            </Button>
-          </View>
-        )}
+
+        <View>
+          <LoginWithAuth0 />
+        </View>
       </View>
     );
   }
