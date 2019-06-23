@@ -5,6 +5,8 @@ import authHelpers from '../../helpers/authHelpers';
 import { connect } from 'react-redux';
 import { setUserCreds } from '../../store/actions';
 import AuthenticationView from '../../screens/AuthenticationView';
+import { Button } from 'native-base';
+import constants from '../../helpers/constants';
 
 class Auth0LoginContainer extends Component {
   handleResponse = result => {
@@ -39,9 +41,9 @@ class Auth0LoginContainer extends Component {
 const Login = props => {
   return (
     <View style={styles.logInBtns}>
-      <TouchableHighlight onPress={props.onLogin}>
-        <Text>Login </Text>
-      </TouchableHighlight>
+      <Button style={styles.button} block onPress={props.onLogin}>
+        <Text style={styles.btnText}>Login </Text>
+      </Button>
       <AuthenticationView onLogin={props.onLogin} />
     </View>
   );
@@ -57,6 +59,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'space-evenly'
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: constants.highlightColor
+  },
+  btnText: {
+    color: '#fff'
   }
 });
 

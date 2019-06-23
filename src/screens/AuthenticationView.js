@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import {
-  Modal,
-  Text,
-  TouchableHighlight,
-  View,
-  Alert,
-  StyleSheet,
-  Dimensions
-} from 'react-native';
+import { Modal, Text, View, Alert, StyleSheet, Dimensions } from 'react-native';
 import VideoAgreeModal from './../components/AuthModals/VideoAgreeModal';
 import VideoModal from '../components/AuthModals/VideoModal';
 import SocialWorkerModal from '../components/AuthModals/SocialWorkerModal';
-
+import { Button } from 'native-base';
+import constants from '../helpers/constants';
 class AuthenticationView extends Component {
   state = {
     modalVisible: false,
@@ -42,7 +35,7 @@ class AuthenticationView extends Component {
 
   render() {
     return (
-      <View style={styles.marginTop}>
+      <View style={styles.registerContainer}>
         <Modal
           animationType="slide"
           transparent={false}
@@ -79,25 +72,40 @@ class AuthenticationView extends Component {
             </View>
           </View>
         </Modal>
-        <TouchableHighlight
+        <Button
+          style={styles.button}
+          block
           onPress={() => {
             this.setModalVisible(true);
           }}
         >
-          <Text>Register</Text>
-        </TouchableHighlight>
+          <Text style={styles.btnText}>Register</Text>
+        </Button>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  registerContainer: {
+    flex: 1,
+    marginHorizontal: 5
+  },
   marginTop: {
     marginTop: 22
   },
   logo: {
     width: Dimensions.get('window').width - 40,
     height: 100
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: constants.highlightColor
+  },
+  btnText: {
+    color: '#fff'
   }
 });
 export default AuthenticationView;
