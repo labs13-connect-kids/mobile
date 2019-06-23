@@ -33,6 +33,7 @@ class Auth0LoginContainer extends Component {
         onRegister={this.onRegister}
         isLoggedIn={this.props.isLoggedIn}
         logOut={this.props.logOut}
+        setModalVisible={this.props.setModalVisible}
       />
     );
   }

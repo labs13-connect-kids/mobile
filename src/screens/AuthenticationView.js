@@ -78,7 +78,7 @@ class AuthenticationView extends Component {
         </Modal>
 
         <View>
-          <LoginWithAuth0 />
+          <LoginWithAuth0 setModalVisible={this.setModalVisible} />
         </View>
       </View>
     );

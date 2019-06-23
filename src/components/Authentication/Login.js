@@ -11,7 +11,7 @@ const Login = props => {
           <Text style={styles.logOutText}>Log Out</Text>
         </Button>
       ) : (
-        <View style={{ marginTop: 50 }}>
+        <View style={styles.logInBtns}>
           <Button style={styles.button} block onPress={props.onLogin}>
             <Text style={styles.btnText}>Login </Text>
           </Button>
@@ -19,7 +19,7 @@ const Login = props => {
             style={styles.button}
             block
             onPress={() => {
-              this.setModalVisible(true);
+              props.setModalVisible(true);
             }}
           >
             <Text style={styles.btnText}>Register</Text>
