@@ -4,8 +4,7 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  Dimensions,
-  Alert
+  Dimensions
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
@@ -35,9 +34,8 @@ const FamilyConnectionsModal = props => {
         <Button
           style={styles.yesButton}
           block
-          onPress={() => {
-            props.trackInterest();
-            Alert.alert('Your email has been added to our mailing list');
+          onPress={async () => {
+            await props.trackInterest();
           }}
         >
           <Text style={styles.btnText}>Yes, add my email to the list</Text>
