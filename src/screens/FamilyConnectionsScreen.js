@@ -6,7 +6,8 @@ import {
   View,
   WebView,
   Platform,
-  Modal
+  Modal,
+  Alert
 } from 'react-native';
 import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -29,11 +30,23 @@ class FamilyConnectionsScreen extends Component {
   };
 
   trackInterest = () => {
-    this.props.trackEmail({ emailAddress: this.props.email });
-    this.toggleModal();
+    this.props
+      .trackEmail({ emailAddress: this.props.email })
+      .then(res => {
+        console.log('RES FROM TRACK INTEREST: ', res);
+        this.props.error
+          ? Alert.alert(this.props.error.message)
+          : this.props.message !== undefined
+          ? Alert.alert(this.props.message)
+          : Alert.alert(
+              'there was a problem talking to the database, Please try again later'
+            );
+      })
+      .catch(res => Alert.alert(this.props.message), this.toggleModal());
   };
 
   render() {
+    console.log('FCS STATE: ', this.state, 'FCS PROPS: ', this.props);
     return (
       <Container style={styles.container}>
         <Modal
@@ -133,9 +146,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
+  console.log('mSTP in famcon: ', state);
   // const { email } = state.auth.user;
   return {
-    email: state.auth.user ? state.auth.user.email : null
+    email: state.auth.user ? state.auth.user.email : null,
+    message: state.famConInterest.message,
+    error: state.famConInterest.error
   };
 };
 
