@@ -1,9 +1,6 @@
 import React from 'react';
 import { Linking, Text, TouchableHighlight, View } from 'react-native';
 
-// const handleOpenEmail = () =>
-//   Linking.openURL('mailto:support@connectourkids.org');
-
 const handleOpenEmail = () => {
   Linking.canOpenURL('mailto:support@connectourkids.org:')
     .then(supported => {
