@@ -11,7 +11,7 @@ import {
 
 import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
-// import { eventTrack } from '../helpers/eventTracking';
+// import { createEvent } from '../helpers/createEvent';
 
 import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
@@ -56,21 +56,28 @@ class PeopleSearchScreen extends React.Component {
   };
 
   handleEncodeURI = person => {
-    console.log(
-      JSON.stringify({
-        person: encodeURI(JSON.stringify(person))
-      })
-    );
-    return JSON.stringify({
-      person: encodeURI(JSON.stringify(person))
-    });
+    console.log(encodeURI(JSON.stringify(person)));
+    return encodeURI(JSON.stringify(person));
   };
 
   handleSearchRequest = person => {
-    const { fetchSearchResult, navigation } = this.props;
-    const body = this.handleEncodeURI(person);
+    const {
+      accessToken,
+      fetchSearchResult,
+      idToken,
+      isLoggedIn,
+      navigation
+    } = this.props;
+    const requestObject = {};
+
+    if (isLoggedIn) {
+      requestObject['authToken'] = accessToken;
+      requestObject['idToken'] = idToken;
+    }
+
+    requestObject['person'] = this.handleEncodeURI(person);
     fetchSearchResult(
-      body,
+      JSON.stringify(requestObject),
       () => navigation.navigate('SearchResult'),
       this.props.eventTrack,
       this.createEvent
@@ -80,7 +87,11 @@ class PeopleSearchScreen extends React.Component {
   handleNavigateToResult = async searchPointer => {
     const { person } = this.state;
     if (!person) {
-      await this.handlePersonRequest(searchPointer);
+      await this.handlePersonRequest(
+        searchPointer,
+        this.props.eventTrack,
+        this.createEvent
+      );
     }
     await this.props.navigation.navigate('SearchResult', {
       person: person
@@ -93,6 +104,7 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
+    const { isLoggedIn } = this.props;
     console.log('PROPS PEOPLE SEARCH SCREEN: ', this.props);
     return (
       <Container style={styles.container}>
@@ -108,10 +120,12 @@ class PeopleSearchScreen extends React.Component {
                 resetReduxState={this.resetReduxState}
               />
 
-              <Text style={styles.link}>
-                This is a preview. Social workers can have completely free
-                access. Click here to find out more.
-              </Text>
+              {!isLoggedIn && (
+                <Text style={styles.link}>
+                  This is a preview. Social workers can have completely free
+                  access. Click here to find out more.
+                </Text>
+              )}
               {this.props.isFetching && <Loader />}
               {this.props.error && <ErrorMessage />}
               {!!this.props.possiblePersons.length ? (
@@ -214,10 +228,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { error, isFetching, person, possiblePersons } = state.people;
-  const { user } = state.auth;
+  const { accessToken, idToken, isLoggedIn, user } = state.auth;
   return {
+    accessToken,
     error,
+    idToken,
     isFetching,
+    isLoggedIn,
     person,
     possiblePersons,
     user
