@@ -65,7 +65,10 @@ class BestPracticesScreen extends Component {
               onPress={() => this.props.navigation.navigate('PeopleSearch')}
             >
               <Text style={styles.primaryBtnText}>
-                People Search - Find Contact Information for Anyone
+                People Search -{' '}
+                <Text style={styles.subText}>
+                  Find Contact Information for Anyone
+                </Text>
               </Text>
             </Button>
             <Button
@@ -77,7 +80,8 @@ class BestPracticesScreen extends Component {
               }
             >
               <Text style={styles.buttonText}>
-                Family Connections - Family Trees for Permanency
+                Family Connections -{' '}
+                <Text style={styles.subText}>Family Trees for Permanency</Text>
               </Text>
             </Button>
             <Button
@@ -87,7 +91,10 @@ class BestPracticesScreen extends Component {
               onPress={() => Linking.openURL('https://connectourkids.org')}
             >
               <Text style={styles.buttonText}>
-                Resources - Useful Materials and Information
+                Resources -{' '}
+                <Text style={styles.subText}>
+                  Useful Materials and Information
+                </Text>
               </Text>
             </Button>
           </ScrollView>
@@ -131,12 +138,18 @@ const styles = StyleSheet.create({
     backgroundColor: constants.highlightColor
   },
   primaryBtnText: {
-    color: '#fff'
+    color: '#fff',
+    fontSize: 12,
+    textTransform: 'uppercase'
+  },
+  subText: {
+    fontSize: 10
   },
   buttonText: {
     color: constants.highlightColor,
     fontSize: 12,
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
+    textTransform: 'uppercase'
   },
 
   textInput: {
