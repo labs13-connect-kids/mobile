@@ -22,6 +22,12 @@ const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
                     {'\n'}
                     {key[itemValue]}{' '}
                     {renderMaskedOrResult(key.zip_code, 'zip_code')}
+                    {'\n'}
+                    {key['@last_seen'] && (
+                      <Text style={styles.colListLabelText}>
+                        {key['@last_seen'].split('-')[0]}
+                      </Text>
+                    )}
                   </Text>
                 </TouchableOpacity>
               );
@@ -33,6 +39,18 @@ const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
                   </Text>
                   {key['@type'] && (
                     <Text style={styles.colListLabelText}>{key['@type']}</Text>
+                  )}
+
+                  {key['@last_seen'] ? (
+                    <Text style={styles.colListLabelText}>
+                      {key['@last_seen'].split('-')[0]}
+                    </Text>
+                  ) : (
+                    key['@valid_since'] && (
+                      <Text style={styles.colListLabelText}>
+                        {key['@valid_since'].split('-')[0]}
+                      </Text>
+                    )
                   )}
                 </TouchableOpacity>
               );

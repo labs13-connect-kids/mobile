@@ -66,12 +66,13 @@ class PeopleSearchScreen extends React.Component {
           : `person-search-${success[0]}`,
       options
     };
-    console.log('event:', event);
+    // console.log('event:', event);
     return event;
   };
 
   render() {
     const { isLoggedIn, person } = this.props;
+    console.log(person);
     return (
       <Container style={styles.container}>
         <SafeAreaView>

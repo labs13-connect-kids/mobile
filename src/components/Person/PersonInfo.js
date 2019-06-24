@@ -26,6 +26,13 @@ const PersonInfo = ({ item }) => {
         itemValue="display"
         title="Addresses"
       />
+      {/* This person info row also needs to pass in a url */}
+      <PersonInfoRow
+        item={item}
+        itemKey="urls"
+        itemValue="@domain"
+        title="Websites"
+      />
     </Grid>
   );
 };

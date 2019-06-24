@@ -51,12 +51,12 @@ class PeopleSearchScreen extends React.Component {
           : `person-search-${success[0]}`,
       options
     };
-    console.log('event:', event);
+    // console.log('event:', event);
     return event;
   };
 
   handleEncodeURI = person => {
-    console.log(encodeURI(JSON.stringify(person)));
+    // console.log(encodeURI(JSON.stringify(person)));
     return encodeURI(JSON.stringify(person));
   };
 
@@ -105,7 +105,7 @@ class PeopleSearchScreen extends React.Component {
 
   render() {
     const { isLoggedIn } = this.props;
-    console.log('PROPS PEOPLE SEARCH SCREEN: ', this.props);
+    // console.log('PROPS PEOPLE SEARCH SCREEN: ', this.props);
     return (
       <Container style={styles.container}>
         <SafeAreaView>

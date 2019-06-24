@@ -37,7 +37,7 @@ class AuthenticationView extends Component {
   };
 
   render() {
-    console.log('auth view props: ', this.props);
+    // console.log('auth view props: ', this.props);
     return (
       <View style={styles.registerContainer}>
         <Modal
