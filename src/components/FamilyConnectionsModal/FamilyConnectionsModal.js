@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Alert
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
@@ -31,7 +32,14 @@ const FamilyConnectionsModal = props => {
         below.
       </Text>
       <View style={styles.buttonContainer}>
-        <Button style={styles.yesButton} block onPress={props.trackInterest}>
+        <Button
+          style={styles.yesButton}
+          block
+          onPress={() => {
+            props.trackInterest();
+            Alert.alert('Your email has been added to our mailing list');
+          }}
+        >
           <Text style={styles.btnText}>Yes, add my email to the list</Text>
         </Button>
         <Button style={styles.noButton} block onPress={props.toggleModal}>
