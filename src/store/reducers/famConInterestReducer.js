@@ -6,7 +6,8 @@ import {
 
 const initialState = {
   isLoading: false,
-  error: null
+  error: null,
+  email: null
 };
 
 export const famConInterestReducer = (state = initialState, action) => {
@@ -15,20 +16,28 @@ export const famConInterestReducer = (state = initialState, action) => {
       return {
         ...state,
         error: null,
-        isLoading: true
+        isLoading: true,
+        email: null
       };
     case TRACK_EMAIL_SUCCESS:
       console.log('email added');
       return {
         ...state,
         isLoading: false,
-        error: null
+        error: null,
+        email: action.payload,
+        message: `${action.payload} has been added to our list.`
       };
     case TRACK_EMAIL_FAILURE:
+      console.log('TRACK EMAIL FAILURE ACTION: ', action);
       return {
         ...state,
-        error: `error adding email to db:  ${action.payload}`,
-        isLoading: false
+        error: {
+          message: `${action.email} is on our list already.`,
+          error: action.payload
+        },
+        isLoading: false,
+        email: null
       };
     default:
       return state;

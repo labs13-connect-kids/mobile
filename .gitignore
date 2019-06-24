@@ -8,4 +8,8 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
+<<<<<<< HEAD
 /environment.js
+=======
+environment.js
+>>>>>>> 728b2794fcbc51b0a09d01a823bd5e5ebd607ab1
