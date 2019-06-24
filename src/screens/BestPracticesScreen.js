@@ -140,7 +140,8 @@ const styles = StyleSheet.create({
   primaryBtnText: {
     color: '#fff',
     fontSize: 12,
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    fontWeight: 'bold'
   },
   subText: {
     fontSize: 10
@@ -149,7 +150,8 @@ const styles = StyleSheet.create({
     color: constants.highlightColor,
     fontSize: 12,
     textDecorationLine: 'underline',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    fontWeight: 'bold'
   },
 
   textInput: {
