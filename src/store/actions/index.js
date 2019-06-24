@@ -62,14 +62,10 @@ export const fetchSearchResult = (
     });
 };
 
-export const fetchPerson = (
-  searchPointer,
-  eventTrack,
-  createEvent
-) => dispatch => {
+export const fetchPerson = (body, eventTrack, createEvent) => dispatch => {
   dispatch({ type: FETCH_PERSON });
   axios
-    .post(`${constants.devURL}`, { search_pointer_hash: searchPointer })
+    .post(`${constants.devURL}`, body)
     .then(res => {
       dispatch({
         type: FETCH_PERSON_SUCCESS,

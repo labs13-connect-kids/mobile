@@ -1,8 +1,8 @@
 import { AsyncStorage } from 'react-native';
 import { AuthSession } from 'expo';
+import getEnvVars from '../../environment';
 
-const auth0Domain = `lambda-connect-kids.auth0.com`;
-const auth0ClientId = 'CxJ6UkC11uAAwCyvdTW20fudtLtJ21gz';
+const { auth0Domain, auth0ClientId } = getEnvVars();
 
 const toQueryString = params => {
   return (
@@ -42,7 +42,7 @@ const _loginWithAuth0 = async handleResponse => {
     `https://${auth0Domain}/authorize` +
     toQueryString({
       client_id: auth0ClientId,
-      response_type: 'token',
+      response_type: 'token id_token',
       scope: 'openid profile email',
       redirect_uri: redirectUrl,
       nonce:

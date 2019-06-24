@@ -4,7 +4,8 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Container, Button } from 'native-base';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-import { fetchPerson } from '../store/actions';
+import { eventTrack, fetchPerson } from '../store/actions';
+// import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
@@ -16,15 +17,61 @@ class PeopleSearchScreen extends React.Component {
     headerConfig('People Search', navigation);
 
   componentDidMount() {
-    const { fetchPerson, person } = this.props;
+    const {
+      accessToken,
+      eventTrack,
+      fetchPerson,
+      idToken,
+      isLoggedIn,
+      person
+    } = this.props;
+
     if (!person) {
       const { searchPointer } = this.props.navigation.state.params;
-      fetchPerson(searchPointer);
+      const requestObject = {};
+      requestObject['search_pointer_hash'] = searchPointer;
+      if (isLoggedIn) {
+        requestObject['authToken'] = accessToken;
+        requestObject['idToken'] = idToken;
+      }
+
+      fetchPerson(JSON.stringify(requestObject), eventTrack, this.createEvent);
     }
   }
 
+  createEvent = success => {
+    let emailAddress = '';
+    let options = {};
+    if (typeof success === 'string') {
+      options = {
+        possibleMatches: this.props.possiblePersons.length,
+        personMatch: false
+      };
+    } else {
+      options = {
+        possibleMatches: 0,
+        personMatch: true
+      };
+    }
+    if (!this.props.user) {
+      emailAddress = 'anonymous@unknown.org';
+    } else {
+      emailAddress = this.props.user.email;
+    }
+    const event = {
+      emailAddress,
+      event:
+        typeof success === 'string'
+          ? `person-search-${success}`
+          : `person-search-${success[0]}`,
+      options
+    };
+    console.log('event:', event);
+    return event;
+  };
+
   render() {
-    const { person } = this.props;
+    const { isLoggedIn, person } = this.props;
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -40,10 +87,12 @@ class PeopleSearchScreen extends React.Component {
             </View>
             {/* <SearchForm /> */}
             <View>
-              <Text style={styles.link}>
-                This is a preview. Social workers can have completely free
-                access. Click here to find out more.
-              </Text>
+              {!isLoggedIn && (
+                <Text style={styles.link}>
+                  This is a preview. Social workers can have completely free
+                  access. Click here to find out more.
+                </Text>
+              )}
               {this.props.error && <ErrorMessage />}
               {!person ? <Loader /> : <PersonInfo item={person} />}
             </View>
@@ -119,15 +168,20 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { error, isFetching, person, possiblePersons } = state.people;
+  const { accessToken, idToken, isLoggedIn, user } = state.auth;
   return {
+    accessToken,
     error,
+    idToken,
     isFetching,
+    isLoggedIn,
     person,
-    possiblePersons
+    possiblePersons,
+    user
   };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchPerson }
+  { eventTrack, fetchPerson }
 )(PeopleSearchScreen);
