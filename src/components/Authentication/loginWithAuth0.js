@@ -27,6 +27,7 @@ class Auth0LoginContainer extends Component {
 
   render() {
     return (
+      
       <Login
         navigation={this.props.navigation}
         onLogin={() => authHelpers._loginWithAuth0(this.handleResponse)}
