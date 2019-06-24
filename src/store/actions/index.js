@@ -115,14 +115,21 @@ export const eventTrack = event => dispatch =>
 
 export const trackEmail = email => dispatch => {
   dispatch({ type: TRACK_EMAIL });
-  axios
+  return axios
     .post(constants.devFamilyConnectionsInterestURL, email)
     .then(res => {
       console.log('EMAIL TRACKING RES: ', res);
-      dispatch({ type: TRACK_EMAIL_SUCCESS });
+      return dispatch({
+        type: TRACK_EMAIL_SUCCESS,
+        payload: email.emailAddress
+      });
     })
     .catch(err => {
       console.log('EMAIL TRACKING ERR: ', err);
-      dispatch({ type: TRACK_EMAIL_FAILURE, payload: err, email });
+      return dispatch({
+        type: TRACK_EMAIL_FAILURE,
+        payload: err,
+        email: email.emailAddress
+      });
     });
 };
