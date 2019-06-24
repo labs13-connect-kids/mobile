@@ -9,8 +9,16 @@ import {
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
+import { connect } from 'react-redux';
 
 const FamilyConnectionsModal = props => {
+  let alertMessage = '';
+
+  if (props.error) {
+    alertMessage = props.error;
+  } else {
+    alertMessage = `${props.email} has been added to our mailing list`;
+  }
   return (
     <>
       <View style={styles.headerContainer}>
@@ -37,7 +45,7 @@ const FamilyConnectionsModal = props => {
           block
           onPress={() => {
             props.trackInterest();
-            Alert.alert('Your email has been added to our mailing list');
+            Alert.alert(alertMessage);
           }}
         >
           <Text style={styles.btnText}>Yes, add my email to the list</Text>
@@ -99,5 +107,10 @@ const styles = StyleSheet.create({
     marginTop: 20
   }
 });
-
-export default FamilyConnectionsModal;
+const mapStateToProps = state => {
+  console.log('mSTP famconModal', state);
+  const { error } = state.famConInterest;
+  const { email } = state.auth.user;
+  return { error, email };
+};
+export default connect(mapStateToProps)(FamilyConnectionsModal);

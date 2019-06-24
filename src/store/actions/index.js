@@ -118,9 +118,11 @@ export const trackEmail = email => dispatch => {
   axios
     .post(constants.devFamilyConnectionsInterestURL, email)
     .then(res => {
+      console.log('EMAIL TRACKING RES: ', res);
       dispatch({ type: TRACK_EMAIL_SUCCESS });
     })
     .catch(err => {
-      dispatch({ type: TRACK_EMAIL_FAILURE, payload: err });
+      console.log('EMAIL TRACKING ERR: ', err);
+      dispatch({ type: TRACK_EMAIL_FAILURE, payload: err, email });
     });
 };

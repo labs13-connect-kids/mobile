@@ -25,9 +25,10 @@ export const famConInterestReducer = (state = initialState, action) => {
         error: null
       };
     case TRACK_EMAIL_FAILURE:
+      console.log();
       return {
         ...state,
-        error: `error adding email to db:  ${action.payload}`,
+        error: `${action.email.emailAddress} is on our list already.`,
         isLoading: false
       };
     default:
