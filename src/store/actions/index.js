@@ -10,7 +10,10 @@ import {
   SET_USER_CREDS,
   LOG_OUT,
   EVENT_ERROR,
-  EVENT_SUCCESS
+  EVENT_SUCCESS,
+  TRACK_EMAIL,
+  TRACK_EMAIL_SUCCESS,
+  TRACK_EMAIL_FAILURE
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -106,11 +109,18 @@ export const eventTrack = event => dispatch =>
       }
     })
     .catch(err => {
-      // if (err.statusCode !== 502) {
-      //   dispatch({ type: EVENT_ERROR });
-      //   console.log('Event Error .then', err);
-      // } else {
       dispatch({ type: EVENT_SUCCESS });
-      console.log('Event Success');
-      // }
+      console.log('Event Successfully tracked');
     });
+
+export const trackEmail = email => dispatch => {
+  dispatch({ type: TRACK_EMAIL });
+  axios
+    .post(constants.devFamilyConnectionsInterestURL, email)
+    .then(res => {
+      dispatch({ type: TRACK_EMAIL_SUCCESS });
+    })
+    .catch(err => {
+      dispatch({ type: TRACK_EMAIL_FAILURE, payload: err });
+    });
+};
