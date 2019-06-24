@@ -9,7 +9,7 @@ import {
   Linking
 } from 'react-native';
 import { Container, Button } from 'native-base';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 // import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 import { AsyncStorage } from 'react-native';
 import { setUserCreds, logOut } from '../store/actions';
@@ -60,18 +60,18 @@ class BestPracticesScreen extends Component {
               />
             </View>
             <Button
-              style={styles.button}
+              style={[styles.button, styles.primaryBtn]}
               block
-              transparent
               onPress={() => this.props.navigation.navigate('PeopleSearch')}
             >
-              <Text style={styles.buttonText}>
+              <Text style={styles.primaryBtnText}>
                 People Search - Find Contact Information for Anyone
               </Text>
             </Button>
             <Button
               style={styles.button}
-              transparent
+              bordered
+              block
               onPress={() =>
                 this.props.navigation.navigate('FamilyConnections')
               }
@@ -82,7 +82,8 @@ class BestPracticesScreen extends Component {
             </Button>
             <Button
               style={styles.button}
-              transparent
+              bordered
+              block
               onPress={() => Linking.openURL('https://connectourkids.org')}
             >
               <Text style={styles.buttonText}>
@@ -122,9 +123,16 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 5
   },
-
+  primaryBtn: {
+    backgroundColor: constants.highlightColor
+  },
+  primaryBtnText: {
+    color: '#fff'
+  },
   buttonText: {
     color: constants.highlightColor,
     fontSize: 12,
