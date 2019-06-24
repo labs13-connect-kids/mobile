@@ -62,21 +62,11 @@ const PeopleSearchNavigator = createStackNavigator(
   }
 );
 
-const AuthenticationViewNavigator = createStackNavigator(
-  {
-    Authentication: {
-      screen: AuthenticationView
-    }
-  },
-  {
-    // initialRouteName: 'Login/Register',
-    // defaultNavigationOptions: {
-    //   headerStyle: {
-    //     height: 80
-    //   }
-    // }
+const AuthenticationViewNavigator = createStackNavigator({
+  Authentication: {
+    screen: AuthenticationView
   }
-);
+});
 
 const AppDrawerNavigator = createDrawerNavigator(
   {
@@ -89,7 +79,7 @@ const AppDrawerNavigator = createDrawerNavigator(
     'People Search': {
       screen: PeopleSearchNavigator
     },
-    'Login/Register': {
+    'Log In / Register    Log Out': {
       screen: AuthenticationViewNavigator
     }
   },

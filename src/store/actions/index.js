@@ -8,11 +8,21 @@ import {
   FETCH_SEARCH_RESULT_FAILURE,
   RESET_STATE,
   SET_USER_CREDS,
-  LOG_OUT
+  LOG_OUT,
+  EVENT_ERROR,
+  EVENT_SUCCESS,
+  TRACK_EMAIL,
+  TRACK_EMAIL_SUCCESS,
+  TRACK_EMAIL_FAILURE
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
-export const fetchSearchResult = (body, cb , eventTrack ) => dispatch => {
+export const fetchSearchResult = (
+  body,
+  cb,
+  eventTrack,
+  createEvent
+) => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
   axios
@@ -23,24 +33,40 @@ export const fetchSearchResult = (body, cb , eventTrack ) => dispatch => {
           type: FETCH_PEOPLE_SUCCESS,
           payload: res.data.possible_persons
         });
+        eventTrack(createEvent('success'));
       } else if (res.data.person) {
         isPerson = true;
         dispatch({
           type: FETCH_PERSON_SUCCESS,
           payload: res.data.person
         });
+        eventTrack(createEvent(['success']));
+      } else if (res.data.persons_count === 0) {
+        dispatch({
+          type: FETCH_SEARCH_RESULT_FAILURE,
+          payload: true
+        });
+        eventTrack(createEvent(['failed']));
       }
     })
     .then(() => {
-      if (isPerson) cb() , eventTrack( 'success' );
+      if (isPerson) {
+        cb();
+      }
     })
     .catch(err => {
+      console.log('did we make it to this error', err);
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
-      eventTrack( 'failed' )
+
+      eventTrack(createEvent('failed'));
     });
 };
 
-export const fetchPerson = searchPointer => dispatch => {
+export const fetchPerson = (
+  searchPointer,
+  eventTrack,
+  createEvent
+) => dispatch => {
   dispatch({ type: FETCH_PERSON });
   axios
     .post(`${constants.devURL}`, { search_pointer_hash: searchPointer })
@@ -49,9 +75,11 @@ export const fetchPerson = searchPointer => dispatch => {
         type: FETCH_PERSON_SUCCESS,
         payload: res.data.person
       });
+      eventTrack(createEvent(['success']));
     })
     .catch(err => {
       dispatch({ type: FETCH_PERSON_FAILURE, payload: err });
+      eventTrack(createEvent(['failed']));
     });
 };
 
@@ -65,4 +93,34 @@ export const setUserCreds = (decodedToken, auth0Data) => {
 
 export const logOut = () => {
   return { type: LOG_OUT };
+};
+
+export const eventTrack = event => dispatch =>
+  axios
+    .post(constants.devEventTrackingURL, event)
+    .then(res => {
+      console.log('EVENT TRACK RES: ', res);
+      if (res.status !== 502) {
+        dispatch({ type: EVENT_ERROR });
+        console.log('Event Error .then');
+      } else {
+        dispatch({ type: EVENT_SUCCESS });
+        console.log('Event Success');
+      }
+    })
+    .catch(err => {
+      dispatch({ type: EVENT_SUCCESS });
+      console.log('Event Successfully tracked');
+    });
+
+export const trackEmail = email => dispatch => {
+  dispatch({ type: TRACK_EMAIL });
+  axios
+    .post(constants.devFamilyConnectionsInterestURL, email)
+    .then(res => {
+      dispatch({ type: TRACK_EMAIL_SUCCESS });
+    })
+    .catch(err => {
+      dispatch({ type: TRACK_EMAIL_FAILURE, payload: err });
+    });
 };

@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
-import {
-  Modal,
-  Text,
-  TouchableHighlight,
-  View,
-  Alert,
-  StyleSheet,
-  Dimensions
-} from 'react-native';
+import { Modal, View, Alert, StyleSheet, Dimensions } from 'react-native';
 import VideoAgreeModal from './../components/AuthModals/VideoAgreeModal';
 import VideoModal from '../components/AuthModals/VideoModal';
 import SocialWorkerModal from '../components/AuthModals/SocialWorkerModal';
-
+import constants from '../helpers/constants';
+import headerConfig from '../helpers/headerConfig';
+import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 class AuthenticationView extends Component {
+  static navigationOptions = ({ navigation }) =>
+    headerConfig('Login / Register', navigation);
   state = {
     modalVisible: false,
     videoAgree: false,
@@ -41,8 +37,9 @@ class AuthenticationView extends Component {
   };
 
   render() {
+    console.log('auth view props: ', this.props);
     return (
-      <View style={styles.marginTop}>
+      <View style={styles.registerContainer}>
         <Modal
           animationType="slide"
           transparent={false}
@@ -79,25 +76,36 @@ class AuthenticationView extends Component {
             </View>
           </View>
         </Modal>
-        <TouchableHighlight
-          onPress={() => {
-            this.setModalVisible(true);
-          }}
-        >
-          <Text>Register</Text>
-        </TouchableHighlight>
+
+        <View>
+          <LoginWithAuth0 setModalVisible={this.setModalVisible} />
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  registerContainer: {
+    flex: 1,
+    marginHorizontal: 5
+  },
   marginTop: {
     marginTop: 22
   },
   logo: {
     width: Dimensions.get('window').width - 40,
     height: 100
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: constants.highlightColor
+  },
+  btnText: {
+    color: '#fff'
   }
 });
+
 export default AuthenticationView;

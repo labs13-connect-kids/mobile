@@ -17,3 +17,7 @@ export const LOG_OUT = 'LOG_OUT';
 
 export const EVENT_ERROR = 'EVENT_ERROR';
 export const EVENT_SUCCESS = 'EVENT_SUCCESS';
+
+export const TRACK_EMAIL = 'TRACK_EMAIL';
+export const TRACK_EMAIL_SUCCESS = 'TRACK_EMAIL_SUCCESS';
+export const TRACK_EMAIL_FAILURE = 'TRACK_EMAIL_FAILURE';
