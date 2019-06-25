@@ -207,10 +207,10 @@ const styles = StyleSheet.create({
   },
 
   link: {
-    color: '#fff',
+    color: `${constants.highlightColor}`,
     lineHeight: 17,
     padding: 15,
-    backgroundColor: constants.highlightColor,
+    backgroundColor: 'rgb(216,236,240)',
     borderRadius: 10,
     marginBottom: 20
   },
