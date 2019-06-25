@@ -41,7 +41,7 @@ const FamilyConnectionsModal = props => {
           <Text style={styles.btnText}>Yes, add my email to the list</Text>
         </Button>
         <Button style={styles.noButton} block onPress={props.toggleModal}>
-          <Text style={styles.btnText}>Nope, that's not me</Text>
+          <Text style={styles.btnText}>Don't add my email</Text>
         </Button>
       </View>
     </>
