@@ -20,7 +20,7 @@ const getToken = async () => {
     const value = await AsyncStorage.getItem('token');
     if (value !== null) {
       // value previously stored
-      console.log('TOKEN VALUE FROM ASYNC', JSON.parse(value));
+      // console.log('TOKEN VALUE FROM ASYNC', JSON.parse(value));
     } else {
       console.log('NOTHING HERE');
     }
@@ -55,7 +55,7 @@ const _loginWithAuth0 = async handleResponse => {
     });
 
   const result = await AuthSession.startAsync({ authUrl });
-  console.log('RESULT', result);
+  // console.log('RESULT', result);
 
   if (result.type === 'success') {
     handleResponse(result);

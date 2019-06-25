@@ -4,7 +4,7 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Container, Button } from 'native-base';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-import { eventTrack, fetchPerson } from '../store/actions';
+import { eventTrack, fetchPerson, resetPerson } from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
@@ -12,7 +12,7 @@ import PersonInfo from '../components/Person/PersonInfo';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
 
-class PeopleSearchScreen extends React.Component {
+class SearchResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
@@ -23,13 +23,20 @@ class PeopleSearchScreen extends React.Component {
       fetchPerson,
       idToken,
       isLoggedIn,
-      person
+      person,
+      resetPerson
     } = this.props;
 
-    if (!person) {
-      const { searchPointer } = this.props.navigation.state.params;
+    if (this.props.navigation.state.params) {
       const requestObject = {};
+
+      if (person) {
+        resetPerson();
+      }
+
+      const { searchPointer } = this.props.navigation.state.params;
       requestObject['search_pointer_hash'] = searchPointer;
+
       if (isLoggedIn) {
         requestObject['authToken'] = accessToken;
         requestObject['idToken'] = idToken;
@@ -66,12 +73,13 @@ class PeopleSearchScreen extends React.Component {
           : `person-search-${success[0]}`,
       options
     };
-    console.log('event:', event);
+    // console.log('event:', event);
     return event;
   };
 
   render() {
     const { isLoggedIn, person } = this.props;
+    console.log(person);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -183,5 +191,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { eventTrack, fetchPerson }
-)(PeopleSearchScreen);
+  { eventTrack, fetchPerson, resetPerson }
+)(SearchResultScreen);
