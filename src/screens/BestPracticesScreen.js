@@ -71,24 +71,30 @@ class BestPracticesScreen extends Component {
               </Text>
             </Button>
             <Button
-              style={styles.button}
+              style={[styles.button, styles.primaryBtn]}
               bordered
               block
               onPress={() =>
                 this.props.navigation.navigate('FamilyConnections')
               }
             >
-              <Text style={styles.primaryBtnText}>Family Connections</Text>
-              <Text style={styles.buttonText}>Family Trees for Permanency</Text>
+              <Text style={[styles.primaryBtnText, styles.lightBtn]}>
+                Family Connections
+              </Text>
+              <Text style={[styles.buttonText, styles.lightBtn]}>
+                Family Trees for Permanency
+              </Text>
             </Button>
             <Button
-              style={[styles.button, styles.lastBtn]}
+              style={[styles.button, styles.lastBtn, styles.primaryBtn]}
               bordered
               block
               onPress={() => Linking.openURL('https://connectourkids.org')}
             >
-              <Text style={styles.primaryBtnText}>Resources</Text>
-              <Text style={styles.buttonText}>
+              <Text style={[styles.primaryBtnText, styles.lightBtn]}>
+                Resources
+              </Text>
+              <Text style={[styles.buttonText, styles.lightBtn]}>
                 Useful Materials and Information
               </Text>
             </Button>
@@ -133,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: constants.highlightColor
   },
   primaryBtnText: {
-    fontSize: 14,
+    fontSize: 12,
     textTransform: 'uppercase',
     fontWeight: 'bold',
     color: constants.highlightColor,

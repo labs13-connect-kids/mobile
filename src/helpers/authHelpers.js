@@ -58,7 +58,6 @@ const _loginWithAuth0 = async () => {
   return await AuthSession.startAsync({ authUrl });
 };
 const handleLogin = async (authSession, setUserCreds) => {
-  // console.log('handleLogin Redult', result);
   // Retrieve the JWT token and decode it
   result = await authSession();
   const jwtToken = result.params.id_token;
