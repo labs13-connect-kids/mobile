@@ -14,6 +14,9 @@ import {
   TRACK_EMAIL,
   TRACK_EMAIL_SUCCESS,
   TRACK_EMAIL_FAILURE,
+  SET_MODAL_VISIBLE,
+  SET_VIDEO_AGREE_VISIBLE,
+  SET_VIDEO_PLAYER_VISIBLE,
   RESET_PERSON
 } from './actionTypes';
 import constants from '../../helpers/constants';
@@ -129,6 +132,18 @@ export const trackEmail = email => dispatch => {
         email: email.emailAddress
       });
     });
+};
+
+export const setModalVisible = visible => {
+  return { type: SET_MODAL_VISIBLE, payload: visible };
+};
+
+export const setAgreeModalVisible = visible => {
+  return { type: SET_VIDEO_AGREE_VISIBLE, payload: visible };
+};
+
+export const setVideoPlayerModalVisible = visible => {
+  return { type: SET_VIDEO_PLAYER_VISIBLE, payload: visible };
 };
 
 export const resetPerson = () => {
