@@ -1,160 +1,183 @@
 import React from 'react';
-
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+
+import { Container, Button } from 'native-base';
 import { connect } from 'react-redux';
-import {
-    fetchPerson,
-    fetchSearchResult,
-    resetState,
-    eventTrack
-} from '../store/actions';
-
-import { Container } from 'native-base';
-import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
+import { eventTrack, fetchPerson, resetPerson } from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
-
-import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
-import SearchForm from '../components/SearchForm/SearchForm';
+import PersonInfo from '../components/Person/PersonInfo';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
 
-class PeopleSearchScreen extends React.Component {
-    static navigationOptions = ({ navigation }) =>
-        headerConfig('People Search', navigation);
+class SearchResultScreen extends React.Component {
+  static navigationOptions = ({ navigation }) =>
+    headerConfig('People Search', navigation);
 
-    createEvent = success => {
-        let emailAddress = '';
-        let options = {};
-        if (typeof success === 'string') {
-            options = {
-                possibleMatches: this.props.possiblePersons.length,
-                personMatch: false
-            };
-        } else {
-            options = {
-                possibleMatches: 0,
-                personMatch: true
-            };
-        }
-        if (!this.props.user) {
-            emailAddress = 'anonymous@unknown.org';
-        } else {
-            emailAddress = this.props.user.email;
-        }
-        const event = {
-            emailAddress,
-            event:
-                typeof success === 'string'
-                    ? `person-search-${success}`
-                    : `person-search-${success[0]}`,
-            options
-        };
-        console.log('event:', event);
-        return event;
+  componentDidMount() {
+    const {
+      accessToken,
+      eventTrack,
+      fetchPerson,
+      idToken,
+      isLoggedIn,
+      person,
+      resetPerson
+    } = this.props;
+
+    if (this.props.navigation.state.params) {
+      const requestObject = {};
+
+      if (person) {
+        resetPerson();
+      }
+
+      const { searchPointer } = this.props.navigation.state.params;
+      requestObject['search_pointer_hash'] = searchPointer;
+
+      if (isLoggedIn) {
+        requestObject['authToken'] = accessToken;
+        requestObject['idToken'] = idToken;
+      }
+
+      fetchPerson(JSON.stringify(requestObject), eventTrack, this.createEvent);
+    }
+  }
+
+  createEvent = success => {
+    let emailAddress = '';
+    let options = {};
+    if (typeof success === 'string') {
+      options = {
+        possibleMatches: this.props.possiblePersons.length,
+        personMatch: false
+      };
+    } else {
+      options = {
+        possibleMatches: 0,
+        personMatch: true
+      };
+    }
+    if (!this.props.user) {
+      emailAddress = 'anonymous@unknown.org';
+    } else {
+      emailAddress = this.props.user.email;
+    }
+    const event = {
+      emailAddress,
+      event:
+        typeof success === 'string'
+          ? `person-search-${success}`
+          : `person-search-${success[0]}`,
+      options
     };
+    // console.log('event:', event);
+    return event;
+};
 
-    handleEncodeURI = person => {
-        console.log(encodeURI(JSON.stringify(person)));
-        return encodeURI(JSON.stringify(person));
-    };
+handleEncodeURI = person => {
+    // console.log(encodeURI(JSON.stringify(person)));
+    return encodeURI(JSON.stringify(person));
+};
 
-    handleSearchRequest = person => {
-        const {
-            accessToken,
-            fetchSearchResult,
-            idToken,
-            isLoggedIn,
-            navigation
-        } = this.props;
-        const requestObject = {};
+handleSearchRequest = person => {
+    const {
+        accessToken,
+        fetchSearchResult,
+        idToken,
+        isLoggedIn,
+        navigation
+    } = this.props;
+    const requestObject = {};
 
-        if (isLoggedIn) {
-            requestObject['authToken'] = accessToken;
-            requestObject['idToken'] = idToken;
-        }
+    if (isLoggedIn) {
+        requestObject['authToken'] = accessToken;
+        requestObject['idToken'] = idToken;
+    }
 
-        requestObject['person'] = this.handleEncodeURI(person);
-        fetchSearchResult(
-            JSON.stringify(requestObject),
-            () => navigation.navigate('SearchResult'),
+    requestObject['person'] = this.handleEncodeURI(person);
+
+    fetchSearchResult(
+        JSON.stringify(requestObject),
+        () => navigation.navigate('SearchResult'),
+        this.props.eventTrack,
+        this.createEvent
+    );
+};
+
+handleNavigateToResult = async searchPointer => {
+    const { person } = this.state;
+    if (!person) {
+        await this.handlePersonRequest(
+            searchPointer,
             this.props.eventTrack,
             this.createEvent
         );
-    };
-
-    handleNavigateToResult = async searchPointer => {
-        const { person } = this.state;
-        if (!person) {
-            await this.handlePersonRequest(
-                searchPointer,
-                this.props.eventTrack,
-                this.createEvent
-            );
-        }
-        await this.props.navigation.navigate('SearchResult', {
-            person: person
-        });
-    };
-
-    resetReduxState = () => {
-        const { resetState } = this.props;
-        resetState();
-    };
-
-    render() {
-        const { isLoggedIn } = this.props;
-        console.log('PROPS PEOPLE SEARCH SCREEN: ', this.props);
-        return (
-            <Container style={styles.container}>
-                <SafeAreaView>
-                    <ScrollView>
-                        <View>
-                            <Text style={styles.intro}>Search By:</Text>
-                        </View>
-
-                        <View>
-                            <SearchForm
-                                handleSearch={this.handleSearchRequest}
-                                resetReduxState={this.resetReduxState}
-                            />
-
-                            {!isLoggedIn && (
-                                <Text style={styles.link}>
-                                    This is a preview. Social workers can have completely free
-                                    access. Click here to find out more.
-                                </Text>
-                            )}
-                            {this.props.isFetching && <Loader />}
-                            {this.props.error && <ErrorMessage />}
-                            {!!this.props.possiblePersons.length ? (
-                                <>
-                                    <Text style={styles.matchesText}>Possible Matches</Text>
-                                    <FlatList
-                                        data={this.props.possiblePersons}
-                                        renderItem={({ item }) => {
-                                            return (
-                                                <PersonRow
-                                                    item={item}
-                                                    handlePress={() =>
-                                                        this.props.navigation.navigate('SearchResult', {
-                                                            searchPointer: item['@search_pointer_hash']
-                                                        })
-                                                    }
-                                                />
-                                            );
-                                        }}
-                                        keyExtractor={(item, index) => index.toString()}
-                                    />
-                                </>
-                            ) : null}
-                        </View>
-                    </ScrollView>
-                </SafeAreaView>
-            </Container>
-        );
     }
+    await this.props.navigation.navigate('SearchResult', {
+        person: person
+    });
+};
+
+resetReduxState = () => {
+    const { resetState } = this.props;
+    resetState();
+};
+
+render() {
+    const { isLoggedIn } = this.props;
+    // console.log('PROPS PEOPLE SEARCH SCREEN: ', this.props);
+    return (
+        <Container style={styles.container}>
+            <SafeAreaView>
+                <ScrollView>
+                    <View>
+                        <Text style={styles.intro}>Search By:</Text>
+                    </View>
+
+                    <View>
+                        <SearchForm
+                            handleSearch={this.handleSearchRequest}
+                            resetReduxState={this.resetReduxState}
+                        />
+
+                        {!isLoggedIn && (
+                            <Text style={styles.link}>
+                                This is a preview. Social workers can have completely free
+                                access. Click here to find out more.
+                </Text>
+                        )}
+                        {this.props.isFetching && <Loader />}
+                        {this.props.error && <ErrorMessage />}
+                        {!!this.props.possiblePersons.length ? (
+                            <>
+                                <Text style={styles.matchesText}>Possible Matches</Text>
+                                <FlatList
+                                    data={this.props.possiblePersons}
+                                    renderItem={({ item }) => {
+                                        return (
+                                            <PersonRow
+                                                item={item}
+                                                handlePress={() =>
+                                                    this.props.navigation.navigate('SearchResult', {
+                                                        searchPointer: item['@search_pointer_hash']
+                                                    })
+                                                }
+                                            />
+                                        );
+                                    }}
+                                    keyExtractor={(item, index) => index.toString()}
+                                />
+                            </>
+                        ) : null}
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        </Container>
+    );
+}
 }
 
 const styles = StyleSheet.create({
@@ -206,10 +229,10 @@ const styles = StyleSheet.create({
     },
 
     link: {
-        color: '#fff',
+        color: `${constants.highlightColor}`,
         lineHeight: 17,
         padding: 15,
-        backgroundColor: constants.highlightColor,
+        backgroundColor: 'rgb(216,236,240)',
         borderRadius: 10,
         marginBottom: 20
     },

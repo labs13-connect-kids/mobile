@@ -25,16 +25,20 @@ export const styles = StyleSheet.create({
     marginLeft: 20
   },
   colListContainer: {
-    marginBottom: 20
+    marginBottom: 20,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   },
   colListText: {
     fontFamily: constants.fontFamily,
-    color: constants.highlightColor
+    color: constants.highlightColor,
+    width: '100%'
   },
   colListLabelText: {
     fontSize: 12,
     color: '#bbb',
-    fontFamily: constants.fontFamily
+    fontFamily: constants.fontFamily,
+    marginRight: 12
   },
   cardNameText: {
     fontSize: 20,

@@ -79,7 +79,7 @@ const AppDrawerNavigator = createDrawerNavigator(
     'People Search': {
       screen: PeopleSearchNavigator
     },
-    'Log In / Register    Log Out': {
+    'Log In / Sign Up \n\nLog Out': {
       screen: AuthenticationViewNavigator
     }
   },

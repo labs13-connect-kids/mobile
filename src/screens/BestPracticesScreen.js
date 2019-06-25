@@ -38,7 +38,7 @@ class BestPracticesScreen extends Component {
   }
 
   render() {
-    console.log('BEST PRACTICES PROPS', this.props);
+    // console.log('BEST PRACTICES PROPS', this.props);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -64,11 +64,11 @@ class BestPracticesScreen extends Component {
               block
               onPress={() => this.props.navigation.navigate('PeopleSearch')}
             >
-              <Text style={styles.primaryBtnText}>
-                People Search -{' '}
-                <Text style={styles.subText}>
-                  Find Contact Information for Anyone
-                </Text>
+              <Text style={[styles.primaryBtnText, styles.lightBtn]}>
+                People Search
+              </Text>
+              <Text style={[styles.buttonText, styles.lightBtn]}>
+                Find Contact Information for Anyone
               </Text>
             </Button>
             <Button
@@ -79,22 +79,18 @@ class BestPracticesScreen extends Component {
                 this.props.navigation.navigate('FamilyConnections')
               }
             >
-              <Text style={styles.buttonText}>
-                Family Connections -{' '}
-                <Text style={styles.subText}>Family Trees for Permanency</Text>
-              </Text>
+              <Text style={styles.primaryBtnText}>Family Connections</Text>
+              <Text style={styles.buttonText}>Family Trees for Permanency</Text>
             </Button>
             <Button
-              style={styles.button}
+              style={[styles.button, styles.lastBtn]}
               bordered
               block
               onPress={() => Linking.openURL('https://connectourkids.org')}
             >
+              <Text style={styles.primaryBtnText}>Resources</Text>
               <Text style={styles.buttonText}>
-                Resources -{' '}
-                <Text style={styles.subText}>
-                  Useful Materials and Information
-                </Text>
+                Useful Materials and Information
               </Text>
             </Button>
           </ScrollView>
@@ -130,30 +126,31 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
-    marginBottom: 5
+    marginBottom: 10
   },
   primaryBtn: {
     backgroundColor: constants.highlightColor
   },
   primaryBtnText: {
-    color: '#fff',
-    fontSize: 12,
+    fontSize: 14,
     textTransform: 'uppercase',
-    fontWeight: 'bold'
-  },
-  subText: {
-    fontSize: 10
+    fontWeight: 'bold',
+    color: constants.highlightColor,
+    flex: 1
   },
   buttonText: {
     color: constants.highlightColor,
     fontSize: 12,
-    textDecorationLine: 'underline',
-    textTransform: 'uppercase',
-    fontWeight: 'bold'
+    textTransform: 'uppercase'
   },
-
+  lightBtn: {
+    color: '#fff'
+  },
+  lastBtn: {
+    marginBottom: 50
+  },
   textInput: {
     borderColor: 'black',
     borderWidth: 1,
