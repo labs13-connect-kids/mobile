@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import { Button, Tabs, Tab, Input } from 'native-base';
 import constants from '../../helpers/constants';
 import {
@@ -196,7 +196,7 @@ class SearchForm extends Component {
   };
 
   render() {
-    const inputHide = this.state.tabPage === 0 ? styles.textInput : styles.hideInput;
+    console.log('SEARCHFORM STATE: ', this.state);
     return (
       <View>
         <Tabs
@@ -210,6 +210,8 @@ class SearchForm extends Component {
             style={[styles.nameInput, { color: '#64aab8' }, !this.state.inputValidate ? styles.error : null]}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View style={styles.nameInputFullWidth}>
               <Input
@@ -231,6 +233,8 @@ class SearchForm extends Component {
             heading="Email"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
@@ -245,6 +249,8 @@ class SearchForm extends Component {
             heading="Address"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
@@ -259,6 +265,8 @@ class SearchForm extends Component {
             heading="Phone"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
@@ -273,6 +281,8 @@ class SearchForm extends Component {
             heading="URL"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
