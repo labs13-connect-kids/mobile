@@ -20,7 +20,6 @@ class SearchForm extends Component {
     phone: '',
     url: '',
     inputValidate: true,
-    hideInput: false,
     tabPage: 0
   };
 
@@ -224,7 +223,6 @@ class SearchForm extends Component {
 
   render() {
     console.log('SEARCHFORM STATE: ', this.state);
-    if(this.state.tabPage === 0){
     return (
       <View>
         <Tabs
@@ -333,9 +331,7 @@ class SearchForm extends Component {
           </Button>
         </View>
       </View>
-    )}else{
-      return <Text>Loading</Text>
-    };
+    )
   }
 }
 
