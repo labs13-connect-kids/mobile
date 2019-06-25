@@ -196,7 +196,6 @@ class SearchForm extends Component {
   };
 
   render() {
-    console.log('SEARCHFORM STATE: ', this.state);
     return (
       <View>
         <Tabs
@@ -328,7 +327,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    margin: 10,
+    margin: 10, 
     padding: 10,
     backgroundColor: '#508DB3'
   },
