@@ -13,7 +13,8 @@ import {
   EVENT_SUCCESS,
   TRACK_EMAIL,
   TRACK_EMAIL_SUCCESS,
-  TRACK_EMAIL_FAILURE
+  TRACK_EMAIL_FAILURE,
+  RESET_PERSON
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -128,4 +129,8 @@ export const trackEmail = email => dispatch => {
         email: email.emailAddress
       });
     });
+};
+
+export const resetPerson = () => {
+  return { type: RESET_PERSON };
 };

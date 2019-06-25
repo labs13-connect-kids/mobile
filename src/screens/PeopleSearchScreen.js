@@ -76,6 +76,7 @@ class PeopleSearchScreen extends React.Component {
     }
 
     requestObject['person'] = this.handleEncodeURI(person);
+
     fetchSearchResult(
       JSON.stringify(requestObject),
       () => navigation.navigate('SearchResult'),
