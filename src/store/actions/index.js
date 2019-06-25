@@ -62,14 +62,10 @@ export const fetchSearchResult = (
     });
 };
 
-export const fetchPerson = (
-  searchPointer,
-  eventTrack,
-  createEvent
-) => dispatch => {
+export const fetchPerson = (body, eventTrack, createEvent) => dispatch => {
   dispatch({ type: FETCH_PERSON });
   axios
-    .post(`${constants.devURL}`, { search_pointer_hash: searchPointer })
+    .post(`${constants.devURL}`, body)
     .then(res => {
       dispatch({
         type: FETCH_PERSON_SUCCESS,
@@ -115,12 +111,21 @@ export const eventTrack = event => dispatch =>
 
 export const trackEmail = email => dispatch => {
   dispatch({ type: TRACK_EMAIL });
-  axios
+  return axios
     .post(constants.devFamilyConnectionsInterestURL, email)
     .then(res => {
-      dispatch({ type: TRACK_EMAIL_SUCCESS });
+      console.log('EMAIL TRACKING RES: ', res);
+      return dispatch({
+        type: TRACK_EMAIL_SUCCESS,
+        payload: email.emailAddress
+      });
     })
     .catch(err => {
-      dispatch({ type: TRACK_EMAIL_FAILURE, payload: err });
+      console.log('EMAIL TRACKING ERR: ', err);
+      return dispatch({
+        type: TRACK_EMAIL_FAILURE,
+        payload: err,
+        email: email.emailAddress
+      });
     });
 };
