@@ -20,7 +20,7 @@ const VideoAgreeModal = props => {
         <TouchableOpacity
           style={styles.close}
           onPress={() => {
-            props.setModalVisible(!props.modalVisible);
+            props.setModalVisible(false);
           }}
         >
           <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
@@ -34,7 +34,14 @@ const VideoAgreeModal = props => {
         <Button style={styles.yesButton} block onPress={props.advanceModal}>
           <Text style={styles.btnText}>Show me the video</Text>
         </Button>
-        <Button style={styles.noButton} block onPress={props.onLogin}>
+        <Button
+          style={styles.noButton}
+          block
+          onPress={() => {
+            props.setModalVisible(false);
+            props.onLogin();
+          }}
+        >
           <Text style={styles.btnText}>Skip the video</Text>
         </Button>
       </View>

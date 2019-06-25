@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
-// import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 import { AsyncStorage } from 'react-native';
 import { setUserCreds, logOut } from '../store/actions';
 import { connect } from 'react-redux';

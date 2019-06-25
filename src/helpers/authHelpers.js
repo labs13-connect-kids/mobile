@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import { AuthSession } from 'expo';
 import getEnvVars from '../../environment';
+import jwtDecode from 'jwt-decode';
 
 const { auth0Domain, auth0ClientId } = getEnvVars();
 
@@ -36,7 +37,7 @@ const setItem = async (key, value) => {
     console.log('SET TOKEN ERROR', e);
   }
 };
-const _loginWithAuth0 = async handleResponse => {
+const _loginWithAuth0 = async () => {
   const redirectUrl = AuthSession.getRedirectUrl();
   let authUrl =
     `https://${auth0Domain}/authorize` +
@@ -54,17 +55,23 @@ const _loginWithAuth0 = async handleResponse => {
           .substring(2, 15)
     });
 
-  const result = await AuthSession.startAsync({ authUrl });
-  console.log('RESULT', result);
+  return await AuthSession.startAsync({ authUrl });
+};
+const handleLogin = async (authSession, setUserCreds) => {
+  // console.log('handleLogin Redult', result);
+  // Retrieve the JWT token and decode it
+  result = await authSession();
+  const jwtToken = result.params.id_token;
+  const decoded = jwtDecode(jwtToken);
 
-  if (result.type === 'success') {
-    handleResponse(result);
-  }
+  setItem('auth0Data', result);
+  setUserCreds(decoded, result);
 };
 
 export default {
   toQueryString,
   setItem,
   getToken,
-  _loginWithAuth0
+  _loginWithAuth0,
+  handleLogin
 };

@@ -13,10 +13,18 @@ import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
-import { trackEmail } from './../store/actions';
+import {
+  trackEmail,
+  setModalVisible,
+  setAgreeModalVisible,
+  setVideoPlayerModalVisible,
+  setUserCreds
+} from './../store/actions';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
 import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 import constants from '../helpers/constants';
+import authHelpers from '../helpers/authHelpers';
+import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 class FamilyConnectionsScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Family Connections', navigation);
@@ -53,9 +61,7 @@ class FamilyConnectionsScreen extends Component {
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-          }}
+          onRequestClose={this.toggleModal}
         >
           <View>
             {this.props.email ? (
@@ -65,10 +71,26 @@ class FamilyConnectionsScreen extends Component {
               />
             ) : (
               <SafeAreaView style={styles.loginContainer}>
-                <Text style={styles.loginText}>
-                  Please take a moment to login or register before continuing
-                </Text>
-                <LoginWithAuth0 />
+                <RegisterModalsContainer
+                  modalVisible={this.props.modalVisible}
+                  setAgreeModalVisible={this.props.setAgreeModalVisible}
+                  videoAgree={this.props.videoAgree}
+                  videoVisible={this.props.videoVisible}
+                  setModalVisible={this.props.setModalVisible}
+                  setVideoPlayerModalVisible={
+                    this.props.setVideoPlayerModalVisible
+                  }
+                  onLogin={() =>
+                    authHelpers.handleLogin(
+                      authHelpers._loginWithAuth0,
+                      this.props.setUserCreds
+                    )
+                  }
+                />
+                <LoginWithAuth0
+                  navigation={this.props.navigation}
+                  setModalVisible={this.props.setModalVisible}
+                />
               </SafeAreaView>
             )}
           </View>
@@ -146,16 +168,26 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log('mSTP in famcon: ', state);
-  // const { email } = state.auth.user;
+  console.log('STATE: FFF', state);
+  const { modalVisible, videoAgree, videoVisible } = state.auth;
+  const { message, error } = state.famConInterest;
   return {
     email: state.auth.user ? state.auth.user.email : null,
-    message: state.famConInterest.message,
-    error: state.famConInterest.error
+    modalVisible,
+    videoAgree,
+    videoVisible,
+    message,
+    error
   };
 };
 
 export default connect(
   mapStateToProps,
-  { trackEmail }
+  {
+    trackEmail,
+    setModalVisible,
+    setAgreeModalVisible,
+    setVideoPlayerModalVisible,
+    setUserCreds
+  }
 )(FamilyConnectionsScreen);
