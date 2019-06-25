@@ -14,7 +14,13 @@ const renderMaskedOrResult = (field, type) => {
     case 'zip_code':
       return '*****';
     case 'phones':
-      return field.slice(0, -3) + '***';
+      if (field.slice(-3) === '000') {
+        return field.slice(0, -3) + '***';
+      } else {
+        return field;
+      }
+    case 'relationships':
+      return '**** ********* **';
     case 'emails':
       return field;
     default:
