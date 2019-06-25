@@ -17,17 +17,24 @@ const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
               return (
                 <TouchableOpacity style={styles.colListContainer} key={index}>
                   <Text style={styles.colListText}>
-                    {renderMaskedOrResult(key.house, 'house')}{' '}
-                    {renderMaskedOrResult(key.street, 'street')}
-                    {'\n'}
-                    {key[itemValue]}{' '}
+                    {key.house && renderMaskedOrResult(key.house, 'house')}{' '}
+                    {key.street &&
+                      renderMaskedOrResult(key.street, 'street') + '\n'}
+                    {key['city'] + ', ' + key['state'] + ' '}
                     {renderMaskedOrResult(key.zip_code, 'zip_code')}
-                    {'\n'}
                     {key['@last_seen'] && (
                       <Text style={styles.colListLabelText}>
-                        {key['@last_seen'].split('-')[0]}
+                        {'\n' + key['@last_seen'].split('-')[0]}
                       </Text>
                     )}
+                  </Text>
+                </TouchableOpacity>
+              );
+            } else if (itemKey === 'relationships') {
+              return (
+                <TouchableOpacity style={styles.colListContainer} key={index}>
+                  <Text style={styles.colListText}>
+                    {renderMaskedOrResult(key[itemValue][0].display, itemKey)}
                   </Text>
                 </TouchableOpacity>
               );

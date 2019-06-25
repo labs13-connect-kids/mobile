@@ -33,6 +33,12 @@ const PersonInfo = ({ item }) => {
         itemValue="@domain"
         title="Websites"
       />
+      <PersonInfoRow
+        item={item}
+        itemKey="relationships"
+        itemValue="names"
+        title="Relationships"
+      />
     </Grid>
   );
 };
