@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-
+//sup
 import { Container, Button } from 'native-base';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
