@@ -7,7 +7,7 @@ function isStateWithTwoWords(state) {
     'carolina',
     'dakota',
     'island',
-    'virginia'
+    'virginia' 
   ]);
   return statesWithTwoWords.has(state.toLowerCase());
 }
