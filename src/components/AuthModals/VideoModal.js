@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   noButton: {
-    backgroundColor: '#6C757D',
+    backgroundColor: constants.highlightColor,
     marginBottom: 10
   },
   close: {

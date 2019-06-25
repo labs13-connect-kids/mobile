@@ -37,7 +37,7 @@ class BestPracticesScreen extends Component {
   }
 
   render() {
-    console.log('BEST PRACTICES PROPS', this.props);
+    // console.log('BEST PRACTICES PROPS', this.props);
     return (
       <Container style={styles.container}>
         <SafeAreaView>

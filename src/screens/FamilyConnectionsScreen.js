@@ -41,7 +41,7 @@ class FamilyConnectionsScreen extends Component {
     this.props
       .trackEmail({ emailAddress: this.props.email })
       .then(res => {
-        console.log('RES FROM TRACK INTEREST: ', res);
+        // console.log('RES FROM TRACK INTEREST: ', res);
         this.props.error
           ? Alert.alert(this.props.error.message)
           : this.props.message !== undefined
@@ -54,7 +54,7 @@ class FamilyConnectionsScreen extends Component {
   };
 
   render() {
-    console.log('FCS STATE: ', this.state, 'FCS PROPS: ', this.props);
+    // console.log('FCS STATE: ', this.state, 'FCS PROPS: ', this.props);
     return (
       <Container style={styles.container}>
         <Modal
@@ -171,6 +171,8 @@ const mapStateToProps = state => {
   console.log('STATE: FFF', state);
   const { modalVisible, videoAgree, videoVisible } = state.auth;
   const { message, error } = state.famConInterest;
+  // console.log('mSTP in famcon: ', state);
+  // const { email } = state.auth.user;
   return {
     email: state.auth.user ? state.auth.user.email : null,
     modalVisible,

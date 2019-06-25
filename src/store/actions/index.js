@@ -16,7 +16,8 @@ import {
   TRACK_EMAIL_FAILURE,
   SET_MODAL_VISIBLE,
   SET_VIDEO_AGREE_VISIBLE,
-  SET_VIDEO_PLAYER_VISIBLE
+  SET_VIDEO_PLAYER_VISIBLE,
+  RESET_PERSON
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -143,4 +144,8 @@ export const setAgreeModalVisible = visible => {
 
 export const setVideoPlayerModalVisible = visible => {
   return { type: SET_VIDEO_PLAYER_VISIBLE, payload: visible };
+};
+
+export const resetPerson = () => {
+  return { type: RESET_PERSON };
 };

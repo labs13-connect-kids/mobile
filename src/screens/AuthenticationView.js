@@ -16,7 +16,7 @@ class AuthenticationView extends Component {
     headerConfig('Login / Register', navigation);
 
   render() {
-    console.log('auth view props: ', this.props);
+    // console.log('auth view props: ', this.props);
     return (
       <View style={styles.registerContainer}>
         <View>

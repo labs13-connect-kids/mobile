@@ -21,7 +21,7 @@ const getToken = async () => {
     const value = await AsyncStorage.getItem('token');
     if (value !== null) {
       // value previously stored
-      console.log('TOKEN VALUE FROM ASYNC', JSON.parse(value));
+      // console.log('TOKEN VALUE FROM ASYNC', JSON.parse(value));
     } else {
       console.log('NOTHING HERE');
     }
