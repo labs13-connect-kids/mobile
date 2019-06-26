@@ -13,14 +13,7 @@ import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
-import {
-  trackEmail,
-  setModalVisible,
-  setAgreeModalVisible,
-  setVideoPlayerModalVisible,
-  setUserCreds,
-  setRedirectPath
-} from './../store/actions';
+import { trackEmail } from './../store/actions';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
 import constants from '../helpers/constants';
 class FamilyConnectionsScreen extends Component {
@@ -37,34 +30,42 @@ class FamilyConnectionsScreen extends Component {
     });
   };
 
-  trackInterest = () => {
+  trackInterest = trackingEmail => {
     if (this.props.email === null) {
-      this.startRegister();
+      this.props
+        .trackEmail({ emailAddress: trackingEmail })
+        .then(res => {
+          this.props.error
+            ? Alert.alert(this.props.error.message)
+            : this.props.message !== undefined
+            ? Alert.alert(this.props.message)
+            : Alert.alert(
+                'there was a problem talking to the database, Please try again later'
+              );
+          this.toggleModal();
+        })
+        .catch(res => {
+          Alert.alert(this.props.message);
+          this.toggleModal();
+        });
     } else {
-      this.props.setRedirectPath(this.props.navigation.state.routeName),
-        this.props
-          .trackEmail({ emailAddress: this.props.email })
-          .then(res => {
-            this.props.error
-              ? Alert.alert(this.props.error.message)
-              : this.props.message !== undefined
-              ? Alert.alert(this.props.message)
-              : Alert.alert(
-                  'there was a problem talking to the database, Please try again later'
-                );
-            this.toggleModal();
-          })
-          .catch(res => {
-            Alert.alert(this.props.message);
-            this.toggleModal();
-          });
+      this.props
+        .trackEmail({ emailAddress: this.props.email })
+        .then(res => {
+          this.props.error
+            ? Alert.alert(this.props.error.message)
+            : this.props.message !== undefined
+            ? Alert.alert(this.props.message)
+            : Alert.alert(
+                'there was a problem talking to the database, Please try again later'
+              );
+          this.toggleModal();
+        })
+        .catch(res => {
+          Alert.alert(this.props.message);
+          this.toggleModal();
+        });
     }
-  };
-
-  startRegister = () => {
-    this.props.setModalVisible(true);
-    this.props.setRedirectPath(this.props.navigation.state.routeName);
-    this.props.navigation.navigate('Authentication');
   };
 
   render() {
@@ -160,13 +161,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   console.log('redux state FCS: ', state);
-  const { modalVisible, videoAgree, videoVisible } = state.auth;
   const { message, error } = state.famConInterest;
   return {
     email: state.auth.user ? state.auth.user.email : null,
-    modalVisible,
-    videoAgree,
-    videoVisible,
     message,
     error
   };
@@ -175,11 +172,6 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
-    trackEmail,
-    setModalVisible,
-    setAgreeModalVisible,
-    setVideoPlayerModalVisible,
-    setUserCreds,
-    setRedirectPath
+    trackEmail
   }
 )(FamilyConnectionsScreen);

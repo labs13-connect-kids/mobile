@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -8,45 +8,70 @@ import {
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
+import { Input } from 'native-base';
 
-const FamilyConnectionsModal = props => {
-  return (
-    <>
-      <View style={styles.headerContainer}>
-        <Text style={styles.modalHeaderStyle}>
-          Interested in staying updated?
+class FamilyConnectionsModal extends Component {
+  state = {
+    email: ''
+  };
+
+  handleInput = text => {
+    this.setState({
+      email: text
+    });
+  };
+
+  render() {
+    return (
+      <>
+        <View style={styles.headerContainer}>
+          <Text style={styles.modalHeaderStyle}>
+            Interested in staying updated?
+          </Text>
+          <TouchableOpacity
+            style={styles.close}
+            onPress={() => {
+              this.props.toggleModal();
+            }}
+          >
+            <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.modalTextStyle}>
+          Our Family Connections feature is coming soon. If you'd like to be
+          added to our email list to be informed about updates, press the Yes
+          button below.
         </Text>
-        <TouchableOpacity
-          style={styles.close}
-          onPress={() => {
-            props.toggleModal();
-          }}
-        >
-          <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.modalTextStyle}>
-        Our Family Connections feature is coming soon. If you'd like to be added
-        to our email list to be informed about updates, press the Yes button
-        below.
-      </Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          style={styles.yesButton}
-          block
-          onPress={async () => {
-            await props.trackInterest();
-          }}
-        >
-          <Text style={styles.btnText}>Yes, add my email to the list</Text>
-        </Button>
-        <Button style={styles.noButton} block onPress={props.toggleModal}>
-          <Text style={styles.btnText}>Don't add my email</Text>
-        </Button>
-      </View>
-    </>
-  );
-};
+        <View style={styles.buttonContainer}>
+          {!this.props.email && (
+            <Input
+              style={styles.textInput}
+              onChangeText={text => this.handleInput(text)}
+              placeholder="sample@email.com"
+            />
+          )}
+          <Button
+            style={styles.yesButton}
+            block
+            onPress={async () => {
+              trackingEmail = this.state.email;
+              await this.props.trackInterest(trackingEmail);
+            }}
+          >
+            <Text style={styles.btnText}>Yes, add my email to the list</Text>
+          </Button>
+          <Button
+            style={styles.noButton}
+            block
+            onPress={this.props.toggleModal}
+          >
+            <Text style={styles.btnText}>Don't add my email</Text>
+          </Button>
+        </View>
+      </>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -94,7 +119,15 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopColor: constants.highlightColor,
     borderTopWidth: 1,
-    marginTop: 20
+    marginTop: 20,
+    height: 210
+  },
+  textInput: {
+    borderColor: '#64aab8',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    width: '100%',
+    marginBottom: 10
   }
 });
 

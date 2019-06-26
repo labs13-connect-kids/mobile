@@ -95,6 +95,7 @@ class SearchResultScreen extends React.Component {
 
   render() {
     const { isLoggedIn, person } = this.props;
+    console.log('PERSON', person);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
