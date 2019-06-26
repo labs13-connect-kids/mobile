@@ -185,13 +185,6 @@ class SearchForm extends Component {
   };
 
   render() {
-    console.log(
-      'SEARCHFORM STATE: ',
-      this.state,
-      'SEARCHFORM PROPS: ',
-      this.props
-    );
-
     return (
       <View>
         <Tabs

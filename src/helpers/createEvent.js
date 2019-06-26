@@ -25,6 +25,5 @@ export const createEvent = success => {
         : `person-search-${success[0]}`,
     options
   };
-  //   console.log('event:', event);
   return event;
 };

@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 import authHelpers from '../../helpers/authHelpers';
 import { connect } from 'react-redux';
-import { setUserCreds, logOut } from '../../store/actions';
+import { setUserCreds, logOut, clearRedirectPath } from '../../store/actions';
 import Login from './Login';
 
 class Auth0LoginContainer extends Component {
   onRegister = () => {};
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (
-  //     prevProps.user === null &&
-  //     this.props.user !== null &&
-  //     prevProps.navigation.state.routeName === 'SearchResult'
-  //   ) {
-  //     // this.props.navigation.state.
-  //     this.props.setModalVisible(false);
-  //   }
-  // }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('CDU');
+    if (
+      prevProps.user === null &&
+      this.props.user !== null &&
+      this.props.redirectPath !== ''
+    ) {
+      console.log('CDU conditional firing');
+      this.props.navigation.navigate(this.props.redirectPath);
+      // this.props.navigation.navigate('FamilyConnections');
+      this.props.setModalVisible(false);
+      // this.props.clearRedirectPath();
+    }
+  }
 
   render() {
-    console.log('LOGINWITHAUTH0 STATE: ', this.state, 'PROPS: ', this.props);
+    console.log('login props: ', this.props);
     return (
       <Login
         navigation={this.props.navigation}
@@ -43,11 +48,11 @@ class Auth0LoginContainer extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user, isLoggedIn, authToken, idToken } = state.auth;
-  return { user, isLoggedIn, authToken, idToken };
+  const { user, isLoggedIn, authToken, idToken, redirectPath } = state.auth;
+  return { user, isLoggedIn, authToken, idToken, redirectPath };
 };
 
 export default connect(
   mapStateToProps,
-  { setUserCreds, logOut }
+  { setUserCreds, logOut, clearRedirectPath }
 )(Auth0LoginContainer);

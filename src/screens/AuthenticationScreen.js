@@ -13,7 +13,6 @@ import {
 import authHelpers from '../helpers/authHelpers';
 class AuthenticationView extends Component {
   render() {
-    // console.log('auth view props: ', this.props);
     return (
       <View style={styles.registerContainer}>
         <RegisterModalsContainer

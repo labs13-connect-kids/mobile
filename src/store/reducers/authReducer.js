@@ -26,7 +26,6 @@ const initialState = {
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER_CREDS:
-      console.log('Set user cred action', action);
       return {
         ...state,
         user: action.decodedToken,

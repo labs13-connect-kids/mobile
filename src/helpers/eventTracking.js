@@ -8,15 +8,12 @@ const eventTrack = (event, dispatch) =>
     .then(res => {
       if (res.status !== 502) {
         dispatch({ type: EVENT_ERROR });
-        console.log('Event Error .then');
       } else {
         dispatch({ type: EVENT_SUCCESS });
-        console.log('Event Success');
       }
     })
     .catch(err => {
       dispatch({ type: EVENT_ERROR });
-      console.log('Event Error .catch');
     });
 
 module.exports = eventTrack;

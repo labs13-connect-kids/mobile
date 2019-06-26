@@ -59,12 +59,10 @@ class PeopleSearchScreen extends React.Component {
           : `person-search-${success[0]}`,
       options
     };
-    // console.log('event:', event);
     return event;
   };
 
   handleEncodeURI = person => {
-    // console.log(encodeURI(JSON.stringify(person)));
     return encodeURI(JSON.stringify(person));
   };
 
@@ -115,16 +113,11 @@ class PeopleSearchScreen extends React.Component {
   startRegister = () => {
     this.props.setModalVisible(true);
     this.props.navigation.navigate('Authentication');
+    this.props.setRedirectPath(this.props.navigation.state.routeName);
   };
 
   render() {
     const { isLoggedIn } = this.props;
-    console.log(
-      'PROPS PEOPLE SEARCH SCREEN: ',
-      this.props,
-      'STATE PEOPLE SEARCH SCREEN: ',
-      this.state
-    );
     return (
       <Container style={styles.container}>
         <SafeAreaView>

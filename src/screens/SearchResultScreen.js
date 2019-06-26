@@ -14,7 +14,8 @@ import {
   eventTrack,
   fetchPerson,
   resetPerson,
-  setModalVisible
+  setModalVisible,
+  setRedirectPath
 } from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
@@ -83,30 +84,22 @@ class SearchResultScreen extends React.Component {
           : `person-search-${success[0]}`,
       options
     };
-    // console.log('event:', event);
     return event;
   };
 
   startRegister = () => {
     this.props.setModalVisible(true);
     this.props.navigation.navigate('Authentication');
+    this.props.setRedirectPath(this.props.navigation.state.routeName);
   };
 
   render() {
     const { isLoggedIn, person } = this.props;
-    console.log(person);
-    console.log(
-      'PROPS SEARCH RESULT SCREEN: ',
-      this.props,
-      'STATE SEARCH RESULT SCREEN: ',
-      this.state
-    );
     return (
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
             <View>
-              {/* <Text style={styles.intro}>Search By:</Text> */}
               <Button
                 style={styles.button}
                 onPress={() => this.props.navigation.goBack()}
@@ -114,7 +107,6 @@ class SearchResultScreen extends React.Component {
                 <Text style={styles.buttonText}>Back</Text>
               </Button>
             </View>
-            {/* <SearchForm /> */}
             <View>
               {!isLoggedIn && (
                 <TouchableHighlight onPress={this.startRegister}>
@@ -228,6 +220,7 @@ export default connect(
     eventTrack,
     fetchPerson,
     resetPerson,
-    setModalVisible
+    setModalVisible,
+    setRedirectPath
   }
 )(SearchResultScreen);
