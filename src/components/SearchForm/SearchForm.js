@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
   },
   nameInputFullWidth: {
     width: '100%'
-  }
+  },
 });
 
 export default SearchForm;

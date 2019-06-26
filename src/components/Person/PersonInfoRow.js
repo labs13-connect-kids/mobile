@@ -1,11 +1,43 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity , Linking , Platform , Alert } from 'react-native';
 import { Col, Row, Text } from 'native-base';
 import { styles } from '../../styles';
 import renderMaskedOrResult from '../../helpers/renderMaskedOrResult';
+import { connect } from 'react-redux'
 
-const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
+const PersonInfoRow = ({ isLoggedIn , item, itemKey, itemValue, title }) => {
   if (item[itemKey]) {
+
+    handlePressDirections = ( address, postalCode, city ) => {
+
+      let daddr = encodeURIComponent(`${address} ${postalCode}, ${city}`);
+      console.log( daddr )
+      if (Platform.OS === 'ios') {
+        Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
+      } else {
+        Linking.openURL(`http://maps.google.com/?daddr=${daddr}`);
+      }
+    };
+    
+    let OnPress = ( key ) => {
+      console.log( 'THIS IS KEY', key )
+      if ( isLoggedIn ) {
+        if ( itemKey === 'emails' ) {
+          // console.log( 'key and item value', key[itemValue] )
+          Linking.openURL( `mailto:${key[itemValue]}`);
+        } else if ( itemKey === 'phones' ) {
+          Linking.openURL( `tel:${key[itemValue]}`);
+        } else if ( itemKey === 'urls' ) {
+          Linking.openURL( `http:${key['url']}`);
+        } else if ( itemKey === 'addresses' ) {
+          let address = `${key.house} ${key.street}`;
+          handlePressDirections( address, key['zip_code'] , key['city'] );
+        }
+      } else {
+        return Alert.alert('Go away')
+      }
+    }
+    
     return (
       <Row style={styles.rowContainer}>
         <Col size={30} style={styles.rowLabel}>
@@ -15,7 +47,7 @@ const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
           {item[itemKey].map((key, index) => {
             if (itemKey === 'addresses') {
               return (
-                <TouchableOpacity style={styles.colListContainer} key={index}>
+                <TouchableOpacity style={styles.colListContainer} key={index} onPress = { () => OnPress( key ) }>
                   <Text style={styles.colListText}>
                     {key.house && renderMaskedOrResult(key.house, 'house')}{' '}
                     {key.street &&
@@ -40,10 +72,13 @@ const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
               );
             } else {
               return (
-                <TouchableOpacity style={styles.colListContainer} key={index}>
-                  <Text style={styles.colListText}>
-                    {renderMaskedOrResult(key[itemValue], itemKey)}
-                  </Text>
+
+                <TouchableOpacity style = { styles.colListContainer } key = { index }>
+                  <Text style = { styles.colListText } 
+                    onPress = { () => OnPress( key ) }>
+                    { renderMaskedOrResult( key[itemValue] , itemKey )}
+                  </Text> 
+
                   {key['@type'] && (
                     <Text style={styles.colListLabelText}>{key['@type']}</Text>
                   )}
@@ -71,4 +106,12 @@ const PersonInfoRow = ({ item, itemKey, itemValue, title }) => {
   }
 };
 
-export default PersonInfoRow;
+const mapStateToProps = state => {
+  const { isLoggedIn } = state.auth
+  return { isLoggedIn };
+};
+
+export default connect( 
+  mapStateToProps,
+  {  }  
+)(PersonInfoRow);
