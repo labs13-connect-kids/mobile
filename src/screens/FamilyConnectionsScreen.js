@@ -72,7 +72,7 @@ class FamilyConnectionsScreen extends Component {
     return (
       <Container style={styles.container}>
         <SafeAreaView>
-          <View>
+          <View></View>
             <Modal
               animationType="slide"
               transparent={false}
