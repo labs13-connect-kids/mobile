@@ -6,8 +6,19 @@ import Login from './Login';
 
 class Auth0LoginContainer extends Component {
   onRegister = () => {};
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (
+  //     prevProps.user === null &&
+  //     this.props.user !== null &&
+  //     prevProps.navigation.state.routeName === 'SearchResult'
+  //   ) {
+  //     // this.props.navigation.state.
+  //     this.props.setModalVisible(false);
+  //   }
+  // }
 
   render() {
+    console.log('LOGINWITHAUTH0 STATE: ', this.state, 'PROPS: ', this.props);
     return (
       <Login
         navigation={this.props.navigation}

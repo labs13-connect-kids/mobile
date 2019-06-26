@@ -1,12 +1,20 @@
 import React from 'react';
 
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight
+} from 'react-native';
 import { connect } from 'react-redux';
 import {
   fetchPerson,
   fetchSearchResult,
   resetState,
-  eventTrack
+  eventTrack,
+  setModalVisible,
+  setRedirectPath
 } from '../store/actions';
 
 import { Container } from 'native-base';
@@ -104,9 +112,19 @@ class PeopleSearchScreen extends React.Component {
     resetState();
   };
 
+  startRegister = () => {
+    this.props.setModalVisible(true);
+    this.props.navigation.navigate('Authentication');
+  };
+
   render() {
     const { isLoggedIn } = this.props;
-    // console.log('PROPS PEOPLE SEARCH SCREEN: ', this.props);
+    console.log(
+      'PROPS PEOPLE SEARCH SCREEN: ',
+      this.props,
+      'STATE PEOPLE SEARCH SCREEN: ',
+      this.state
+    );
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -122,10 +140,12 @@ class PeopleSearchScreen extends React.Component {
               />
 
               {!isLoggedIn && (
-                <Text style={styles.link}>
-                  This is a preview. Social workers can have completely free
-                  access. Click here to find out more.
-                </Text>
+                <TouchableHighlight onPress={this.startRegister}>
+                  <Text style={styles.link}>
+                    This is a preview. Social workers can have completely free
+                    access. Click here to find out more.
+                  </Text>
+                </TouchableHighlight>
               )}
               {this.props.isFetching && <Loader />}
               {this.props.error && <ErrorMessage />}
@@ -170,7 +190,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 25
   },
-
+  loginContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   intro: {
     padding: 10,
 
@@ -244,5 +268,12 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchPerson, fetchSearchResult, resetState, eventTrack }
+  {
+    fetchPerson,
+    fetchSearchResult,
+    resetState,
+    eventTrack,
+    setModalVisible,
+    setRedirectPath
+  }
 )(PeopleSearchScreen);

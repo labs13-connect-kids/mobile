@@ -3,7 +3,9 @@ import {
   LOG_OUT,
   SET_MODAL_VISIBLE,
   SET_VIDEO_AGREE_VISIBLE,
-  SET_VIDEO_PLAYER_VISIBLE
+  SET_VIDEO_PLAYER_VISIBLE,
+  SET_REDIRECT_PATH,
+  CLEAR_REDIRECT_PATH
 } from './../actions/actionTypes';
 import { AsyncStorage } from 'react-native';
 
@@ -17,7 +19,8 @@ const initialState = {
   idToken: null,
   modalVisible: false,
   videoAgree: false,
-  videoVisible: false
+  videoVisible: false,
+  redirectPath: ''
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -51,6 +54,16 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         videoAgree: false,
         videoVisible: true
+      };
+    case SET_REDIRECT_PATH:
+      return {
+        ...state,
+        redirectPath: action.payload
+      };
+    case CLEAR_REDIRECT_PATH:
+      return {
+        ...state,
+        redirectPath: ''
       };
     case LOG_OUT:
       AsyncStorage.removeItem('auth0Data');

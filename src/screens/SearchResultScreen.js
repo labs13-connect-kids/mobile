@@ -1,17 +1,27 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight
+} from 'react-native';
 
 import { Container, Button } from 'native-base';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-import { eventTrack, fetchPerson, resetPerson } from '../store/actions';
+import {
+  eventTrack,
+  fetchPerson,
+  resetPerson,
+  setModalVisible
+} from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
-
 class SearchResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
@@ -77,9 +87,20 @@ class SearchResultScreen extends React.Component {
     return event;
   };
 
+  startRegister = () => {
+    this.props.setModalVisible(true);
+    this.props.navigation.navigate('Authentication');
+  };
+
   render() {
     const { isLoggedIn, person } = this.props;
     console.log(person);
+    console.log(
+      'PROPS SEARCH RESULT SCREEN: ',
+      this.props,
+      'STATE SEARCH RESULT SCREEN: ',
+      this.state
+    );
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -96,13 +117,22 @@ class SearchResultScreen extends React.Component {
             {/* <SearchForm /> */}
             <View>
               {!isLoggedIn && (
-                <Text style={styles.link}>
-                  This is a preview. Social workers can have completely free
-                  access. Click here to find out more.
-                </Text>
+                <TouchableHighlight onPress={this.startRegister}>
+                  <Text style={styles.link}>
+                    This is a preview. Social workers can have completely free
+                    access. Click here to find out more.
+                  </Text>
+                </TouchableHighlight>
               )}
               {this.props.error && <ErrorMessage />}
-              {!person ? <Loader /> : <PersonInfo item={person} />}
+              {!person ? (
+                <Loader />
+              ) : (
+                <PersonInfo
+                  item={person}
+                  setModalVisible={this.props.setModalVisible}
+                />
+              )}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -116,7 +146,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 5
   },
-
+  loginContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   header: {
     flexDirection: 'row',
     textAlign: 'center',
@@ -144,7 +178,6 @@ const styles = StyleSheet.create({
   nameInput: {
     flexDirection: 'row'
   },
-
   button: {
     margin: 10,
     padding: 10,
@@ -191,5 +224,10 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { eventTrack, fetchPerson, resetPerson }
+  {
+    eventTrack,
+    fetchPerson,
+    resetPerson,
+    setModalVisible
+  }
 )(SearchResultScreen);

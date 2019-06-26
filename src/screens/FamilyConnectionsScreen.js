@@ -21,7 +21,7 @@ import {
   setUserCreds
 } from './../store/actions';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
-import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
+import LoginWithAuth0 from '../components/Authentication/LoginWithAuth0';
 import constants from '../helpers/constants';
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
