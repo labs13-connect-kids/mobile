@@ -15,7 +15,9 @@ import {
   fetchPerson,
   resetPerson,
   setModalVisible,
-  setRedirectPath
+  setAgreeModalVisible,
+  setUserCreds,
+  setVideoPlayerModalVisible
 } from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
@@ -23,6 +25,8 @@ import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
+import authHelpers from '../helpers/authHelpers';
+import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 class SearchResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
@@ -89,8 +93,6 @@ class SearchResultScreen extends React.Component {
 
   startRegister = () => {
     this.props.setModalVisible(true);
-    this.props.navigation.navigate('Authentication');
-    this.props.setRedirectPath(this.props.navigation.state.routeName);
   };
 
   render() {
@@ -98,6 +100,20 @@ class SearchResultScreen extends React.Component {
     console.log('PERSON', person);
     return (
       <Container style={styles.container}>
+        <RegisterModalsContainer
+          modalVisible={this.props.modalVisible}
+          setAgreeModalVisible={this.props.setAgreeModalVisible}
+          videoAgree={this.props.videoAgree}
+          videoVisible={this.props.videoVisible}
+          setModalVisible={this.props.setModalVisible}
+          setVideoPlayerModalVisible={this.props.setVideoPlayerModalVisible}
+          onLogin={() =>
+            authHelpers.handleLogin(
+              authHelpers._loginWithAuth0,
+              this.props.setUserCreds
+            )
+          }
+        />
         <SafeAreaView>
           <ScrollView>
             <View>
@@ -124,6 +140,7 @@ class SearchResultScreen extends React.Component {
                 <PersonInfo
                   item={person}
                   setModalVisible={this.props.setModalVisible}
+                  startRegister={this.startRegister}
                 />
               )}
             </View>
@@ -202,7 +219,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { error, isFetching, person, possiblePersons } = state.people;
-  const { accessToken, idToken, isLoggedIn, user } = state.auth;
+  const {
+    accessToken,
+    idToken,
+    isLoggedIn,
+    user,
+    modalVisible,
+    videoAgree,
+    videoVisible
+  } = state.auth;
   return {
     accessToken,
     error,
@@ -211,7 +236,10 @@ const mapStateToProps = state => {
     isLoggedIn,
     person,
     possiblePersons,
-    user
+    user,
+    modalVisible,
+    videoAgree,
+    videoVisible
   };
 };
 
@@ -222,6 +250,8 @@ export default connect(
     fetchPerson,
     resetPerson,
     setModalVisible,
-    setRedirectPath
+    setAgreeModalVisible,
+    setUserCreds,
+    setVideoPlayerModalVisible
   }
 )(SearchResultScreen);
