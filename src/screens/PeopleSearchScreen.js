@@ -14,7 +14,9 @@ import {
   resetState,
   eventTrack,
   setModalVisible,
-  setRedirectPath
+  setAgreeModalVisible,
+  setUserCreds,
+  setVideoPlayerModalVisible
 } from '../store/actions';
 
 import { Container } from 'native-base';
@@ -27,6 +29,8 @@ import constants from '../helpers/constants';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
+import authHelpers from '../helpers/authHelpers';
+import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -112,14 +116,26 @@ class PeopleSearchScreen extends React.Component {
 
   startRegister = () => {
     this.props.setModalVisible(true);
-    this.props.navigation.navigate('Authentication');
-    this.props.setRedirectPath(this.props.navigation.state.routeName);
   };
 
   render() {
     const { isLoggedIn } = this.props;
     return (
       <Container style={styles.container}>
+        <RegisterModalsContainer
+          modalVisible={this.props.modalVisible}
+          setAgreeModalVisible={this.props.setAgreeModalVisible}
+          videoAgree={this.props.videoAgree}
+          videoVisible={this.props.videoVisible}
+          setModalVisible={this.props.setModalVisible}
+          setVideoPlayerModalVisible={this.props.setVideoPlayerModalVisible}
+          onLogin={() =>
+            authHelpers.handleLogin(
+              authHelpers._loginWithAuth0,
+              this.props.setUserCreds
+            )
+          }
+        />
         <SafeAreaView>
           <ScrollView>
             <View>
@@ -246,7 +262,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { error, isFetching, person, possiblePersons } = state.people;
-  const { accessToken, idToken, isLoggedIn, user } = state.auth;
+  const {
+    accessToken,
+    idToken,
+    isLoggedIn,
+    user,
+    modalVisible,
+    videoAgree,
+    videoVisible
+  } = state.auth;
   return {
     accessToken,
     error,
@@ -255,6 +279,9 @@ const mapStateToProps = state => {
     isLoggedIn,
     person,
     possiblePersons,
+    modalVisible,
+    videoAgree,
+    videoVisible,
     user
   };
 };
@@ -267,6 +294,8 @@ export default connect(
     resetState,
     eventTrack,
     setModalVisible,
-    setRedirectPath
+    setAgreeModalVisible,
+    setUserCreds,
+    setVideoPlayerModalVisible
   }
 )(PeopleSearchScreen);
