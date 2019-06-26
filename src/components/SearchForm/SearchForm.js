@@ -10,6 +10,7 @@ import {
   isUrl
 } from '../../helpers/inputValidators';
 import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
+import saveToRecentSearches from '../../helpers/saveToRecentSearches';
 
 class SearchForm extends Component {
   state = {
@@ -98,6 +99,11 @@ class SearchForm extends Component {
       console.log('your input is not valid');
     }
     if (formattedObject) {
+      saveToRecentSearches({
+        searchType: 'name',
+        searchInput: 'Steve Smith',
+        formattedObject
+      });
       this.props.handleSearch(formattedObject);
     } else {
       console.log('formattedObject: error');
@@ -360,7 +366,7 @@ const styles = StyleSheet.create({
   },
   nameInputFullWidth: {
     width: '100%'
-  },
+  }
 });
 
 export default SearchForm;

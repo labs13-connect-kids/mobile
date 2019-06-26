@@ -17,7 +17,8 @@ import {
   SET_MODAL_VISIBLE,
   SET_VIDEO_AGREE_VISIBLE,
   SET_VIDEO_PLAYER_VISIBLE,
-  RESET_PERSON
+  RESET_PERSON,
+  SET_RECENT_SEARCHES
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -148,4 +149,8 @@ export const setVideoPlayerModalVisible = visible => {
 
 export const resetPerson = () => {
   return { type: RESET_PERSON };
+};
+
+export const setRecentSearches = recentSearches => {
+  return { type: SET_RECENT_SEARCHES, payload: recentSearches };
 };
