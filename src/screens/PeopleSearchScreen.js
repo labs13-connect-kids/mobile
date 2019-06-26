@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import {
     fetchPerson,
@@ -150,9 +150,6 @@ class PeopleSearchScreen extends React.Component {
                                     />
                                 </>
                             ) : null}
-                        </View>
-                        <View>
-                            <Text>Recent Searches:</Text>
                         </View>
                     </ScrollView>
                 </SafeAreaView>
