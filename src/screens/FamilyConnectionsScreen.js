@@ -71,23 +71,22 @@ class FamilyConnectionsScreen extends Component {
   render() {
     return (
       <Container style={styles.container}>
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={this.state.modalVisible}
-            onRequestClose={this.toggleModal}
-          >
-            <FamilyConnectionsModal
-              trackInterest={this.trackInterest}
-              toggleModal={this.toggleModal}
-              startRegister={this.startRegister}
-              email={this.props.email}
-            />
-          </Modal>
-        </View>
-
         <SafeAreaView>
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={this.toggleModal}
+            >
+              <FamilyConnectionsModal
+                trackInterest={this.trackInterest}
+                toggleModal={this.toggleModal}
+                startRegister={this.startRegister}
+                email={this.props.email}
+              />
+            </Modal>
+          </View>
           <ScrollView>
             <Text style={styles.mainText}>
               Learn about a revolutionary way to discover and engage extended
