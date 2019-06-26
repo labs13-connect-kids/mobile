@@ -10,14 +10,12 @@ const initialState = {
 export const eventTrackingReducer = (state = initialState, action) => {
   switch (action.type) {
     case EVENT_ERROR:
-      console.log('event tracked reducer Error');
       return {
         ...state,
         error: 'error'
       };
 
     case EVENT_SUCCESS:
-      console.log('event tracked reducer success');
       return initialState;
 
     default:

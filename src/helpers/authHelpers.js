@@ -16,20 +16,6 @@ const toQueryString = params => {
       .join('&')
   );
 };
-const getToken = async () => {
-  try {
-    const value = await AsyncStorage.getItem('token');
-    if (value !== null) {
-      // value previously stored
-      // console.log('TOKEN VALUE FROM ASYNC', JSON.parse(value));
-    } else {
-      console.log('NOTHING HERE');
-    }
-  } catch (e) {
-    // error reading value
-    console.log('ERROR IN GET DATA');
-  }
-};
 const setItem = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
@@ -70,7 +56,6 @@ const handleLogin = async (authSession, setUserCreds) => {
 export default {
   toQueryString,
   setItem,
-  getToken,
   _loginWithAuth0,
   handleLogin
 };
