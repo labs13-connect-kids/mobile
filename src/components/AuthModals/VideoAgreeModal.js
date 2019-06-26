@@ -23,7 +23,7 @@ const VideoAgreeModal = props => {
             props.setModalVisible(false);
           }}
         >
-          <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
+          <Text style={[styles.btnText, styles.closeBtn]}>❌</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.modalTextStyle}>
@@ -74,12 +74,11 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   close: {
-    backgroundColor: 'red',
-    borderRadius: 3,
     marginLeft: 'auto'
   },
   closeBtn: {
-    padding: 5
+    padding: 5,
+    color: '#000'
   },
   btnText: {
     color: '#fff'
