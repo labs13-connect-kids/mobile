@@ -45,7 +45,9 @@ const _loginWithAuth0 = async () => {
 };
 const handleLogin = async (authSession, setUserCreds) => {
   // Retrieve the JWT token and decode it
-  result = await authSession();
+  let result = await authSession();
+  // if users cancels login process, terminate method
+  if (result.type === 'dismiss') return;
   const jwtToken = result.params.id_token;
   const decoded = jwtDecode(jwtToken);
 

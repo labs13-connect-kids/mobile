@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux';
 import {
@@ -122,21 +123,21 @@ class PeopleSearchScreen extends React.Component {
     const { isLoggedIn } = this.props;
     return (
       <Container style={styles.container}>
-        <RegisterModalsContainer
-          modalVisible={this.props.modalVisible}
-          setAgreeModalVisible={this.props.setAgreeModalVisible}
-          videoAgree={this.props.videoAgree}
-          videoVisible={this.props.videoVisible}
-          setModalVisible={this.props.setModalVisible}
-          setVideoPlayerModalVisible={this.props.setVideoPlayerModalVisible}
-          onLogin={() =>
-            authHelpers.handleLogin(
-              authHelpers._loginWithAuth0,
-              this.props.setUserCreds
-            )
-          }
-        />
         <SafeAreaView>
+          <RegisterModalsContainer
+            modalVisible={this.props.modalVisible}
+            setAgreeModalVisible={this.props.setAgreeModalVisible}
+            videoAgree={this.props.videoAgree}
+            videoVisible={this.props.videoVisible}
+            setModalVisible={this.props.setModalVisible}
+            setVideoPlayerModalVisible={this.props.setVideoPlayerModalVisible}
+            onLogin={() =>
+              authHelpers.handleLogin(
+                authHelpers._loginWithAuth0,
+                this.props.setUserCreds
+              )
+            }
+          />
           <ScrollView>
             <View>
               <Text style={styles.intro}>Search By:</Text>
