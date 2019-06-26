@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text,  } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { Grid } from 'native-base';
 import PersonInfoHeader from './PersonInfoHeader';
 import PersonInfoRow from './PersonInfoRow';
 
-const PersonInfo = ({ item, startRegister }) => {
+const PersonInfo = ({ item, startRegister, isLoggedIn }) => {
   return (
     <Grid style={styles.container}>
       <PersonInfoHeader item={item} />
@@ -30,12 +30,14 @@ const PersonInfo = ({ item, startRegister }) => {
         title="Addresses"
       />
       {/* This person info row also needs to pass in a url */}
-      <PersonInfoRow
-        item={item}
-        itemKey="urls"
-        itemValue="@domain"
-        title="Websites"
-      />
+      {isLoggedIn && (
+        <PersonInfoRow
+          item={item}
+          itemKey="urls"
+          itemValue="@domain"
+          title="Websites"
+        />
+      )}
       <PersonInfoRow
         startRegister={startRegister}
         item={item}

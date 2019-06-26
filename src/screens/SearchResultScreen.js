@@ -31,6 +31,10 @@ class SearchResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
+  state = {
+    requestObject: {}
+  };
+
   componentDidMount() {
     const {
       accessToken,
@@ -55,9 +59,31 @@ class SearchResultScreen extends React.Component {
       if (isLoggedIn) {
         requestObject['authToken'] = accessToken;
         requestObject['idToken'] = idToken;
+      } else {
+        this.setState({ requestObject });
       }
 
       fetchPerson(JSON.stringify(requestObject), eventTrack, this.createEvent);
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.log('CDU SRS');
+    if (
+      prevProps.isLoggedIn === false &&
+      this.props.isLoggedIn === true &&
+      this.state.requestObject
+    ) {
+      console.log('requestobj: ', this.state.requestObject);
+      this.props.resetPerson();
+      let requestObject = { ...this.state.requestObject };
+      requestObject['authToken'] = this.props.accessToken;
+      requestObject['idToken'] = this.props.idToken;
+      this.props.fetchPerson(
+        JSON.stringify(requestObject),
+        this.props.eventTrack,
+        this.createEvent
+      );
+      this.setState({ requestObject: {} });
     }
   }
 
@@ -97,7 +123,7 @@ class SearchResultScreen extends React.Component {
 
   render() {
     const { isLoggedIn, person } = this.props;
-    console.log('PERSON', person);
+    console.log('PERSON', person, 'SRS STATE: ', this.state);
     return (
       <Container style={styles.container}>
         <RegisterModalsContainer
@@ -141,6 +167,7 @@ class SearchResultScreen extends React.Component {
                   item={person}
                   setModalVisible={this.props.setModalVisible}
                   startRegister={this.startRegister}
+                  isLoggedIn={isLoggedIn}
                 />
               )}
             </View>

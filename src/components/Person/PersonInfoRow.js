@@ -1,11 +1,18 @@
 import React from 'react';
-import { TouchableOpacity, Linking, Platform, Alert } from 'react-native';
+import { TouchableOpacity, Linking, Platform } from 'react-native';
 import { Col, Row, Text } from 'native-base';
 import { styles } from '../../styles';
 import renderMaskedOrResult from '../../helpers/renderMaskedOrResult';
 import { connect } from 'react-redux';
 
-const PersonInfoRow = ({ isLoggedIn, item, itemKey, itemValue, title }) => {
+const PersonInfoRow = ({
+  isLoggedIn,
+  item,
+  itemKey,
+  itemValue,
+  startRegister,
+  title
+}) => {
   if (item[itemKey]) {
     handlePressDirections = (address, postalCode, city) => {
       let daddr = encodeURIComponent(`${address} ${postalCode}, ${city}`);
@@ -18,6 +25,7 @@ const PersonInfoRow = ({ isLoggedIn, item, itemKey, itemValue, title }) => {
     };
 
     let OnPress = key => {
+      if (!isLoggedIn) startRegister();
       console.log('THIS IS KEY', key);
       if (isLoggedIn) {
         if (itemKey === 'emails') {
@@ -31,8 +39,6 @@ const PersonInfoRow = ({ isLoggedIn, item, itemKey, itemValue, title }) => {
           let address = `${key.house} ${key.street}`;
           handlePressDirections(address, key['zip_code'], key['city']);
         }
-      } else {
-        return Alert.alert('Go away');
       }
     };
 
