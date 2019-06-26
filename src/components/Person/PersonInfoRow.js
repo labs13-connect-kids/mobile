@@ -15,8 +15,17 @@ const PersonInfoRow = ({
 }) => {
   if (item[itemKey]) {
     handlePressDirections = (address, postalCode, city) => {
-      let daddr = encodeURIComponent(`${address} ${postalCode}, ${city}`);
-      console.log(daddr);
+      console.log('address, postalCode, city: ', address, postalCode, city);
+      let daddr;
+      if (!address && !postalCode) {
+        daddr = encodeURIComponent(`${city}`);
+      } else if (!address) {
+        daddr = encodeURIComponent(`${postalCode}, ${city}`);
+      } else if (!postalCode) {
+        daddr = encodeURIComponent(`${address}, ${city}`);
+      } else {
+        daddr = encodeURIComponent(`${address} ${postalCode}, ${city}`);
+      }
       if (Platform.OS === 'ios') {
         Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
       } else {
@@ -34,8 +43,10 @@ const PersonInfoRow = ({
         } else if (itemKey === 'phones') {
           Linking.openURL(`tel:${key[itemValue]}`);
         } else if (itemKey === 'urls') {
-          Linking.openURL(`http:${key['url']}`);
+          Linking.openURL(`${key['url']}`);
         } else if (itemKey === 'addresses') {
+          if (!key.house) key.house = '';
+          if (!key.street) key.street = '';
           let address = `${key.house} ${key.street}`;
           handlePressDirections(address, key['zip_code'], key['city']);
         }
