@@ -24,9 +24,23 @@ class RecentSearches extends Component {
     }
   }
 
-  //   handleRecentSearchPress = search => {
-  //     this.props.handleSearch(search.formattedObject)
-  //   }
+  async componentDidUpdate(prevProps) {
+    let storageSearches = await AsyncStorage.getItem('recentSearches');
+    if (storageSearches !== null) {
+      if (prevProps.recentSearches[0] !== JSON.parse(storageSearches)[0]) {
+        this.props.setRecentSearches(JSON.parse(storageSearches));
+      }
+    }
+  }
+
+  clearRecentSearches = async () => {
+    try {
+      await AsyncStorage.removeItem('recentSearches');
+      this.props.setRecentSearches([]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     const { recentSearches } = this.props;
@@ -35,17 +49,23 @@ class RecentSearches extends Component {
       <View style={{ padding: 20 }}>
         <Text>Recent Searches:</Text>
         {!!recentSearches.length ? (
-          recentSearches.map((search, i) => (
-            <TouchableOpacity
-              key={i}
-              style={styles.recentSearchButton}
-              onPress={() => this.props.handleSearch(search.formattedObject)}
-            >
-              <Text style={styles.recentSearchButtonText}>
-                {search.searchInput}
-              </Text>
-            </TouchableOpacity>
-          ))
+          recentSearches.map(
+            ({ formattedObject, searchType, searchInput }, i) => (
+              <TouchableOpacity
+                key={i}
+                style={styles.recentSearchButton}
+                onPress={() =>
+                  this.props.handleSearch(
+                    formattedObject,
+                    searchType,
+                    searchInput
+                  )
+                }
+              >
+                <Text style={styles.recentSearchButtonText}>{searchInput}</Text>
+              </TouchableOpacity>
+            )
+          )
         ) : (
           <ActivityIndicator />
         )}

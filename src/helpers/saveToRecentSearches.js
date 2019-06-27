@@ -3,18 +3,30 @@ import { AsyncStorage } from 'react-native';
 // need to add this in
 const capcity = 3;
 
+// class LinkedList {
+//   constructor() {
+//     this.head = null;
+//   }
+// }
+
+// class ListNode {
+//   constructor(data) {
+//     this.data = data;
+//     this.next = null;
+//   }
+// }
+
 async function saveToRecentSearches(newSearch) {
   try {
     let storageSearches = await AsyncStorage.getItem('recentSearches');
-    if (!storageSearches) {
-      storageSearches = [];
+    storageSearches = !storageSearches ? [] : JSON.parse(storageSearches);
+
+    if (!storageSearches.length) {
       storageSearches.push(newSearch);
-    } else if (JSON.parse(storageSearches).length < capcity) {
-      storageSearches = JSON.parse(storageSearches);
+    } else if (storageSearches.length < capcity) {
       storageSearches.unshift(newSearch);
     } else {
       // remove oldest search
-      storageSearches = JSON.parse(storageSearches);
       storageSearches.pop();
       // add newest search to front
       storageSearches.unshift(newSearch);

@@ -21,6 +21,8 @@ import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
 import RecentSearches from '../components/RecentSearches/RecentSearches';
 
+import saveToRecentSearches from '../helpers/saveToRecentSearches';
+
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
@@ -57,11 +59,10 @@ class PeopleSearchScreen extends React.Component {
   };
 
   handleEncodeURI = person => {
-    // console.log(encodeURI(JSON.stringify(person)));
     return encodeURI(JSON.stringify(person));
   };
 
-  handleSearchRequest = person => {
+  handleSearchRequest = (person, searchType, searchInput) => {
     const {
       accessToken,
       fetchSearchResult,
@@ -69,11 +70,17 @@ class PeopleSearchScreen extends React.Component {
       isLoggedIn,
       navigation
     } = this.props;
+
     const requestObject = {};
 
     if (isLoggedIn) {
       requestObject['authToken'] = accessToken;
       requestObject['idToken'] = idToken;
+      saveToRecentSearches({
+        searchType: searchType,
+        searchInput: searchInput,
+        formattedObject: person
+      });
     }
 
     requestObject['person'] = this.handleEncodeURI(person);

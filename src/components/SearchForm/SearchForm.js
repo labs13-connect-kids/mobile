@@ -69,42 +69,42 @@ class SearchForm extends Component {
       inputKey = key;
       inputValue = value;
     }
-
+    let searchType;
     if (isName(inputValue)) {
       if (!this.state.name) {
         this.setState({ name: inputValue, [inputKey]: '', tabPage: 0 });
       }
+      searchType = 'name';
       formattedObject = this.formatRequestObject(inputValue, 'name');
     } else if (isEmail(inputValue)) {
       if (!this.state.email) {
         this.setState({ email: inputValue, [inputKey]: '', tabPage: 1 });
       }
+      searchType = 'email';
       formattedObject = this.formatRequestObject(inputValue, 'email');
     } else if (isAddress(inputValue)) {
       if (!this.state.address) {
         this.setState({ address: inputValue, [inputKey]: '', tabPage: 2 });
       }
+      searchType = 'address';
       formattedObject = this.formatRequestObject(inputValue, 'address');
     } else if (isPhone(inputValue)) {
       if (!this.state.phone) {
         this.setState({ phone: inputValue, [inputKey]: '', tabPage: 3 });
       }
+      searchType = 'phone';
       formattedObject = this.formatRequestObject(inputValue, 'phone');
     } else if (isUrl(inputValue)) {
       if (!this.state.url) {
         this.setState({ url: inputValue, [inputKey]: '', tabPage: 4 });
       }
+      searchType = 'url';
       formattedObject = this.formatRequestObject(inputValue, 'url');
     } else {
       console.log('your input is not valid');
     }
     if (formattedObject) {
-      saveToRecentSearches({
-        searchType: 'name',
-        searchInput: 'Steve Smith',
-        formattedObject
-      });
-      this.props.handleSearch(formattedObject);
+      this.props.handleSearch(formattedObject, searchType, inputValue);
     } else {
       console.log('formattedObject: error');
     }
