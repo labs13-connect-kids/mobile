@@ -1,4 +1,4 @@
-export { notLoggedIn, loggedIn };
+export { notLoggedIn, loggedIn, optionTypes };
 
 const notLoggedIn = {
   stopVideo: 'click-do-not-watch-video',
@@ -30,6 +30,15 @@ const loggedIn = {
   openVideo: 'open-introduction-video',
   successfulSearch: 'search-person-success',
   servedChild: 'served-child-success'
+};
+
+const optionTypes = {
+  possiblePersonIndex,
+  emailIndex,
+  phoneIndex,
+  addressIndex,
+  urlIndex,
+  relationshipIndex
 };
 
 // =====================================================================================
@@ -67,6 +76,16 @@ const loggedIn = {
 // - 'open-introduction-video'
 // - 'search-person-success'  (SINGLE AND MULTIPLE)
 // - 'served-child-success'
+
+// =====================================================================================
+// =================================== OPTIONS TYPES =====================================
+// =====================================================================================
+// possiblePersonIndex: 0
+// emailIndex: 0
+// phoneIndex: 0
+// addressIndex: 2
+// urlIndex: 0
+// relationshipIndex: 0
 
 // =====================================================================================
 // ================================ HEADERS OBJECTS ====================================
@@ -275,7 +294,10 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'search-person-success',
-  options: { possibleMatches: 0, personMatch: true }
+  options: {
+    possibleMatches: 0,
+    personMatch: true
+  }
 };
 
 // CLICKING POSSIBLE PERSON EVENT FROM LIST
@@ -283,7 +305,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-possible_person',
-  options: { possiblePersonIndex: 0 }
+  options: {
+    possiblePersonIndex: 0
+  }
 };
 
 // CLICKING PERSON EMAIL SEARCH
@@ -291,7 +315,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-person_email_search',
-  options: { emailIndex: 0 }
+  options: {
+    emailIndex: 0
+  }
 };
 
 // CLICKING PERSON EMAIL SEND
@@ -299,7 +325,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-person_email_send',
-  options: { emailIndex: 0 }
+  options: {
+    emailIndex: 0
+  }
 };
 
 // CLICKING PERSON PHONE SEARCH
@@ -307,7 +335,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-person_phone_search',
-  options: { phoneIndex: 0 }
+  options: {
+    phoneIndex: 0
+  }
 };
 
 // CLICKING CALL THIS NUMBER FROM MODAL AFTER PRESSING A PHONE NUMBER LINK
@@ -315,7 +345,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-person_phone_call',
-  options: { phoneIndex: 0 }
+  options: {
+    phoneIndex: 0
+  }
 };
 
 // CLICKING PERFORM SEARCH ON ADDRESS FROM MODAL AFTER CLICKING ADDRESS LINK
@@ -331,7 +363,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-person_address_view',
-  options: { addressIndex: 2 }
+  options: {
+    addressIndex: 2
+  }
 };
 
 // CLICKING PERFORM A SEARCH FROM MODAL WHEN CLICKING A URL LINK
@@ -339,7 +373,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-person_url_search',
-  options: { urlIndex: 0 }
+  options: {
+    urlIndex: 0
+  }
 };
 
 // CLICKING VIEW THE URL FROM MODAL WHEN CLICKING A URL LINK
@@ -347,7 +383,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-person_url_view',
-  options: { urlIndex: 0 }
+  options: {
+    urlIndex: 0
+  }
 };
 
 // CLICKING A RELATIONSHIP LINK FROM SINGLE PERSON RESULTS
@@ -355,5 +393,7 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-relationship',
-  options: { relationshipIndex: 0 }
+  options: {
+    relationshipIndex: 0
+  }
 };

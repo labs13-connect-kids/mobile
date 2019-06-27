@@ -27,3 +27,10 @@ export const createEvent = success => {
   };
   return event;
 };
+
+// possiblePersonIndex: 0
+// emailIndex: 0
+// phoneIndex: 0
+// addressIndex: 2
+// urlIndex: 0
+// relationshipIndex: 0
