@@ -1,3 +1,37 @@
+export { notLoggedIn, loggedIn };
+
+const notLoggedIn = {
+  stopVideo: 'click-do-not-watch-video',
+  notSocialWorker: 'click-i-am-not-a-social-worker',
+  logo: 'click-logo',
+  modalSignUp: 'click-post-watch-video-sign-up',
+  personClick: 'click-possible_person',
+  signUp: 'click-sign-up',
+  watchVideo: 'click-watch-video',
+  confirmSocialWorker: 'click-yes-i-am-a-social-worker',
+  closeVideo: 'close-introduction-video',
+  openVideo: 'open-introduction-video',
+  successfulSearch: 'search-person-success'
+};
+const loggedIn = {
+  clickRelationship: 'click-relationship',
+  logo: 'click-logo',
+  logOut: 'click-logout',
+  clickAddressSearch: 'click-person_address_search',
+  clickAddressView: 'click-person_address_view',
+  clickEmailSearch: 'click-person_email_search',
+  clickEmailSend: 'click-person_email_send',
+  clickPhoneCall: 'click-person_phone_call',
+  clickPhoneSearch: 'click-person_phone_search',
+  clickUrlSearch: 'click-person_url_search',
+  clickUrlView: 'click-person_url_view',
+  personClick: 'click-possible_person',
+  closeVideo: 'close-introduction-video',
+  openVideo: 'open-introduction-video',
+  successfulSearch: 'search-person-success',
+  servedChild: 'served-child-success'
+};
+
 // =====================================================================================
 // =================================== EVENT TYPES =====================================
 // =====================================================================================
