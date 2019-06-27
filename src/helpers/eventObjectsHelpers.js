@@ -355,7 +355,9 @@ requestPayload = {
 requestPayload = {
   emailAddress: 'rytwalker@gmail.com',
   event: 'click-person_address_search',
-  options: { addressIndex: 0 }
+  options: {
+    addressIndex: 0
+  }
 };
 
 // CLICKING VIEW ON MAP FROM MODAL AFTER CLICKING ADDRESS LINK

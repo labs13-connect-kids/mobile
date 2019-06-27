@@ -1,7 +1,7 @@
-export const createEvent = success => {
+export const createSearchEvent = message => {
   let emailAddress = '';
   let options = {};
-  if (typeof success === 'string') {
+  if (typeof message === 'string') {
     options = {
       possibleMatches: this.props.possiblePersons.length,
       personMatch: false
