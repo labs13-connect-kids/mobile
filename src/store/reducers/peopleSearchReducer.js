@@ -9,14 +9,14 @@ import {
   RESET_STATE
 } from '../actions/actionTypes';
 
-const intialState = {
+const initialState = {
   error: null,
   isFetching: false,
   person: null,
   possiblePersons: []
 };
 
-export const peopleSearchReducer = (state = intialState, action) => {
+export const peopleSearchReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_PERSON:
     case FETCH_SEARCH_RESULT:
@@ -40,7 +40,6 @@ export const peopleSearchReducer = (state = intialState, action) => {
       };
     case FETCH_PERSON_FAILURE:
     case FETCH_SEARCH_RESULT_FAILURE:
-      console.log(action.payload);
       return {
         error: action.payload,
         isFetching: false,
@@ -53,7 +52,7 @@ export const peopleSearchReducer = (state = intialState, action) => {
         person: null
       };
     case RESET_STATE:
-      return intialState;
+      return initialState;
     default:
       return state;
   }

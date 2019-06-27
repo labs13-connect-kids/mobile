@@ -191,7 +191,6 @@ class SearchForm extends Component {
   };
 
   render() {
-    console.log('SEARCHFORM STATE: ', this.state);
     return (
       <View>
         <Tabs

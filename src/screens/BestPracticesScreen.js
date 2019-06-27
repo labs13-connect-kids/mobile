@@ -11,7 +11,7 @@ import {
 import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AsyncStorage } from 'react-native';
-import { setUserCreds, logOut } from '../store/actions';
+import { setUserCreds, logOut, clearRedirectPath } from '../store/actions';
 import { connect } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 
@@ -23,6 +23,7 @@ class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Best Practices', navigation);
   async componentDidMount() {
+    console.log('BPS CDM', this.props);
     // NOTE: TODO check for JWT expiration to confirm if logged in
     let confirmedUser = await AsyncStorage.getItem('auth0Data');
 
@@ -33,11 +34,14 @@ class BestPracticesScreen extends Component {
       const decoded = jwtDecode(jwtToken);
 
       this.props.setUserCreds(decoded, confirmedUser);
+      if (this.props.redirectPath !== '') {
+        this.props.navigation.navigate(this.props.redirectPath);
+        this.props.clearRedirectPath();
+      }
     }
   }
 
   render() {
-    // console.log('BEST PRACTICES PROPS', this.props);
     return (
       <Container style={styles.container}>
         <SafeAreaView>
@@ -176,13 +180,14 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { isLoggedIn } = state.auth;
+  const { isLoggedIn, redirectPath } = state.auth;
   return {
-    isLoggedIn
+    isLoggedIn,
+    redirectPath
   };
 };
 
 export default connect(
   mapStateToProps,
-  { setUserCreds, logOut }
+  { setUserCreds, logOut, clearRedirectPath }
 )(BestPracticesScreen);

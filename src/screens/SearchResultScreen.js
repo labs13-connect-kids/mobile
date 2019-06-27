@@ -1,20 +1,39 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight
+} from 'react-native';
 
 import { Container, Button } from 'native-base';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-import { eventTrack, fetchPerson, resetPerson } from '../store/actions';
+import {
+  eventTrack,
+  fetchPerson,
+  resetPerson,
+  setModalVisible,
+  setAgreeModalVisible,
+  setUserCreds,
+  setVideoPlayerModalVisible
+} from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import PersonInfo from '../components/Person/PersonInfo';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
-
+import authHelpers from '../helpers/authHelpers';
+import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 class SearchResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
+
+  state = {
+    requestObject: {}
+  };
 
   componentDidMount() {
     const {
@@ -40,9 +59,31 @@ class SearchResultScreen extends React.Component {
       if (isLoggedIn) {
         requestObject['authToken'] = accessToken;
         requestObject['idToken'] = idToken;
+      } else {
+        this.setState({ requestObject });
       }
 
       fetchPerson(JSON.stringify(requestObject), eventTrack, this.createEvent);
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.log('CDU SRS');
+    if (
+      prevProps.isLoggedIn === false &&
+      this.props.isLoggedIn === true &&
+      this.state.requestObject
+    ) {
+      console.log('requestobj: ', this.state.requestObject);
+      this.props.resetPerson();
+      let requestObject = { ...this.state.requestObject };
+      requestObject['authToken'] = this.props.accessToken;
+      requestObject['idToken'] = this.props.idToken;
+      this.props.fetchPerson(
+        JSON.stringify(requestObject),
+        this.props.eventTrack,
+        this.createEvent
+      );
+      this.setState({ requestObject: {} });
     }
   }
 
@@ -73,19 +114,35 @@ class SearchResultScreen extends React.Component {
           : `person-search-${success[0]}`,
       options
     };
-    // console.log('event:', event);
     return event;
+  };
+
+  startRegister = () => {
+    this.props.setModalVisible(true);
   };
 
   render() {
     const { isLoggedIn, person } = this.props;
-    console.log(person);
+    console.log('PERSON', person, 'SRS STATE: ', this.state);
     return (
       <Container style={styles.container}>
+        <RegisterModalsContainer
+          modalVisible={this.props.modalVisible}
+          setAgreeModalVisible={this.props.setAgreeModalVisible}
+          videoAgree={this.props.videoAgree}
+          videoVisible={this.props.videoVisible}
+          setModalVisible={this.props.setModalVisible}
+          setVideoPlayerModalVisible={this.props.setVideoPlayerModalVisible}
+          onLogin={() =>
+            authHelpers.handleLogin(
+              authHelpers._loginWithAuth0,
+              this.props.setUserCreds
+            )
+          }
+        />
         <SafeAreaView>
           <ScrollView>
             <View>
-              {/* <Text style={styles.intro}>Search By:</Text> */}
               <Button
                 style={styles.button}
                 onPress={() => this.props.navigation.goBack()}
@@ -93,16 +150,26 @@ class SearchResultScreen extends React.Component {
                 <Text style={styles.buttonText}>Back</Text>
               </Button>
             </View>
-            {/* <SearchForm /> */}
             <View>
               {!isLoggedIn && (
-                <Text style={styles.link}>
-                  This is a preview. Social workers can have completely free
-                  access. Click here to find out more.
-                </Text>
+                <TouchableHighlight onPress={this.startRegister}>
+                  <Text style={styles.link}>
+                    This is a preview. Social workers can have completely free
+                    access. Click here to find out more.
+                  </Text>
+                </TouchableHighlight>
               )}
               {this.props.error && <ErrorMessage />}
-              {!person ? <Loader /> : <PersonInfo item={person} />}
+              {!person ? (
+                <Loader />
+              ) : (
+                <PersonInfo
+                  item={person}
+                  setModalVisible={this.props.setModalVisible}
+                  startRegister={this.startRegister}
+                  isLoggedIn={isLoggedIn}
+                />
+              )}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -116,7 +183,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 5
   },
-
+  loginContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   header: {
     flexDirection: 'row',
     textAlign: 'center',
@@ -144,7 +215,6 @@ const styles = StyleSheet.create({
   nameInput: {
     flexDirection: 'row'
   },
-
   button: {
     margin: 10,
     padding: 10,
@@ -176,7 +246,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { error, isFetching, person, possiblePersons } = state.people;
-  const { accessToken, idToken, isLoggedIn, user } = state.auth;
+  const {
+    accessToken,
+    idToken,
+    isLoggedIn,
+    user,
+    modalVisible,
+    videoAgree,
+    videoVisible
+  } = state.auth;
   return {
     accessToken,
     error,
@@ -185,11 +263,22 @@ const mapStateToProps = state => {
     isLoggedIn,
     person,
     possiblePersons,
-    user
+    user,
+    modalVisible,
+    videoAgree,
+    videoVisible
   };
 };
 
 export default connect(
   mapStateToProps,
-  { eventTrack, fetchPerson, resetPerson }
+  {
+    eventTrack,
+    fetchPerson,
+    resetPerson,
+    setModalVisible,
+    setAgreeModalVisible,
+    setUserCreds,
+    setVideoPlayerModalVisible
+  }
 )(SearchResultScreen);
