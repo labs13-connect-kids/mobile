@@ -25,14 +25,16 @@ export const isAddress = address => {
   return false;
 };
 
+
 export const isPhone = phone => {
   if (phone.length) {
-    let numbersOnly = phone.replace(/[^0-9]+/g,'');
+    let numbersOnly = phone.replace(/^[2-9]\d{2}-\d{3}-\d{4}$/);
+    console.log(numbersOnly.length)
 
     return numbersOnly.length === 10;
   }
-  return false;
 };
+
 
 export const isUrl = url => {
   if (url.length) {

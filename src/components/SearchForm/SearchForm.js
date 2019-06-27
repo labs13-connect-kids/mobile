@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
-import { Button, Tabs, Tab, Input } from 'native-base';
+import { Button, Tabs, Tab, Input, Container, Content, Header } from 'native-base';
 import constants from '../../helpers/constants';
 import {
   isName,
@@ -10,6 +10,7 @@ import {
   isUrl
 } from '../../helpers/inputValidators';
 import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
+import InputDisplay from './InputDisplay';
 
 class SearchForm extends Component {
   state = {
@@ -20,7 +21,8 @@ class SearchForm extends Component {
     phone: '',
     url: '',
     inputValidate: true,
-    tabPage: 0
+    tabPage: 0,
+    showCityStateInput: true,
   };
 
   inputHandler = (name, value) => {
@@ -53,39 +55,19 @@ class SearchForm extends Component {
     this.setState({ [name]: value });
 
     if (name === 'name') {
-      if (isName(this.state.name)) {
-        this.setState({ inputValidate: true })
-      } else {
-        this.setState({ inputValidate: false })
-      }
+      this.setState({ inputValidate: isName(value) })
     }
     else if (name === 'email') {
-      if (isEmail(this.state.email)) {
-        this.setState({ inputValidate: true })
-      } else {
-        this.setState({ inputValidate: false })
-      }
+      this.setState({ inputValidate: isEmail(value) }) 
     }
     else if (name === 'address') {
-      if (isAddress(this.state.address)) {
-        this.setState({ inputValidate: true })
-      } else {
-        this.setState({ inputValidate: false })
-      }
+      this.setState({ inputValidate: isAddress(value) })
     }
     else if (name === 'phone') {
-      if (isPhone(this.state.phone)) {
-        this.setState({ inputValidate: true })
-      } else {
-        this.setState({ inputValidate: false })
-      }
+      this.setState({ inputValidate: isPhone(value) })
     }
     else if (name === 'url') {
-      if (isUrl(this.state.url)) {
-        this.setState({ inputValidate: true })
-      } else {
-        this.setState({ inputValidate: false })
-      }
+      this.setState({ inputValidate: isUrl(value) })
     }
   };
 
@@ -221,15 +203,40 @@ class SearchForm extends Component {
     });
   };
 
+  toggleCityStateInput = (data) => {
+    console.log(data.i)
+
+    // if(data.i === 0){
+    //   this.setState({ showCityStateInput: true})
+    //   console.log("i'm in tab 1!")
+    // }else if (data.i === 1){
+    //   this.setState({ showCityStateInput: false })
+    //   console.log("i'm in tab 2!")
+    // }else if (data.i === 2){
+    //   this.setState({ showCityStateInput: false })
+    //   console.log("i'm in tab 3!")
+    // } else if (data.i === 3) {
+    //   this.setState({ showCityStateInput: false })
+    //   console.log("i'm in tab 4!")
+    // } else if (data.i === 4) {
+    //   this.setState({ showCityStateInput: false })
+    //   console.log("i'm in tab 5!")
+    // }
+    
+    this.setState({ showCityStateInput: data.i == 0 ? true : false, tabPage: data.i });
+
+  }
+
   render() {
-    console.log('SEARCHFORM STATE: ', this.state);
     return (
       <View>
         <Tabs
           style={styles.container}
           activeTextStyle={{ color: '#64aab8' }}
           tabBarUnderlineStyle={{ backgroundColor: '#000' }}
-          page={this.state.tabPage}
+          // page={this.state.tabPage}
+          // page={this.displayInput}
+          onChangeTab={this.toggleCityStateInput}
         >
           <Tab
             heading="Name"
@@ -239,29 +246,41 @@ class SearchForm extends Component {
             activeTabStyle={{ backgroundColor: '#fff' }}
             tabStyle={{ backgroundColor: '#fff' }}
           >
-            <View style={[styles.nameInputFullWidth]}>
+            {/*<View style={styles.nameInputFullWidth}>
               <Input
                 placeholder="First and last, middle optional"
                 style={[styles.textInput, !this.state.inputValidate ? styles.error : null]}
                 value={this.state.name}
                 onChangeText={text => this.inputHandler('name', text)}
               />
-
-             <Input
+              <Input
                 placeholder="City, State"
+                // style={styles.textInput}
                 style={styles.textInput}
                 value={this.state.cityState}
                 onChangeText={text => this.inputHandler('cityState', text)}
               />
-            </View>
+    </View>*/}
+            {this.state.showCityStateInput ?
+              <InputDisplay
+                inputValidate={this.state.inputValidate}
+                name={this.state.name}
+                cityState={this.state.cityState}
+                inputHandlerName={text => this.inputHandler('name', text)}
+                inputHandlerCityState={text => this.inputHandler('cityState', text)}
+              />
+              : styles.displayNoneInput}
           </Tab>
 
           <Tab
             heading="Email"
-            activeTextStyle={styles.activeTextStyle}
+            activeTextStyle={[styles.activeTextStyle]}
             textStyle={styles.textStyle}
-            activeTabStyle={{ backgroundColor: '#fff' }}
-            tabStyle={{ backgroundColor: '#fff' }}
+            activeTabStyle={[{ backgroundColor: '#fff' }]}
+            tabStyle={[{ backgroundColor: '#fff' }]}
+            style={[{ flex: 0 }]}
+
+
           >
             <View>
               <Input
@@ -272,6 +291,7 @@ class SearchForm extends Component {
               />
             </View>
           </Tab>
+
           <Tab
             heading="Address"
             activeTextStyle={styles.activeTextStyle}
@@ -288,6 +308,7 @@ class SearchForm extends Component {
               />
             </View>
           </Tab>
+
           <Tab
             heading="Phone"
             activeTextStyle={styles.activeTextStyle}
@@ -300,10 +321,12 @@ class SearchForm extends Component {
                 placeholder="Phone any format, no letters"
                 style={[styles.textInput, !this.state.inputValidate ? styles.error : null]}
                 value={this.state.phone}
-                onChangeText={text => this.inputHandler('phone', text)}
+                onChangeText={text =>
+                  this.inputHandler('phone', text)}
               />
             </View>
           </Tab>
+
           <Tab
             heading="URL"
             activeTextStyle={styles.activeTextStyle}
@@ -321,7 +344,8 @@ class SearchForm extends Component {
             </View>
           </Tab>
         </Tabs>
-        <View style={{ flexDirection: 'row' }}>
+        {/*<Content style={{ flexDirection: 'row' }}>*/}
+        <View style={[{ flexDirection: 'row' }, this.state.margin ? styles.buttonMargin : null]}>
           <Button info style={styles.button} onPress={this.handleFormSubmit}>
             <Text style={styles.buttonText}> Search </Text>
           </Button>
@@ -338,7 +362,7 @@ class SearchForm extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    margin: 5
+    margin: 5, flex: 0
   },
   textInput: {
     borderColor: '#64aab8',
@@ -397,14 +421,19 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   nameInputFullWidth: {
-    flex:1,
+    flex: 1,
   },
   error: {
     borderWidth: 3,
     borderColor: 'red'
   },
-  inputHide: {
-    display:'none'
+  displayNoneInput: {
+    display: 'none'
+  },
+  buttonMargin: {
+    //marginTop: -50
+    transform: [{ translateY: -50 }],
+    backgroundColor: 'red'
   }
 
 });
