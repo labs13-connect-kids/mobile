@@ -17,7 +17,9 @@ import {
   SET_MODAL_VISIBLE,
   SET_VIDEO_AGREE_VISIBLE,
   SET_VIDEO_PLAYER_VISIBLE,
-  RESET_PERSON
+  RESET_PERSON,
+  SET_REDIRECT_PATH,
+  CLEAR_REDIRECT_PATH
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -59,7 +61,6 @@ export const fetchSearchResult = (
       }
     })
     .catch(err => {
-      console.log('did we make it to this error', err);
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
 
       eventTrack(createEvent('failed'));
@@ -99,18 +100,14 @@ export const eventTrack = event => dispatch =>
   axios
     .post(constants.devEventTrackingURL, event)
     .then(res => {
-      console.log('EVENT TRACK RES: ', res);
       if (res.status !== 502) {
         dispatch({ type: EVENT_ERROR });
-        console.log('Event Error .then');
       } else {
         dispatch({ type: EVENT_SUCCESS });
-        console.log('Event Success');
       }
     })
     .catch(err => {
       dispatch({ type: EVENT_SUCCESS });
-      console.log('Event Successfully tracked');
     });
 
 export const trackEmail = email => dispatch => {
@@ -118,14 +115,12 @@ export const trackEmail = email => dispatch => {
   return axios
     .post(constants.devFamilyConnectionsInterestURL, email)
     .then(res => {
-      console.log('EMAIL TRACKING RES: ', res);
       return dispatch({
         type: TRACK_EMAIL_SUCCESS,
         payload: email.emailAddress
       });
     })
     .catch(err => {
-      console.log('EMAIL TRACKING ERR: ', err);
       return dispatch({
         type: TRACK_EMAIL_FAILURE,
         payload: err,
@@ -148,4 +143,12 @@ export const setVideoPlayerModalVisible = visible => {
 
 export const resetPerson = () => {
   return { type: RESET_PERSON };
+};
+
+export const setRedirectPath = path => {
+  return { type: SET_REDIRECT_PATH, payload: path };
+};
+
+export const clearRedirectPath = () => {
+  return { type: CLEAR_REDIRECT_PATH };
 };

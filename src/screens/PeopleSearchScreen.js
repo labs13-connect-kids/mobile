@@ -1,12 +1,22 @@
 import React from 'react';
 
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight
+} from 'react-native';
 import { connect } from 'react-redux';
 import {
   fetchPerson,
   fetchSearchResult,
   resetState,
-  eventTrack
+  eventTrack,
+  setModalVisible,
+  setAgreeModalVisible,
+  setUserCreds,
+  setVideoPlayerModalVisible
 } from '../store/actions';
 
 import { Container } from 'native-base';
@@ -19,6 +29,8 @@ import constants from '../helpers/constants';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
+import authHelpers from '../helpers/authHelpers';
+import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -51,12 +63,10 @@ class PeopleSearchScreen extends React.Component {
           : `person-search-${success[0]}`,
       options
     };
-    // console.log('event:', event);
     return event;
   };
 
   handleEncodeURI = person => {
-    // console.log(encodeURI(JSON.stringify(person)));
     return encodeURI(JSON.stringify(person));
   };
 
@@ -104,11 +114,28 @@ class PeopleSearchScreen extends React.Component {
     resetState();
   };
 
+  startRegister = () => {
+    this.props.setModalVisible(true);
+  };
+
   render() {
     const { isLoggedIn } = this.props;
-    // console.log('PROPS PEOPLE SEARCH SCREEN: ', this.props);
     return (
       <Container style={styles.container}>
+        <RegisterModalsContainer
+          modalVisible={this.props.modalVisible}
+          setAgreeModalVisible={this.props.setAgreeModalVisible}
+          videoAgree={this.props.videoAgree}
+          videoVisible={this.props.videoVisible}
+          setModalVisible={this.props.setModalVisible}
+          setVideoPlayerModalVisible={this.props.setVideoPlayerModalVisible}
+          onLogin={() =>
+            authHelpers.handleLogin(
+              authHelpers._loginWithAuth0,
+              this.props.setUserCreds
+            )
+          }
+        />
         <SafeAreaView>
           <ScrollView>
             <View>
@@ -122,10 +149,12 @@ class PeopleSearchScreen extends React.Component {
               />
 
               {!isLoggedIn && (
-                <Text style={styles.link}>
-                  This is a preview. Social workers can have completely free
-                  access. Click here to find out more.
-                </Text>
+                <TouchableHighlight onPress={this.startRegister}>
+                  <Text style={styles.link}>
+                    This is a preview. Social workers can have completely free
+                    access. Click here to find out more.
+                  </Text>
+                </TouchableHighlight>
               )}
               {this.props.isFetching && <Loader />}
               {this.props.error && <ErrorMessage />}
@@ -170,7 +199,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 25
   },
-
+  loginContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   intro: {
     padding: 10,
 
@@ -229,7 +262,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { error, isFetching, person, possiblePersons } = state.people;
-  const { accessToken, idToken, isLoggedIn, user } = state.auth;
+  const {
+    accessToken,
+    idToken,
+    isLoggedIn,
+    user,
+    modalVisible,
+    videoAgree,
+    videoVisible
+  } = state.auth;
   return {
     accessToken,
     error,
@@ -238,11 +279,23 @@ const mapStateToProps = state => {
     isLoggedIn,
     person,
     possiblePersons,
+    modalVisible,
+    videoAgree,
+    videoVisible,
     user
   };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchPerson, fetchSearchResult, resetState, eventTrack }
+  {
+    fetchPerson,
+    fetchSearchResult,
+    resetState,
+    eventTrack,
+    setModalVisible,
+    setAgreeModalVisible,
+    setUserCreds,
+    setVideoPlayerModalVisible
+  }
 )(PeopleSearchScreen);

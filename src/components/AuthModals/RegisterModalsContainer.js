@@ -12,7 +12,7 @@ const RegisterModalsContainer = props => {
       transparent={false}
       visible={props.modalVisible}
       onRequestClose={() => {
-        props.setModalVisible(!props.modalVisible);
+        props.setModalVisible(false);
       }}
     >
       <View style={styles.marginTop}>

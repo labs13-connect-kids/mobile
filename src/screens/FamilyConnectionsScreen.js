@@ -13,18 +13,9 @@ import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
-import {
-  trackEmail,
-  setModalVisible,
-  setAgreeModalVisible,
-  setVideoPlayerModalVisible,
-  setUserCreds
-} from './../store/actions';
+import { trackEmail } from './../store/actions';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
-import LoginWithAuth0 from '../components/Authentication/loginWithAuth0';
 import constants from '../helpers/constants';
-import authHelpers from '../helpers/authHelpers';
-import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 class FamilyConnectionsScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Family Connections', navigation);
@@ -34,67 +25,68 @@ class FamilyConnectionsScreen extends Component {
   };
 
   toggleModal = () => {
-    this.setState({ modalVisible: !this.state.modalVisible });
+    this.setState({
+      modalVisible: !this.state.modalVisible
+    });
   };
 
-  trackInterest = () => {
-    this.props
-      .trackEmail({ emailAddress: this.props.email })
-      .then(res => {
-        // console.log('RES FROM TRACK INTEREST: ', res);
-        this.props.error
-          ? Alert.alert(this.props.error.message)
-          : this.props.message !== undefined
-          ? Alert.alert(this.props.message)
-          : Alert.alert(
-              'there was a problem talking to the database, Please try again later'
-            );
-      })
-      .catch(res => Alert.alert(this.props.message), this.toggleModal());
+  trackInterest = trackingEmail => {
+    if (this.props.email === null) {
+      this.props
+        .trackEmail({ emailAddress: trackingEmail })
+        .then(res => {
+          this.props.error
+            ? Alert.alert(this.props.error.message)
+            : this.props.message !== undefined
+            ? Alert.alert(this.props.message)
+            : Alert.alert(
+                'there was a problem talking to the database, Please try again later'
+              );
+          this.toggleModal();
+        })
+        .catch(res => {
+          Alert.alert(this.props.message);
+          this.toggleModal();
+        });
+    } else {
+      this.props
+        .trackEmail({ emailAddress: this.props.email })
+        .then(res => {
+          this.props.error
+            ? Alert.alert(this.props.error.message)
+            : this.props.message !== undefined
+            ? Alert.alert(this.props.message)
+            : Alert.alert(
+                'there was a problem talking to the database, Please try again later'
+              );
+          this.toggleModal();
+        })
+        .catch(res => {
+          Alert.alert(this.props.message);
+          this.toggleModal();
+        });
+    }
   };
 
   render() {
-    // console.log('FCS STATE: ', this.state, 'FCS PROPS: ', this.props);
     return (
       <Container style={styles.container}>
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={this.toggleModal}
-        >
-          <View>
-            {this.props.email ? (
-              <FamilyConnectionsModal
-                trackInterest={this.trackInterest}
-                toggleModal={this.toggleModal}
-              />
-            ) : (
-              <SafeAreaView style={styles.loginContainer}>
-                <RegisterModalsContainer
-                  modalVisible={this.props.modalVisible}
-                  setAgreeModalVisible={this.props.setAgreeModalVisible}
-                  videoAgree={this.props.videoAgree}
-                  videoVisible={this.props.videoVisible}
-                  setModalVisible={this.props.setModalVisible}
-                  setVideoPlayerModalVisible={
-                    this.props.setVideoPlayerModalVisible
-                  }
-                  onLogin={() =>
-                    authHelpers.handleLogin(
-                      authHelpers._loginWithAuth0,
-                      this.props.setUserCreds
-                    )
-                  }
-                />
-                <LoginWithAuth0
-                  navigation={this.props.navigation}
-                  setModalVisible={this.props.setModalVisible}
-                />
-              </SafeAreaView>
-            )}
-          </View>
-        </Modal>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={this.toggleModal}
+          >
+            <FamilyConnectionsModal
+              trackInterest={this.trackInterest}
+              toggleModal={this.toggleModal}
+              startRegister={this.startRegister}
+              email={this.props.email}
+            />
+          </Modal>
+        </View>
+
         <SafeAreaView>
           <ScrollView>
             <Text style={styles.mainText}>
@@ -168,16 +160,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log('STATE: FFF', state);
-  const { modalVisible, videoAgree, videoVisible } = state.auth;
+  console.log('redux state FCS: ', state);
   const { message, error } = state.famConInterest;
-  // console.log('mSTP in famcon: ', state);
-  // const { email } = state.auth.user;
   return {
     email: state.auth.user ? state.auth.user.email : null,
-    modalVisible,
-    videoAgree,
-    videoVisible,
     message,
     error
   };
@@ -186,10 +172,6 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
-    trackEmail,
-    setModalVisible,
-    setAgreeModalVisible,
-    setVideoPlayerModalVisible,
-    setUserCreds
+    trackEmail
   }
 )(FamilyConnectionsScreen);

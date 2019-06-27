@@ -421,6 +421,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   nameInputFullWidth: {
+<<<<<<< HEAD
     flex: 1,
   },
   error: {
@@ -436,6 +437,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'red'
   }
 
+=======
+    width: '100%'
+  },
+>>>>>>> fd3f9bf1218f6464ccfe6afc9c044ae3e93e9134
 });
 
 export default SearchForm;

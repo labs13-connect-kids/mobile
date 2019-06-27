@@ -5,71 +5,75 @@ import constants from '../../helpers/constants';
 
 const Login = props => {
   return (
-    <View style={styles.logInBtns}>
-      {props.isLoggedIn ? (
-        <View style={{ width: '100%' }}>
-          <Button
-            style={[styles.button, { backgroundColor: 'red' }]}
-            onPress={props.logOut}
-            block
-          >
-            <Text style={styles.logOutText}>Log Out</Text>
-          </Button>
-          <Button
-            style={[styles.button, styles.primaryBtn]}
-            block
-            onPress={() => props.navigation.navigate('PeopleSearch')}
-          >
-            <Text style={[styles.primaryBtnText, styles.lightBtn]}>
-              People Search
-            </Text>
-            <Text style={[styles.buttonText, styles.lightBtn]}>
-              Find Contact Information for Anyone
-            </Text>
-          </Button>
-          <Button
-            style={[styles.button, styles.primaryBtn]}
-            bordered
-            block
-            onPress={() => props.navigation.navigate('FamilyConnections')}
-          >
-            <Text style={[styles.primaryBtnText, styles.lightBtn]}>
-              Family Connections
-            </Text>
-            <Text style={[styles.buttonText, styles.lightBtn]}>
-              Family Trees for Permanency
-            </Text>
-          </Button>
-          <Button
-            style={[styles.button, styles.lastBtn, styles.primaryBtn]}
-            bordered
-            block
-            onPress={() => Linking.openURL('https://connectourkids.org')}
-          >
-            <Text style={[styles.primaryBtnText, styles.lightBtn]}>
-              Resources
-            </Text>
-            <Text style={[styles.buttonText, styles.lightBtn]}>
-              Useful Materials and Information
-            </Text>
-          </Button>
-        </View>
-      ) : (
-        <View style={styles.logInBtns}>
-          <Button style={styles.buttonStyle} block onPress={props.onLogin}>
-            <Text style={styles.btnText}>Login </Text>
-          </Button>
-          <Button
-            style={styles.buttonStyle}
-            block
-            onPress={() => {
-              props.setModalVisible(true);
-            }}
-          >
-            <Text style={styles.btnText}>Sign Up</Text>
-          </Button>
-        </View>
-      )}
+    <View style={styles.linkContainer}>
+      <View style={styles.logInBtns}>
+        {props.isLoggedIn ? (
+          <View style={{ width: '100%' }}>
+            <Button
+              style={[styles.button, { backgroundColor: 'red' }]}
+              onPress={props.logOut}
+              block
+            >
+              <Text style={styles.logOutText}>Log Out</Text>
+            </Button>
+          </View>
+        ) : (
+          <View style={styles.logInBtns}>
+            <Button style={styles.buttonStyle} block onPress={props.onLogin}>
+              <Text style={styles.btnText}>Login </Text>
+            </Button>
+            <Button
+              style={styles.buttonStyle}
+              block
+              onPress={() => {
+                props.setModalVisible(true);
+              }}
+            >
+              <Text style={styles.btnText}>Sign Up</Text>
+            </Button>
+          </View>
+        )}
+      </View>
+      <View>
+        <Button
+          style={[styles.button, styles.primaryBtn]}
+          block
+          onPress={() => props.navigation.navigate('PeopleSearch')}
+        >
+          <Text style={[styles.primaryBtnText, styles.lightBtn]}>
+            People Search
+          </Text>
+          <Text style={[styles.buttonText, styles.lightBtn]}>
+            Find Contact Information for Anyone
+          </Text>
+        </Button>
+        <Button
+          style={[styles.button, styles.primaryBtn]}
+          bordered
+          block
+          onPress={() => props.navigation.navigate('FamilyConnections')}
+        >
+          <Text style={[styles.primaryBtnText, styles.lightBtn]}>
+            Family Connections
+          </Text>
+          <Text style={[styles.buttonText, styles.lightBtn]}>
+            Family Trees for Permanency
+          </Text>
+        </Button>
+        <Button
+          style={[styles.button, styles.lastBtn, styles.primaryBtn]}
+          bordered
+          block
+          onPress={() => Linking.openURL('https://connectourkids.org')}
+        >
+          <Text style={[styles.primaryBtnText, styles.lightBtn]}>
+            Resources
+          </Text>
+          <Text style={[styles.buttonText, styles.lightBtn]}>
+            Useful Materials and Information
+          </Text>
+        </Button>
+      </View>
     </View>
   );
 };
@@ -78,11 +82,15 @@ const styles = StyleSheet.create({
   logInBtns: {
     flexDirection: 'row',
     flex: 1,
-    justifyContent: 'space-evenly',
-    marginTop: 20
+    justifyContent: 'space-evenly'
   },
   logOutText: {
     color: '#fff'
+  },
+  linkContainer: {
+    justifyContent: 'space-between',
+    flex: 1,
+    marginTop: 60
   },
   buttonStyle: {
     flex: 1,
