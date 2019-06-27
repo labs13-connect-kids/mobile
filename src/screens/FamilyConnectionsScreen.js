@@ -31,41 +31,23 @@ class FamilyConnectionsScreen extends Component {
   };
 
   trackInterest = trackingEmail => {
-    if (this.props.email === null) {
-      this.props
-        .trackEmail({ emailAddress: trackingEmail })
-        .then(res => {
-          this.props.error
-            ? Alert.alert(this.props.error.message)
-            : this.props.message !== undefined
-            ? Alert.alert(this.props.message)
-            : Alert.alert(
-                'there was a problem talking to the database, Please try again later'
-              );
-          this.toggleModal();
-        })
-        .catch(res => {
-          Alert.alert(this.props.message);
-          this.toggleModal();
-        });
-    } else {
-      this.props
-        .trackEmail({ emailAddress: this.props.email })
-        .then(res => {
-          this.props.error
-            ? Alert.alert(this.props.error.message)
-            : this.props.message !== undefined
-            ? Alert.alert(this.props.message)
-            : Alert.alert(
-                'there was a problem talking to the database, Please try again later'
-              );
-          this.toggleModal();
-        })
-        .catch(res => {
-          Alert.alert(this.props.message);
-          this.toggleModal();
-        });
-    }
+    let email = this.props.email ? this.props.email : trackingEmail;
+    this.props
+      .trackEmail({ emailAddress: email })
+      .then(res => {
+        this.props.error
+          ? Alert.alert(this.props.error.message)
+          : this.props.message !== undefined
+          ? Alert.alert(this.props.message)
+          : Alert.alert(
+              'there was a problem talking to the database, Please try again later'
+            );
+        this.toggleModal();
+      })
+      .catch(res => {
+        Alert.alert(this.props.message);
+        this.toggleModal();
+      });
   };
 
   render() {

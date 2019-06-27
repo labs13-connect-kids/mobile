@@ -20,12 +20,13 @@ export const famConInterestReducer = (state = initialState, action) => {
         email: null
       };
     case TRACK_EMAIL_SUCCESS:
+      console.log();
       return {
         ...state,
         isLoading: false,
         error: null,
-        email: action.payload,
-        message: `${action.payload} has been added to our list.`
+        email: action.payload.emailAddress,
+        message: `${action.payload.emailAddress} has been added to our list.`
       };
     case TRACK_EMAIL_FAILURE:
       return {

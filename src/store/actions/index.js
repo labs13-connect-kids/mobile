@@ -110,21 +110,21 @@ export const eventTrack = event => dispatch =>
       dispatch({ type: EVENT_SUCCESS });
     });
 
-export const trackEmail = email => dispatch => {
+export const trackEmail = event => dispatch => {
   dispatch({ type: TRACK_EMAIL });
   return axios
-    .post(constants.devFamilyConnectionsInterestURL, email)
+    .post(constants.devFamilyConnectionsInterestURL, event)
     .then(res => {
       return dispatch({
         type: TRACK_EMAIL_SUCCESS,
-        payload: email.emailAddress
+        payload: event
       });
     })
     .catch(err => {
       return dispatch({
         type: TRACK_EMAIL_FAILURE,
         payload: err,
-        email: email.emailAddress
+        email: event.emailAddress
       });
     });
 };
