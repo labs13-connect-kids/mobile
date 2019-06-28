@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  Modal
 } from 'react-native';
 
 import { Container, Button } from 'native-base';
@@ -17,7 +18,8 @@ import {
   setModalVisible,
   setAgreeModalVisible,
   setUserCreds,
-  setVideoPlayerModalVisible
+  setVideoPlayerModalVisible,
+  showModal
 } from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
@@ -27,12 +29,24 @@ import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
+import { ConfirmationModal } from '../components/Person/ConfirmationModal';
+
 class SearchResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
   state = {
-    requestObject: {}
+    requestObject: {},
+    modalVisible: false,
+    key: '',
+    type: '',
+    address: ''
+  };
+
+  toggleModal = () => {
+    this.setState({
+      modalVisible: !this.state.modalVisible
+    });
   };
 
   componentDidMount() {
@@ -66,6 +80,7 @@ class SearchResultScreen extends React.Component {
       fetchPerson(JSON.stringify(requestObject), eventTrack, this.createEvent);
     }
   }
+
   componentDidUpdate(prevProps, prevState) {
     console.log('CDU SRS');
     if (
@@ -121,6 +136,11 @@ class SearchResultScreen extends React.Component {
     this.props.setModalVisible(true);
   };
 
+  showConModal = ( key, type )=> {
+      this.setState({ key: key, type: type })
+      this.toggleModal()
+  }
+
   render() {
     const { isLoggedIn, person } = this.props;
     console.log('PERSON', person, 'SRS STATE: ', this.state);
@@ -163,16 +183,32 @@ class SearchResultScreen extends React.Component {
               {!person ? (
                 <Loader />
               ) : (
-                <PersonInfo
-                  item={person}
-                  setModalVisible={this.props.setModalVisible}
-                  startRegister={this.startRegister}
-                  isLoggedIn={isLoggedIn}
-                />
-              )}
+                  <PersonInfo
+                    item={person}
+                    setModalVisible={this.props.setModalVisible}
+                    startRegister={this.startRegister}
+                    isLoggedIn={isLoggedIn}
+                    showConModal={this.showConModal}
+                  />
+                )}
             </View>
           </ScrollView>
         </SafeAreaView>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={this.toggleModal}
+          >
+            <ConfirmationModal
+              toggleModal={this.toggleModal}
+              type = {this.state.type}
+              data={this.state.key}
+              home={this.state.address}
+            />
+          </Modal>
+        </View>
       </Container>
     );
   }
@@ -279,6 +315,7 @@ export default connect(
     setModalVisible,
     setAgreeModalVisible,
     setUserCreds,
-    setVideoPlayerModalVisible
+    setVideoPlayerModalVisible,
+    showModal
   }
 )(SearchResultScreen);

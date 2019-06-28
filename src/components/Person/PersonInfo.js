@@ -1,14 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Grid } from 'native-base';
 import PersonInfoHeader from './PersonInfoHeader';
 import PersonInfoRow from './PersonInfoRow';
 
-const PersonInfo = ({ item, startRegister, isLoggedIn }) => {
+const PersonInfo = ({ item, startRegister, isLoggedIn, showConModal }) => {
   return (
     <Grid style={styles.container}>
       <PersonInfoHeader item={item} />
       <PersonInfoRow
+        showConModal={showConModal}
         startRegister={startRegister}
         item={item}
         itemKey="emails"
@@ -16,6 +17,7 @@ const PersonInfo = ({ item, startRegister, isLoggedIn }) => {
         title="Emails"
       />
       <PersonInfoRow
+        showConModal={showConModal}
         startRegister={startRegister}
         item={item}
         itemKey="phones"
@@ -23,6 +25,7 @@ const PersonInfo = ({ item, startRegister, isLoggedIn }) => {
         title="Phone Numbers"
       />
       <PersonInfoRow
+        showConModal={showConModal}
         startRegister={startRegister}
         item={item}
         itemKey="addresses"
@@ -32,6 +35,7 @@ const PersonInfo = ({ item, startRegister, isLoggedIn }) => {
       {/* This person info row also needs to pass in a url */}
       {isLoggedIn && (
         <PersonInfoRow
+          showConModal={showConModal}
           item={item}
           itemKey="urls"
           itemValue="@domain"

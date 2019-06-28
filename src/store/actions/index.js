@@ -19,7 +19,8 @@ import {
   SET_VIDEO_PLAYER_VISIBLE,
   RESET_PERSON,
   SET_REDIRECT_PATH,
-  CLEAR_REDIRECT_PATH
+  CLEAR_REDIRECT_PATH,
+  MODAL_VISIBLE
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -152,3 +153,7 @@ export const setRedirectPath = path => {
 export const clearRedirectPath = () => {
   return { type: CLEAR_REDIRECT_PATH };
 };
+
+export const showModal = visible => {
+  return{ type: MODAL_VISIBLE , payload: visible }
+}
