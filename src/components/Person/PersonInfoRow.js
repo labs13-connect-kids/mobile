@@ -32,41 +32,41 @@ const PersonInfoRow = ({
       if (!isLoggedIn) startRegister();
 
       if ( isLoggedIn && itemKey === 'emails' ){
-        const type = 'Email'
+        const type = 'email'
         showConModal( key, type );
       }
       if ( isLoggedIn && itemKey === 'phones' ){
-        const type = 'Call'
+        const type = 'phone'
         showConModal( key, type );
       }
       if ( isLoggedIn && itemKey === 'addresses' ){
         let address = `${key.house} ${key.street}`;
-        const type = 'Map'
+        const type = 'address'
         showConModal( address, type );
       }
       if ( isLoggedIn && itemKey === 'urls' ){
-        const type = 'View URL'
+        const type = 'url'
         showConModal( key, type );
       }
     }
 
-    // let OnPress = key => {
-    //   if (!isLoggedIn) startRegister();
-    //   console.log('THIS IS KEY', key);
-    //   // if (isLoggedIn) {
-    //   //   if (itemKey === 'emails') {
-    //   //     // console.log( 'key and item value', key[itemValue] )
-    //   //     Linking.openURL(`mailto:${key[itemValue]}`);
-    //   //   } else if (itemKey === 'phones') {
-    //   //     Linking.openURL(`tel:${key[itemValue]}`);
-    //   //   } else if (itemKey === 'urls') {
-    //   //     Linking.openURL(`${key['url']}`);
-    //   //   } else if (itemKey === 'addresses') {
-    //   //     let address = `${key.house} ${key.street}`;
-    //   //     handlePressDirections(address, key['zip_code'], key['city']);
-    //   //   }
-    //   // }
-    // };
+    let OnPress = key => {
+      if (!isLoggedIn) startRegister();
+      console.log('THIS IS KEY', key);
+      if (isLoggedIn) {
+        if (itemKey === 'emails') {
+          // console.log( 'key and item value', key[itemValue] )
+          Linking.openURL(`mailto:${key[itemValue]}`);
+        } else if (itemKey === 'phones') {
+          Linking.openURL(`tel:${key[itemValue]}`);
+        } else if (itemKey === 'urls') {
+          Linking.openURL(`${key['url']}`);
+        } else if (itemKey === 'addresses') {
+          let address = `${key.house} ${key.street}`;
+          handlePressDirections(address, key['zip_code'], key['city']);
+        }
+      }
+    };
 
     return (
       <Row style={ styles.rowContainer }>

@@ -19,7 +19,8 @@ import {
   setAgreeModalVisible,
   setUserCreds,
   setVideoPlayerModalVisible,
-  showModal
+  showModal,
+  getInfo
 } from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
@@ -40,7 +41,8 @@ class SearchResultScreen extends React.Component {
     modalVisible: false,
     key: '',
     type: '',
-    address: ''
+    address: '', 
+    info: ''
   };
 
   toggleModal = () => {
@@ -136,9 +138,16 @@ class SearchResultScreen extends React.Component {
     this.props.setModalVisible(true);
   };
 
-  showConModal = ( key, type )=> {
-      this.setState({ key: key, type: type })
-      this.toggleModal()
+  showConModal = (key, type) => {
+    this.setState({ key: key, type: type })
+    this.toggleModal()
+
+  }
+
+  setData = ( key , type ) => {
+    console.log( 'SET DATA', key , type )
+    this.setState({ info: key , type: type })
+    this.props.getInfo(key , type)
   }
 
   render() {
@@ -146,6 +155,24 @@ class SearchResultScreen extends React.Component {
     console.log('PERSON', person, 'SRS STATE: ', this.state);
     return (
       <Container style={styles.container}>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={this.toggleModal}
+            // onRequestClose={Alert.alert( 'sup fam' )}
+          >
+            <ConfirmationModal
+              toggleModal={this.toggleModal}
+              type={this.state.type}
+              data={this.state.key}
+              home={this.state.address}
+              navigation={this.props.navigation}
+              setData={this.setData}
+            />
+          </Modal>
+        </View>
         <RegisterModalsContainer
           modalVisible={this.props.modalVisible}
           setAgreeModalVisible={this.props.setAgreeModalVisible}
@@ -194,21 +221,6 @@ class SearchResultScreen extends React.Component {
             </View>
           </ScrollView>
         </SafeAreaView>
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={this.state.modalVisible}
-            onRequestClose={this.toggleModal}
-          >
-            <ConfirmationModal
-              toggleModal={this.toggleModal}
-              type = {this.state.type}
-              data={this.state.key}
-              home={this.state.address}
-            />
-          </Modal>
-        </View>
       </Container>
     );
   }
@@ -281,6 +293,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
+  console.log(state)
   const { error, isFetching, person, possiblePersons } = state.people;
   const {
     accessToken,
@@ -302,7 +315,8 @@ const mapStateToProps = state => {
     user,
     modalVisible,
     videoAgree,
-    videoVisible
+    videoVisible,
+    getInfo: state.confirmationModal.info
   };
 };
 
@@ -316,6 +330,7 @@ export default connect(
     setAgreeModalVisible,
     setUserCreds,
     setVideoPlayerModalVisible,
-    showModal
+    showModal,
+    getInfo
   }
 )(SearchResultScreen);

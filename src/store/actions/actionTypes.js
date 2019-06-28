@@ -32,3 +32,5 @@ export const SET_REDIRECT_PATH = 'SET_REDIRECT_PATH';
 export const CLEAR_REDIRECT_PATH = 'CLEAR_REDIRECT_PATH';
 
 export const MODAL_VISIBLE = 'MODAL_VISIBLE';
+export const GET_INFO = 'GET_INFO';
+export const STOP_SEARCH_ME = 'STOP_SEARCH_ME'

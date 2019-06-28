@@ -2,88 +2,162 @@ import React from 'react';
 import {
     Text,
     View,
-    Modal,
     StyleSheet,
     Linking,
-    Platform
+    Platform,
+    TouchableOpacity
 } from 'react-native';
 import { Button } from 'native-base';
-import { SafeAreaView } from 'react-navigation';
+import constants from '../../helpers/constants';
 
-export const ConfirmationModal = ({ toggleModal, data, type }) => {
+export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData }) => {
 
     const handlePressDirections = data => {
         let daddr = data;
         console.log(daddr);
         if (Platform.OS === 'ios') {
-          Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
+            Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
         } else {
-          Linking.openURL(`http://maps.google.com/?daddr=${daddr}`);
+            Linking.openURL(`http://maps.google.com/?daddr=${daddr}`);
         }
     };
-
     return (
-        <>
-            <SafeAreaView>
+        <View style={options.container} >
+            {type === 'email' ?
                 <View>
-                    <Modal>
-                        <View style={options.container} >
-                            <Text style={options.header}>{type} or Search?</Text>
-                            <Text style={options.question}>Would you like to {type}, or perform a search?</Text>
-                            <View style={options.buttonContainer}>
-                                {/* <Button
-                                    onPress={() => toggleModal()}
-                                >
-                                    <Text style={options.button}>Close</Text>
-                                </Button> */}
-                                <Button onPress={ () => {
-                                    if ( type === 'Email' ) {
-                                        console.log('EMAIL TO:', data.address)
-                                        Linking.openURL(`mailto:${data.address}`);
-                                    }
-                                    if ( type === 'Call' ) {
-                                        console.log('CALL TO:', data.number)
-                                        Linking.openURL(`tel:${data.number}`);
-                                    }
-                                    if ( type === 'Map' ) {
-                                        console.log('MAP TO:', data )
-                                        handlePressDirections(data);
-                                    }
-                                    if ( type === 'View URL' ) {
-                                        console.log('URL TO:', data )
-                                        Linking.openURL(`${data.url}`);
-                                    }
-                                } }>
-                                    <Text style={options.button}>{type}</Text>
-                                </Button>
-                                <Button
-                                    onPress={() => toggleModal()}
-                                >
-                                    <Text style={options.button}>Close</Text>
-                                </Button>
-                            </View>
-                        </View>
-                    </Modal>
+                    <View style={options.border}>
+                        <Text style={options.header}>Send Email or Search?</Text>
+                        <TouchableOpacity onPress={() => toggleModal()}>
+                            <Text style={options.button}>❌</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={options.question}>Would you like to send an email, or perform a search?</Text>
                 </View>
-            </SafeAreaView>
-        </>
+            : null}
+            {type === 'phone' ?
+                <View>
+                    <View style={options.border}>
+                        <Text style={options.header}>Call or Search?</Text>
+                        <TouchableOpacity onPress={() => toggleModal()}>
+                            <Text style={options.button}>❌</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={options.question}>Would you like to call this number, or perform a search? Calling requires a device capable of dialing phone numbers.</Text>
+                </View>
+            : null}
+            {type === 'address' ?
+                <View>
+                    <View style={options.border}>
+                        <Text style={options.header}>View or Search?</Text>
+                        <TouchableOpacity onPress={() => toggleModal()}>
+                            <Text style={options.button}>❌</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={options.question}>Would you like to view this address on a map, or perform a search on it?</Text>
+                </View>
+            : null}
+            {type === 'url' ?
+                <View>
+                    <View style={options.border}>
+                        <Text style={options.header}>View or Search?</Text>
+                        <TouchableOpacity onPress={() => toggleModal()}>
+                            <Text style={options.button}>❌</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={options.question}>Would you like to view this URL, or perform a search on it?</Text>
+                </View>
+            : null}
+            <View style={options.buttonContainer}>
+                <Button info style={options.blueButton} onPress={() => {
+                    if (type === 'email') {
+                        console.log('EMAIL TO:', data.address)
+                        Linking.openURL(`mailto:${data.address}`);
+                    }
+                    if (type === 'phone') {
+                        console.log('CALL TO:', data.number)
+                        Linking.openURL(`tel:${data.number}`);
+                    }
+                    if (type === 'address') {
+                        console.log('MAP TO:', data)
+                        handlePressDirections(data);
+                    }
+                    if (type === 'url') {
+                        console.log('URL TO:', data)
+                        Linking.openURL(`${data.url}`);
+                    }
+                }}>
+                    {type === 'email' ?
+                        <Text style = {{ color: 'white' }}>Send Email</Text>
+                    : null}
+                    {type === 'phone' ?
+                        <Text style = {{ color: 'white' }}>Call this number</Text>
+                    : null}
+                    {type === 'address' ?
+                        <Text style = {{ color: 'white' }}>View on map</Text>
+                    : null}
+                    {type === 'url' ?
+                        <Text style = {{ color: 'white' }}>View the URL</Text>
+                    : null}
+                </Button>
+                <Button info style={options.greyButton} onPress={() => {
+                    if (type === 'email') {
+                        info = data.address
+                        console.log('SEARCH EMAIL:', data.address)
+                        navigation.goBack()
+                        setData(info, type)
+                    }
+                    if (type === 'phone') {
+                        info = data.display
+                        console.log('SEARCH PHONE:', data.number)
+                        navigation.navigate('PeopleSearch')
+                        setData(info, type)
+                    }
+                    if (type === 'address') {
+                        info = data
+                        console.log('SEARCH MAP TO:', data)
+                        navigation.navigate('PeopleSearch')
+                        setData(info, type)
+                    }
+                    if (type === 'url') {
+                        info = data.url
+                        console.log('SEARCH URL:', data)
+                        navigation.navigate('PeopleSearch')
+                        setData(info, type)
+                    }
+                }}>
+                    <Text style = {{ color: 'white' }}>Perform a Search</Text>
+                </Button>
+            </View>
+        </View >
     );
 
 }
 
 const options = StyleSheet.create({
+    border: {
+        justifyContent: 'space-between', 
+        flexDirection: 'row' , 
+        paddingBottom: 10,
+        borderBottomWidth: 1 , 
+        borderBottomColor: 'grey', 
+        width: '100%'
+    },
     container: {
-        marginTop: 100,
+        marginTop: 70,
         flex: 1,
-        padding: 10
+        padding: 20
     },
     header: {
         fontSize: 23,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        color: '#508DB3',
+        fontFamily: constants.fontFamily,
     },
     question: {
+        margin: 30,
         fontSize: 17,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        fontFamily: constants.fontFamily,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -93,5 +167,15 @@ const options = StyleSheet.create({
     button: {
         paddingRight: 15,
         paddingLeft: 15,
+    },
+    blueButton: {
+        margin: 10,
+        padding: 10,
+        backgroundColor: '#508DB3'
+    },
+    greyButton: {
+        backgroundColor: 'grey',
+        margin: 10,
+        padding: 10
     }
 })
