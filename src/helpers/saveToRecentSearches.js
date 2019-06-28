@@ -1,5 +1,4 @@
 import { AsyncStorage } from 'react-native';
-import { parse, stringify } from 'flatted/esm';
 import LRUCache from '../helpers/LRUCache';
 
 async function saveToRecentSearches(newSearch) {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  AsyncStorage,
   ActivityIndicator,
   StyleSheet,
   Text,
@@ -7,25 +8,13 @@ import {
   View
 } from 'react-native';
 import { connect } from 'react-redux';
-import { AsyncStorage } from 'react-native';
-import { setRecentSearches } from '../../store/actions';
+import { Button } from 'native-base';
+import {
+  populatePerson,
+  populateSearchResults,
+  setRecentSearches
+} from '../../store/actions';
 import constants from '../../helpers/constants';
-import { parse, stringify } from 'flatted/esm';
-
-// const mapLRUCache = cache => {
-//   const cacheArr = [];
-//   let currentEntry = cache.head;
-//   while (currentEntry !== null) {
-//     cacheArr.push(currentEntry.data);
-//     currentEntry = currentEntry.next;
-//   }
-
-//   if (!cacheArr.length) {
-//     console.log('cache is empty');
-//   } else {
-//     return cacheArr;
-//   }
-// };
 
 class RecentSearches extends Component {
   async componentDidMount() {
@@ -42,22 +31,22 @@ class RecentSearches extends Component {
     }
   }
 
-  async componentDidUpdate(prevProps) {
-    // if (prevProps.recentSearches[0] !== this.props.recentSearches[0]) {
-    //   let cache = await AsyncStorage.getItem('recentSearchesCache');
-    //   if (cache !== null) {
-    //     cache = JSON.parse(cache);
-    //     console.log('PREVPROPS', prevProps.recentSearches);
-    //     if (
-    //       prevProps.recentSearches.length &&
-    //       prevProps.recentSearches[0].searchInput !==
-    //         cache.cacheOrder[0].searchInput
-    //     ) {
-    //       this.props.setRecentSearches(cache.cacheOrder);
-    //     }
-    //   }
-    // }
-  }
+  // async componentDidUpdate(prevProps) {
+  //   console.log('CDM RECENT');
+  //   let cache = await AsyncStorage.getItem('recentSearchesCache');
+  //   if (cache !== null) {
+  //     cache = JSON.parse(cache);
+  //     console.log('PREVPROPS', prevProps.recentSearches);
+  //     if (
+  //       prevProps.recentSearches.length &&
+  //       prevProps.recentSearches[0].searchInput !==
+  //         cache.cacheOrder[0].searchInput
+  //     ) {
+  //       console.log('PREVPROPS II', prevProps.recentSearches);
+  //       this.props.setRecentSearches(cache.cacheOrder);
+  //     }
+  //   }
+  // }
 
   clearRecentSearches = async () => {
     try {
@@ -68,33 +57,47 @@ class RecentSearches extends Component {
     }
   };
 
+  displayRecentSearch = data => {
+    if (!data.length) {
+      // If a person
+      this.props.populatePerson(data);
+      this.props.navigation.navigate('SearchResult');
+    } else {
+      this.props.populateSearchResults(data);
+    }
+  };
+
   render() {
-    const { recentSearches } = this.props;
+    const { recentSearches, recentSearchesLoaded } = this.props;
 
     return (
       <View style={{ padding: 20 }}>
         <Text>Recent Searches:</Text>
-        <TouchableOpacity onPress={this.clearRecentSearches}>
-          <Text>Clear</Text>
-        </TouchableOpacity>
-        {!!recentSearches.length ? (
-          recentSearches.map(
-            ({ formattedObject, searchType, searchInput }, i) => (
-              <TouchableOpacity
-                key={i}
-                style={styles.recentSearchButton}
-                onPress={() =>
-                  this.props.handleSearch(
-                    formattedObject,
-                    searchType,
-                    searchInput
-                  )
-                }
-              >
-                <Text style={styles.recentSearchButtonText}>{searchInput}</Text>
-              </TouchableOpacity>
-            )
-          )
+        {recentSearchesLoaded ? (
+          <>
+            {recentSearches.length ? (
+              <View>
+                {recentSearches.map(({ data, searchType, searchInput }, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    style={styles.recentSearchButton}
+                    onPress={() => this.displayRecentSearch(data)}
+                  >
+                    <Text style={styles.recentSearchButtonText}>
+                      {searchInput}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+                <Button
+                  style={styles.clearButton}
+                  danger
+                  onPress={this.clearRecentSearches}
+                >
+                  <Text style={styles.clearButtonText}>Clear</Text>
+                </Button>
+              </View>
+            ) : null}
+          </>
         ) : (
           <ActivityIndicator />
         )}
@@ -112,17 +115,24 @@ const styles = StyleSheet.create({
   recentSearchButtonText: {
     fontSize: 20,
     color: `${constants.highlightColor}`
+  },
+  clearButton: {
+    padding: 20
+  },
+  clearButtonText: {
+    color: '#fff'
   }
 });
 
 const mapStateToProps = state => {
-  const { recentSearches } = state.recentSearches;
+  const { recentSearches, recentSearchesLoaded } = state.recentSearches;
   return {
-    recentSearches
+    recentSearches,
+    recentSearchesLoaded
   };
 };
 
 export default connect(
   mapStateToProps,
-  { setRecentSearches }
+  { populatePerson, populateSearchResults, setRecentSearches }
 )(RecentSearches);

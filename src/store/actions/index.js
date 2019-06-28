@@ -20,9 +20,12 @@ import {
   RESET_PERSON,
   SET_RECENT_SEARCHES,
   SET_REDIRECT_PATH,
-  CLEAR_REDIRECT_PATH
+  CLEAR_REDIRECT_PATH,
+  POPULATE_SEARCH_RESULTS,
+  POPULATE_PERSON
 } from './actionTypes';
 import constants from '../../helpers/constants';
+import saveToRecentSearches from '../../helpers/saveToRecentSearches';
 
 export const fetchSearchResult = (
   body,
@@ -33,7 +36,7 @@ export const fetchSearchResult = (
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
   axios
-    .post(`${constants.devURL}`, body)
+    .post(`${constants.devURL}`, body.requestObject)
     .then(res => {
       if (res.data.possible_persons) {
         dispatch({
@@ -41,6 +44,14 @@ export const fetchSearchResult = (
           payload: res.data.possible_persons
         });
         eventTrack(createEvent('success'));
+        // SAVE TO RECENT SEARCH
+        if (body.searchType && body.searchInput) {
+          saveToRecentSearches({
+            searchType: body.searchType,
+            searchInput: body.searchInput,
+            data: res.data.possible_persons
+          });
+        }
       } else if (res.data.person) {
         isPerson = true;
         dispatch({
@@ -48,6 +59,14 @@ export const fetchSearchResult = (
           payload: res.data.person
         });
         eventTrack(createEvent(['success']));
+        // SAVE TO RECENT SEARCH
+        if (body.searchType && body.searchInput) {
+          saveToRecentSearches({
+            searchType: body.searchType,
+            searchInput: body.searchInput,
+            data: res.data.person
+          });
+        }
       } else if (res.data.persons_count === 0) {
         dispatch({
           type: FETCH_SEARCH_RESULT_FAILURE,
@@ -156,4 +175,12 @@ export const setRedirectPath = path => {
 
 export const clearRedirectPath = () => {
   return { type: CLEAR_REDIRECT_PATH };
+};
+
+export const populateSearchResults = data => {
+  return { type: POPULATE_SEARCH_RESULTS, payload: data };
+};
+
+export const populatePerson = data => {
+  return { type: POPULATE_PERSON, payload: data };
 };

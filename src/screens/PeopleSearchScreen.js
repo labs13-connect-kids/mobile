@@ -82,22 +82,26 @@ class PeopleSearchScreen extends React.Component {
       navigation
     } = this.props;
 
+    const body = {};
     const requestObject = {};
 
     if (isLoggedIn) {
       requestObject['authToken'] = accessToken;
       requestObject['idToken'] = idToken;
-      saveToRecentSearches({
-        searchType: searchType,
-        searchInput: searchInput,
-        formattedObject: person
-      });
+      // Add to save to recent searcg
+      body['searchType'] = searchType;
+      body['searchInput'] = searchInput;
+      // saveToRecentSearches({
+      //   searchType: searchType,
+      //   searchInput: searchInput,
+      //   formattedObject: person
+      // });
     }
 
     requestObject['person'] = this.handleEncodeURI(person);
-
+    body['requestObject'] = JSON.stringify(requestObject);
     fetchSearchResult(
-      JSON.stringify(requestObject),
+      body,
       () => navigation.navigate('SearchResult'),
       this.props.eventTrack,
       this.createEvent
@@ -128,7 +132,7 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, navigation } = this.props;
     return (
       <Container style={styles.container}>
         <RegisterModalsContainer
@@ -189,7 +193,10 @@ class PeopleSearchScreen extends React.Component {
                 </>
               ) : null}
               {isLoggedIn && (
-                <RecentSearches handleSearch={this.handleSearchRequest} />
+                <RecentSearches
+                  handleSearch={this.handleSearchRequest}
+                  navigation={navigation}
+                />
               )}
             </View>
           </ScrollView>
