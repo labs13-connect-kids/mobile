@@ -10,7 +10,6 @@ import {
   isUrl
 } from '../../helpers/inputValidators';
 import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
-import saveToRecentSearches from '../../helpers/saveToRecentSearches';
 
 class SearchForm extends Component {
   state = {

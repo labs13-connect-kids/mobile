@@ -1,38 +1,22 @@
 import { AsyncStorage } from 'react-native';
-
-// need to add this in
-const capcity = 3;
-
-// class LinkedList {
-//   constructor() {
-//     this.head = null;
-//   }
-// }
-
-// class ListNode {
-//   constructor(data) {
-//     this.data = data;
-//     this.next = null;
-//   }
-// }
+import { parse, stringify } from 'flatted/esm';
+import LRUCache from '../helpers/LRUCache';
 
 async function saveToRecentSearches(newSearch) {
   try {
-    let storageSearches = await AsyncStorage.getItem('recentSearches');
-    storageSearches = !storageSearches ? [] : JSON.parse(storageSearches);
-
-    if (!storageSearches.length) {
-      storageSearches.push(newSearch);
-    } else if (storageSearches.length < capcity) {
-      storageSearches.unshift(newSearch);
+    let storageSearches = await AsyncStorage.getItem('recentSearchesCache');
+    if (!storageSearches) {
+      storageSearches = new LRUCache();
     } else {
-      // remove oldest search
-      storageSearches.pop();
-      // add newest search to front
-      storageSearches.unshift(newSearch);
+      storageSearches = JSON.parse(storageSearches);
+      console.log(storageSearches);
+
+      storageSearches.__proto__ = new LRUCache();
     }
+    storageSearches.put(newSearch);
+    console.log('AFTER PUT', storageSearches);
     await AsyncStorage.setItem(
-      'recentSearches',
+      'recentSearchesCache',
       JSON.stringify(storageSearches)
     );
   } catch (error) {
