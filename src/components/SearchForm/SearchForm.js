@@ -288,11 +288,11 @@ class SearchForm extends Component {
           </Tab>
         </Tabs>
         <View style={{ flexDirection: 'row' }}>
-          <Button info style={styles.button} onPress={this.handleFormSubmit}>
+          <Button style={styles.button} onPress={this.handleFormSubmit}>
             <Text style={styles.buttonText}> Search </Text>
           </Button>
 
-          <Button info style={styles.greyButton} onPress={this.startOver}>
+          <Button style={styles.greyButton} onPress={this.startOver}>
             <Text style={styles.buttonText}> Start Over </Text>
           </Button>
         </View>
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   button: {
     margin: 10,
     padding: 10,
-    backgroundColor: '#508DB3'
+    backgroundColor: `${constants.highlightColor}`
   },
 
   tab: {
@@ -338,13 +338,13 @@ const styles = StyleSheet.create({
     color: '#64aab8',
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
+    backgroundColor: `${constants.highlightColor}`,
     borderRadius: 10,
     marginBottom: 20
   },
   matchesText: {
     fontSize: 20,
-    color: '#508DB3',
+    color: `${constants.highlightColor}`,
     marginBottom: 20
   },
   greyButton: {

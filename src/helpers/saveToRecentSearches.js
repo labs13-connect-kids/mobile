@@ -8,12 +8,10 @@ async function saveToRecentSearches(newSearch) {
       storageSearches = new LRUCache();
     } else {
       storageSearches = JSON.parse(storageSearches);
-      console.log(storageSearches);
-
+      // give the LRU Cache class it's proto back
       storageSearches.__proto__ = new LRUCache();
     }
     storageSearches.put(newSearch);
-    console.log('AFTER PUT', storageSearches);
     await AsyncStorage.setItem(
       'recentSearchesCache',
       JSON.stringify(storageSearches)

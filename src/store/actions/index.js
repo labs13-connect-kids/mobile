@@ -22,7 +22,9 @@ import {
   SET_REDIRECT_PATH,
   CLEAR_REDIRECT_PATH,
   POPULATE_SEARCH_RESULTS,
-  POPULATE_PERSON
+  POPULATE_PERSON,
+  SAVING_RECENT_SEARCHES,
+  STOP_SAVING_RECENT_SEARCHES
 } from './actionTypes';
 import constants from '../../helpers/constants';
 import saveToRecentSearches from '../../helpers/saveToRecentSearches';
@@ -51,6 +53,7 @@ export const fetchSearchResult = (
             searchInput: body.searchInput,
             data: res.data.possible_persons
           });
+          dispatch({ type: SAVING_RECENT_SEARCHES });
         }
       } else if (res.data.person) {
         isPerson = true;
@@ -66,6 +69,7 @@ export const fetchSearchResult = (
             searchInput: body.searchInput,
             data: res.data.person
           });
+          dispatch({ type: SAVING_RECENT_SEARCHES });
         }
       } else if (res.data.persons_count === 0) {
         dispatch({
@@ -183,4 +187,7 @@ export const populateSearchResults = data => {
 
 export const populatePerson = data => {
   return { type: POPULATE_PERSON, payload: data };
+};
+export const stopSavingRecentSearches = () => {
+  return { type: STOP_SAVING_RECENT_SEARCHES };
 };

@@ -12,7 +12,8 @@ import { Button } from 'native-base';
 import {
   populatePerson,
   populateSearchResults,
-  setRecentSearches
+  setRecentSearches,
+  stopSavingRecentSearches
 } from '../../store/actions';
 import constants from '../../helpers/constants';
 
@@ -25,28 +26,27 @@ class RecentSearches extends Component {
         cache = JSON.parse(cache);
         let searches = [...cache.cacheOrder];
         this.props.setRecentSearches(searches);
+      } else {
+        this.props.setRecentSearches([]);
       }
     } catch (error) {
       console.log(error);
     }
   }
 
-  // async componentDidUpdate(prevProps) {
-  //   console.log('CDM RECENT');
-  //   let cache = await AsyncStorage.getItem('recentSearchesCache');
-  //   if (cache !== null) {
-  //     cache = JSON.parse(cache);
-  //     console.log('PREVPROPS', prevProps.recentSearches);
-  //     if (
-  //       prevProps.recentSearches.length &&
-  //       prevProps.recentSearches[0].searchInput !==
-  //         cache.cacheOrder[0].searchInput
-  //     ) {
-  //       console.log('PREVPROPS II', prevProps.recentSearches);
-  //       this.props.setRecentSearches(cache.cacheOrder);
-  //     }
-  //   }
-  // }
+  async componentDidUpdate(prevProps) {
+    console.log('CDM RECENT');
+    // set boolean
+    if (this.props.isSavingRecentSearches) {
+      console.log('CDM INSIDE');
+      let cache = await AsyncStorage.getItem('recentSearchesCache');
+      cache = JSON.parse(cache);
+      if (cache !== null) {
+        this.props.setRecentSearches(cache.cacheOrder);
+      }
+      this.props.stopSavingRecentSearches();
+    }
+  }
 
   clearRecentSearches = async () => {
     try {
@@ -72,7 +72,7 @@ class RecentSearches extends Component {
 
     return (
       <View style={{ padding: 20 }}>
-        <Text>Recent Searches:</Text>
+        <Text style={styles.recentSearchesText}>Recent Searches:</Text>
         {recentSearchesLoaded ? (
           <>
             {recentSearches.length ? (
@@ -96,7 +96,11 @@ class RecentSearches extends Component {
                   <Text style={styles.clearButtonText}>Clear</Text>
                 </Button>
               </View>
-            ) : null}
+            ) : (
+              <Text style={styles.noRecentSearchesText}>
+                Start searching to save your most recent search results!
+              </Text>
+            )}
           </>
         ) : (
           <ActivityIndicator />
@@ -107,6 +111,9 @@ class RecentSearches extends Component {
 }
 
 const styles = StyleSheet.create({
+  recentSearchesText: {
+    fontFamily: `${constants.fontFamily}`
+  },
   recentSearchButton: {
     marginBottom: 10,
     paddingTop: 10,
@@ -114,19 +121,30 @@ const styles = StyleSheet.create({
   },
   recentSearchButtonText: {
     fontSize: 20,
-    color: `${constants.highlightColor}`
+    color: `${constants.highlightColor}`,
+    fontFamily: `${constants.fontFamily}`
   },
   clearButton: {
     padding: 20
   },
   clearButtonText: {
     color: '#fff'
+  },
+  noRecentSearchesText: {
+    color: `${constants.highlightColor}`,
+    fontFamily: `${constants.fontFamily}`
   }
 });
 
 const mapStateToProps = state => {
-  const { recentSearches, recentSearchesLoaded } = state.recentSearches;
+  const {
+    isSavingRecentSearches,
+    recentSearches,
+    recentSearchesLoaded
+  } = state.recentSearches;
+
   return {
+    isSavingRecentSearches,
     recentSearches,
     recentSearchesLoaded
   };
@@ -134,5 +152,10 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { populatePerson, populateSearchResults, setRecentSearches }
+  {
+    populatePerson,
+    populateSearchResults,
+    setRecentSearches,
+    stopSavingRecentSearches
+  }
 )(RecentSearches);
