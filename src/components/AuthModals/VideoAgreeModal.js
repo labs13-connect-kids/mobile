@@ -40,6 +40,7 @@ const VideoAgreeModal = props => {
           onPress={() => {
             props.setModalVisible(false);
             props.onLogin();
+            props.sendEvent(null, 'click', 'do-not-watch-video');
           }}
         >
           <Text style={styles.btnText}>Skip the video</Text>

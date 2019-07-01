@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Button, Tabs, Tab, Input } from 'native-base';
 import constants from '../../helpers/constants';
 import {

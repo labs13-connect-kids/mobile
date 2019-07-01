@@ -4,6 +4,7 @@ import SocialWorkerModal from './SocialWorkerModal';
 import VideoAgreeModal from './VideoAgreeModal';
 import VideoModal from './VideoModal';
 import constants from '../../helpers/constants';
+import { sendEvent } from './../../helpers/createEvent';
 
 const RegisterModalsContainer = props => {
   return (
@@ -22,6 +23,7 @@ const RegisterModalsContainer = props => {
               modalVisible={props.modalVisible}
               advanceModal={props.setAgreeModalVisible}
               setModalVisible={props.setModalVisible}
+              sendEvent={sendEvent}
             />
           )}
           {!props.videoVisible && props.videoAgree && (
@@ -30,12 +32,14 @@ const RegisterModalsContainer = props => {
               advanceModal={props.setVideoPlayerModalVisible}
               setModalVisible={props.setModalVisible}
               onLogin={props.onLogin}
+              sendEvent={sendEvent}
             />
           )}
           {!props.videoAgree && props.videoVisible && (
             <VideoModal
               setModalVisible={props.setModalVisible}
               onLogin={props.onLogin}
+              sendEvent={sendEvent}
             />
           )}
         </View>

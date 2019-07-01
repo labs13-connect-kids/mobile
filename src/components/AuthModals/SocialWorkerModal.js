@@ -39,6 +39,7 @@ const SocialWorkerModal = props => {
           style={styles.noButton}
           block
           onPress={() => {
+            props.sendEvent(null, 'click', 'i-am-not-a-social-worker');
             Linking.openURL('https://connectourkids.org');
           }}
         >

@@ -11,7 +11,7 @@ import {
 import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AsyncStorage } from 'react-native';
-import { setUserCreds, logOut, clearRedirectPath } from '../store/actions';
+import { setUserCreds, logOut } from '../store/actions';
 import { connect } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 
@@ -34,10 +34,6 @@ class BestPracticesScreen extends Component {
       const decoded = jwtDecode(jwtToken);
 
       this.props.setUserCreds(decoded, confirmedUser);
-      if (this.props.redirectPath !== '') {
-        this.props.navigation.navigate(this.props.redirectPath);
-        this.props.clearRedirectPath();
-      }
     }
   }
 
@@ -180,14 +176,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { isLoggedIn, redirectPath } = state.auth;
+  const { isLoggedIn } = state.auth;
   return {
-    isLoggedIn,
-    redirectPath
+    isLoggedIn
   };
 };
 
 export default connect(
   mapStateToProps,
-  { setUserCreds, logOut, clearRedirectPath }
+  { setUserCreds, logOut }
 )(BestPracticesScreen);

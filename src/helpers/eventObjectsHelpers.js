@@ -1,10 +1,10 @@
 export { notLoggedIn, loggedIn, optionTypes };
 
 const notLoggedIn = {
-  stopVideo: 'click-do-not-watch-video',
-  notSocialWorker: 'click-i-am-not-a-social-worker',
-  logo: 'click-logo',
-  modalSignUp: 'click-post-watch-video-sign-up',
+  // stopVideo: 'click-do-not-watch-video',
+  // notSocialWorker: 'click-i-am-not-a-social-worker',
+  // logo: 'click-logo',
+  // modalSignUp: 'click-post-watch-video-sign-up',
   personClick: 'click-possible_person',
   signUp: 'click-sign-up',
   watchVideo: 'click-watch-video',
@@ -15,8 +15,8 @@ const notLoggedIn = {
 };
 const loggedIn = {
   clickRelationship: 'click-relationship',
-  logo: 'click-logo',
-  logOut: 'click-logout',
+  // logo: 'click-logo',
+  // logOut: 'click-logout',
   clickAddressSearch: 'click-person_address_search',
   clickAddressView: 'click-person_address_view',
   clickEmailSearch: 'click-person_email_search',

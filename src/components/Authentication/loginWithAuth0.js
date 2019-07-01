@@ -1,26 +1,11 @@
 import React, { Component } from 'react';
 import authHelpers from '../../helpers/authHelpers';
 import { connect } from 'react-redux';
-import { setUserCreds, logOut, clearRedirectPath } from '../../store/actions';
+import { setUserCreds, logOut } from '../../store/actions';
 import Login from './Login';
 
 class Auth0LoginContainer extends Component {
   onRegister = () => {};
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log('CDU');
-    if (
-      prevProps.user === null &&
-      this.props.user !== null &&
-      this.props.redirectPath !== ''
-    ) {
-      console.log('CDU conditional firing');
-      this.props.navigation.navigate(this.props.redirectPath);
-      // this.props.navigation.navigate('FamilyConnections');
-      this.props.setModalVisible(false);
-      // this.props.clearRedirectPath();
-    }
-  }
 
   render() {
     console.log('login props: ', this.props);
@@ -39,6 +24,7 @@ class Auth0LoginContainer extends Component {
             this.props.setUserCreds
           )
         }
+        email={this.props.user ? this.props.user.email : null}
         isLoggedIn={this.props.isLoggedIn}
         logOut={this.props.logOut}
         setModalVisible={this.props.setModalVisible}
@@ -48,11 +34,11 @@ class Auth0LoginContainer extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user, isLoggedIn, authToken, idToken, redirectPath } = state.auth;
-  return { user, isLoggedIn, authToken, idToken, redirectPath };
+  const { user, isLoggedIn, authToken, idToken } = state.auth;
+  return { user, isLoggedIn, authToken, idToken };
 };
 
 export default connect(
   mapStateToProps,
-  { setUserCreds, logOut, clearRedirectPath }
+  { setUserCreds, logOut }
 )(Auth0LoginContainer);

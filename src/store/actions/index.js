@@ -14,8 +14,6 @@ import {
   SET_VIDEO_PLAYER_VISIBLE,
   RESET_PERSON,
   SET_RECENT_SEARCHES,
-  SET_REDIRECT_PATH,
-  CLEAR_REDIRECT_PATH,
   POPULATE_SEARCH_RESULTS,
   POPULATE_PERSON,
   SAVING_RECENT_SEARCHES,
@@ -26,6 +24,7 @@ import {
 } from './actionTypes';
 import constants from '../../helpers/constants';
 import saveToRecentSearches from '../../helpers/saveToRecentSearches';
+import { sendEvent, createObject } from './../../helpers/createEvent';
 
 export const fetchSearchResult = (
   body,
@@ -114,7 +113,8 @@ export const setUserCreds = (decodedToken, auth0Data) => {
   return { type: SET_USER_CREDS, decodedToken, auth0Data };
 };
 
-export const logOut = () => {
+export const logOut = email => {
+  sendEvent(email, 'click', 'logout');
   return { type: LOG_OUT };
 };
 
@@ -136,14 +136,6 @@ export const resetPerson = () => {
 
 export const setRecentSearches = recentSearches => {
   return { type: SET_RECENT_SEARCHES, payload: recentSearches };
-};
-
-export const setRedirectPath = path => {
-  return { type: SET_REDIRECT_PATH, payload: path };
-};
-
-export const clearRedirectPath = () => {
-  return { type: CLEAR_REDIRECT_PATH };
 };
 
 export const populateSearchResults = data => {
