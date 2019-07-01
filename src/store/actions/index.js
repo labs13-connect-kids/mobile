@@ -24,25 +24,30 @@ import {
 } from './actionTypes';
 import constants from '../../helpers/constants';
 import saveToRecentSearches from '../../helpers/saveToRecentSearches';
-import { sendEvent, createObject } from './../../helpers/createEvent';
+import { sendEvent, createOptions } from './../../helpers/createEvent';
 
-export const fetchSearchResult = (
-  body,
-  cb,
-  eventTrack,
-  createEvent
-) => dispatch => {
+export const fetchSearchResult = (body, cb, email) => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
+  let options;
   axios
     .post(`${constants.devURL}`, body.requestObject)
     .then(res => {
       if (res.data.possible_persons) {
+        options = createOptions(res.data.possible_persons.length, null, null);
         dispatch({
           type: FETCH_PEOPLE_SUCCESS,
           payload: res.data.possible_persons
         });
-        eventTrack(createEvent('success'));
+        console.log(
+          'Sent payload people',
+          email,
+          'search',
+          'person',
+          'success',
+          options
+        );
+        sendEvent(email, 'search', 'person', 'success', options);
         // SAVE TO RECENT SEARCH
         if (body.searchType && body.searchInput) {
           saveToRecentSearches({
@@ -53,12 +58,21 @@ export const fetchSearchResult = (
           dispatch({ type: SAVING_RECENT_SEARCHES });
         }
       } else if (res.data.person) {
+        options = createOptions(0, null, null);
         isPerson = true;
         dispatch({
           type: FETCH_PERSON_SUCCESS,
           payload: res.data.person
         });
-        eventTrack(createEvent(['success']));
+        console.log(
+          'Sent payload person',
+          email,
+          'search',
+          'person',
+          'success',
+          options
+        );
+        sendEvent(email, 'search', 'person', 'success', options);
         // SAVE TO RECENT SEARCH
         if (body.searchType && body.searchInput) {
           saveToRecentSearches({
@@ -73,7 +87,7 @@ export const fetchSearchResult = (
           type: FETCH_SEARCH_RESULT_FAILURE,
           payload: true
         });
-        eventTrack(createEvent(['failed']));
+        sendEvent(email, 'search', 'person', 'success', options);
       }
     })
     .then(() => {
@@ -83,8 +97,8 @@ export const fetchSearchResult = (
     })
     .catch(err => {
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
-
-      eventTrack(createEvent('failed'));
+      console.log('search catch');
+      sendEvent(email, 'search', 'person', 'failed');
     });
 };
 

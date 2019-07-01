@@ -20,7 +20,7 @@ const setItem = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
   } catch (e) {
-    console.log('SET TOKEN ERROR', e);
+    // console.log('SET TOKEN ERROR', e);
   }
 };
 const _loginWithAuth0 = async () => {

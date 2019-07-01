@@ -37,7 +37,7 @@ const PersonInfoRow = ({
         showConModal(key, type);
       }
       if (isLoggedIn && itemKey === 'relationships') {
-        console.log('THIS IS RELATIONSHIP KEY', key);
+        // console.log('THIS IS RELATIONSHIP KEY', key);
         const type = 'name';
         showConModal(key, type);
       }

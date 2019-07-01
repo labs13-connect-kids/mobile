@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log('redux state FCS: ', state);
+  // console.log('redux state FCS: ', state);
   return {
     email: state.auth.user ? state.auth.user.email : null
   };

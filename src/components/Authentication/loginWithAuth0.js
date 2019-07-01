@@ -8,7 +8,7 @@ class Auth0LoginContainer extends Component {
   onRegister = () => {};
 
   render() {
-    console.log('login props: ', this.props);
+    // console.log('login props: ', this.props);
     return (
       <Login
         navigation={this.props.navigation}

@@ -50,6 +50,7 @@ export const sendEvent = (
 };
 
 export const createOptions = (listLength, noun, index) => {
+  console.log('listLength', listLength, ' noun ', noun, ' index ', index);
   let options = {};
   if (listLength === null) {
     options[`${noun}Index`] = index;

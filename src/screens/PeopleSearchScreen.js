@@ -86,7 +86,8 @@ class PeopleSearchScreen extends React.Component {
       fetchSearchResult,
       idToken,
       isLoggedIn,
-      navigation
+      navigation,
+      user
     } = this.props;
 
     const body = {};
@@ -110,8 +111,7 @@ class PeopleSearchScreen extends React.Component {
     fetchSearchResult(
       body,
       () => navigation.navigate('SearchResult'),
-      this.props.eventTrack,
-      this.createEvent
+      user ? user.email : null
     );
   };
 
