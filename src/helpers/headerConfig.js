@@ -11,14 +11,18 @@ import React from 'react';
 
 export default (headerConfig = (title, navigation) => {
   return {
-    headerTitle: <HeaderTitle title={title} />,
+    headerTitle: <HeaderTitle title={title} navigation={navigation} />,
     headerLeft:
       Platform.OS === 'ios' ? (
-        <Image
-          source={logoImg}
-          style={styles.imageStyles}
-          resizeMode="contain"
-        />
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate('BestPractices')}
+        >
+          <Image
+            source={logoImg}
+            style={styles.imageStyles}
+            resizeMode="contain"
+          />
+        </TouchableWithoutFeedback>
       ) : null,
     headerRight: (
       <TouchableWithoutFeedback
