@@ -30,6 +30,9 @@ import constants from '../helpers/constants';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
+import RecentSearches from '../components/RecentSearches/RecentSearches';
+
+import saveToRecentSearches from '../helpers/saveToRecentSearches';
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 
@@ -76,7 +79,7 @@ class PeopleSearchScreen extends React.Component {
     return encodeURI(JSON.stringify(person));
   };
 
-  handleSearchRequest = person => {
+  handleSearchRequest = (person, searchType, searchInput) => {
     const {
       accessToken,
       fetchSearchResult,
@@ -84,17 +87,27 @@ class PeopleSearchScreen extends React.Component {
       isLoggedIn,
       navigation
     } = this.props;
+
+    const body = {};
     const requestObject = {};
 
     if (isLoggedIn) {
       requestObject['authToken'] = accessToken;
       requestObject['idToken'] = idToken;
+      // Add to save to recent searcg
+      body['searchType'] = searchType;
+      body['searchInput'] = searchInput;
+      // saveToRecentSearches({
+      //   searchType: searchType,
+      //   searchInput: searchInput,
+      //   formattedObject: person
+      // });
     }
 
     requestObject['person'] = this.handleEncodeURI(person);
-
+    body['requestObject'] = JSON.stringify(requestObject);
     fetchSearchResult(
-      JSON.stringify(requestObject),
+      body,
       () => navigation.navigate('SearchResult'),
       this.props.eventTrack,
       this.createEvent
@@ -125,7 +138,7 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, navigation } = this.props;
     return (
       <Container style={styles.container}>
         <RegisterModalsContainer
@@ -186,6 +199,12 @@ class PeopleSearchScreen extends React.Component {
                   />
                 </>
               ) : null}
+              {isLoggedIn && (
+                <RecentSearches
+                  handleSearch={this.handleSearchRequest}
+                  navigation={navigation}
+                />
+              )}
             </View>
           </ScrollView>
         </SafeAreaView>
