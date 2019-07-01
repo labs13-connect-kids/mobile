@@ -31,25 +31,25 @@ const PersonInfoRow = ({
     let OohKillEm = key => {
       if (!isLoggedIn) startRegister();
 
-      if ( isLoggedIn && itemKey === 'emails' ){
+      if (isLoggedIn && itemKey === 'emails') {
         const type = 'email'
-        showConModal( key, type );
+        showConModal(key, type);
       }
-      if ( isLoggedIn && itemKey === 'phones' ){
+      if (isLoggedIn && itemKey === 'phones') {
         const type = 'phone'
-        showConModal( key, type );
+        showConModal(key, type);
       }
-      if ( isLoggedIn && itemKey === 'addresses' ){
+      if (isLoggedIn && itemKey === 'addresses') {
         let address = `${key.house} ${key.street}`;
         const type = 'address'
-        showConModal( address, type );
+        showConModal(address, type);
       }
-      if ( isLoggedIn && itemKey === 'urls' ){
+      if (isLoggedIn && itemKey === 'urls') {
         const type = 'url'
-        showConModal( key, type );
+        showConModal(key, type);
       }
-      if ( isLoggedIn && itemKey === 'relationships' ){
-        console.log('THIS IS RELATIONSHIP KEY' , key)
+      if (isLoggedIn && itemKey === 'relationships') {
+        console.log('THIS IS RELATIONSHIP KEY', key)
         const type = 'name'
         showConModal( key, type );
       }
@@ -74,7 +74,7 @@ const PersonInfoRow = ({
     // };
 
     return (
-      <Row style={ styles.rowContainer }>
+      <Row style={styles.rowContainer}>
         <Col size={30} style={styles.rowLabel}>
           <Text style={styles.rowLabelText}>{title}</Text>
         </Col>
@@ -103,7 +103,7 @@ const PersonInfoRow = ({
               );
             } else if (itemKey === 'relationships') {
               return (
-                <TouchableOpacity style={styles.colListContainer} key={ index } onPress={() => OohKillEm(key[itemValue][0].display)}>
+                <TouchableOpacity style={styles.colListContainer} key={index} onPress={() => OohKillEm(key[itemValue][0].display)}>
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(key[itemValue][0].display, itemKey)}
                   </Text>
@@ -111,7 +111,7 @@ const PersonInfoRow = ({
               );
             } else {
               return (
-                <TouchableOpacity style={styles.colListContainer} key={ index} >
+                <TouchableOpacity style={styles.colListContainer} key={index} >
                   <Text style={styles.colListText} onPress={() => OohKillEm(key)}>
                     {renderMaskedOrResult(key[itemValue], itemKey)}
                   </Text>
