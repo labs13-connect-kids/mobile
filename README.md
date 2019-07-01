@@ -64,11 +64,23 @@ People Search API [development api](https://dev.search.connectourkids.org/)
 
 ## Requirements
 
-🚫 These are examples, make sure this matches your project's requirements
-
-- iOS 8.0+
-- Xcode 7.3
-- Cocoa Pods
+- iOS 10.0+
+- Android 5.0+
+- Axios https://www.npmjs.com/package/axios
+- Expo https://docs.expo.io/versions/latest/introduction/faq/
+- Expo-Constants https://www.npmjs.com/package/expo-constants
+- Expo-Font https://www.npmjs.com/package/expo-font
+- Native-Base https://www.npmjs.com/package/native-base
+- React https://reactjs.org/
+- React-Dom https://www.npmjs.com/package/react-dom
+- React-Native https://github.com/facebook/react-native
+- React-Native-Auth0 https://www.npmjs.com/package/react-native-auth0
+- React-Native-Web https://github.com/necolas/react-native-web
+- React-Navigation https://reactnavigation.org/
+- React-Redux https://react-redux.js.org/
+- Redux https://redux.js.org/
+- Redux_Devtools-Extension https://www.npmjs.com/package/redux-devtools-extension
+- Redux-Thunk https://www.npmjs.com/package/redux-thunk
 
 ## Contributing
 
