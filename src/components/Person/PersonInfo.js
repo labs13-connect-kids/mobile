@@ -43,6 +43,7 @@ const PersonInfo = ({ item, startRegister, isLoggedIn, showConModal }) => {
         />
       )}
       <PersonInfoRow
+        showConModal={showConModal}
         startRegister={startRegister}
         item={item}
         itemKey="relationships"

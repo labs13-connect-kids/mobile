@@ -48,25 +48,30 @@ const PersonInfoRow = ({
         const type = 'url'
         showConModal( key, type );
       }
+      if ( isLoggedIn && itemKey === 'relationships' ){
+        console.log('THIS IS RELATIONSHIP KEY' , key)
+        const type = 'name'
+        showConModal( key, type );
+      }
     }
 
-    let OnPress = key => {
-      if (!isLoggedIn) startRegister();
-      console.log('THIS IS KEY', key);
-      if (isLoggedIn) {
-        if (itemKey === 'emails') {
-          // console.log( 'key and item value', key[itemValue] )
-          Linking.openURL(`mailto:${key[itemValue]}`);
-        } else if (itemKey === 'phones') {
-          Linking.openURL(`tel:${key[itemValue]}`);
-        } else if (itemKey === 'urls') {
-          Linking.openURL(`${key['url']}`);
-        } else if (itemKey === 'addresses') {
-          let address = `${key.house} ${key.street}`;
-          handlePressDirections(address, key['zip_code'], key['city']);
-        }
-      }
-    };
+    // let OnPress = key => {
+    //   if (!isLoggedIn) startRegister();
+    //   console.log('THIS IS KEY', key);
+    //   if (isLoggedIn) {
+    //     if (itemKey === 'emails') {
+    //       // console.log( 'key and item value', key[itemValue] )
+    //       Linking.openURL(`mailto:${key[itemValue]}`);
+    //     } else if (itemKey === 'phones') {
+    //       Linking.openURL(`tel:${key[itemValue]}`);
+    //     } else if (itemKey === 'urls') {
+    //       Linking.openURL(`${key['url']}`);
+    //     } else if (itemKey === 'addresses') {
+    //       let address = `${key.house} ${key.street}`;
+    //       handlePressDirections(address, key['zip_code'], key['city']);
+    //     }
+    //   }
+    // };
 
     return (
       <Row style={ styles.rowContainer }>
@@ -98,7 +103,7 @@ const PersonInfoRow = ({
               );
             } else if (itemKey === 'relationships') {
               return (
-                <TouchableOpacity style={styles.colListContainer} key={ index }>
+                <TouchableOpacity style={styles.colListContainer} key={ index } onPress={() => OohKillEm(key[itemValue][0].display)}>
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(key[itemValue][0].display, itemKey)}
                   </Text>
@@ -107,7 +112,6 @@ const PersonInfoRow = ({
             } else {
               return (
                 <TouchableOpacity style={styles.colListContainer} key={ index} >
-                  {/* <Text style={styles.colListText} onPress={() => OnPress(key)}> */}
                   <Text style={styles.colListText} onPress={() => OohKillEm(key)}>
                     {renderMaskedOrResult(key[itemValue], itemKey)}
                   </Text>

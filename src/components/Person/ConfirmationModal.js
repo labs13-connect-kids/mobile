@@ -33,7 +33,7 @@ export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData
                     </View>
                     <Text style={options.question}>Would you like to send an email, or perform a search?</Text>
                 </View>
-            : null}
+                : null}
             {type === 'phone' ?
                 <View>
                     <View style={options.border}>
@@ -44,7 +44,7 @@ export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData
                     </View>
                     <Text style={options.question}>Would you like to call this number, or perform a search? Calling requires a device capable of dialing phone numbers.</Text>
                 </View>
-            : null}
+                : null}
             {type === 'address' ?
                 <View>
                     <View style={options.border}>
@@ -55,7 +55,7 @@ export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData
                     </View>
                     <Text style={options.question}>Would you like to view this address on a map, or perform a search on it?</Text>
                 </View>
-            : null}
+                : null}
             {type === 'url' ?
                 <View>
                     <View style={options.border}>
@@ -66,39 +66,58 @@ export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData
                     </View>
                     <Text style={options.question}>Would you like to view this URL, or perform a search on it?</Text>
                 </View>
-            : null}
+                : null}
+            {type === 'name' ?
+                <View>
+                    <View style={options.border}>
+                        <Text style={options.header}>View Relationship or Search?</Text>
+                        <TouchableOpacity onPress={() => toggleModal()}>
+                            <Text style={options.button}>❌</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={options.question}>Would you like to view this relation, or perform a search on them?</Text>
+                </View>
+                : null}
             <View style={options.buttonContainer}>
-                <Button info style={options.blueButton} onPress={() => {
-                    if (type === 'email') {
-                        console.log('EMAIL TO:', data.address)
-                        Linking.openURL(`mailto:${data.address}`);
-                    }
-                    if (type === 'phone') {
-                        console.log('CALL TO:', data.number)
-                        Linking.openURL(`tel:${data.number}`);
-                    }
-                    if (type === 'address') {
-                        console.log('MAP TO:', data)
-                        handlePressDirections(data);
-                    }
-                    if (type === 'url') {
-                        console.log('URL TO:', data)
-                        Linking.openURL(`${data.url}`);
-                    }
-                }}>
-                    {type === 'email' ?
-                        <Text style = {{ color: 'white' }}>Send Email</Text>
-                    : null}
-                    {type === 'phone' ?
-                        <Text style = {{ color: 'white' }}>Call this number</Text>
-                    : null}
-                    {type === 'address' ?
-                        <Text style = {{ color: 'white' }}>View on map</Text>
-                    : null}
-                    {type === 'url' ?
-                        <Text style = {{ color: 'white' }}>View the URL</Text>
-                    : null}
-                </Button>
+                {type === 'name' ?
+                    null
+                    :
+                    <Button info style={options.blueButton} onPress={() => {
+                        if (type === 'email') {
+                            console.log('EMAIL TO:', data.address)
+                            Linking.openURL(`mailto:${data.address}`);
+                        }
+                        if (type === 'phone') {
+                            console.log('CALL TO:', data.number)
+                            Linking.openURL(`tel:${data.number}`);
+                        }
+                        if (type === 'address') {
+                            console.log('MAP TO:', data)
+                            handlePressDirections(data);
+                        }
+                        if (type === 'url') {
+                            console.log('URL TO:', data)
+                            Linking.openURL(`${data.url}`);
+                        }
+                        if (type === 'name') {
+                            console.log('RELATIONSHIP TO:', data)
+                            Linking.openURL(`${data}`);
+                        }
+                    }}>
+                        {type === 'email' ?
+                            <Text style={{ color: 'white' }}>Send Email</Text>
+                            : null}
+                        {type === 'phone' ?
+                            <Text style={{ color: 'white' }}>Call this number</Text>
+                            : null}
+                        {type === 'address' ?
+                            <Text style={{ color: 'white' }}>View on map</Text>
+                            : null}
+                        {type === 'url' ?
+                            <Text style={{ color: 'white' }}>View the URL</Text>
+                            : null}
+                    </Button>
+                }
                 <Button info style={options.greyButton} onPress={() => {
                     if (type === 'email') {
                         info = data.address
@@ -124,8 +143,14 @@ export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData
                         navigation.navigate('PeopleSearch')
                         setData(info, type)
                     }
+                    if (type === 'name') {
+                        info = data
+                        console.log('RELATIONSHIP TO:', data)
+                        navigation.navigate('PeopleSearch')
+                        setData(info, type)
+                    }
                 }}>
-                    <Text style = {{ color: 'white' }}>Perform a Search</Text>
+                    <Text style={{ color: 'white' }}>Perform a Search</Text>
                 </Button>
             </View>
         </View >
@@ -135,11 +160,11 @@ export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData
 
 const options = StyleSheet.create({
     border: {
-        justifyContent: 'space-between', 
-        flexDirection: 'row' , 
+        justifyContent: 'space-between',
+        flexDirection: 'row',
         paddingBottom: 10,
-        borderBottomWidth: 1 , 
-        borderBottomColor: 'grey', 
+        borderBottomWidth: 1,
+        borderBottomColor: 'grey',
         width: '100%'
     },
     container: {
