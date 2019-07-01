@@ -16,5 +16,6 @@ export default {
       possibleMatches: 0,
       personMatch: true
     }
-  }
+  },
+  recentSearchesMaxSize: 3
 };

@@ -12,6 +12,7 @@
     "expo": "^33.0.0",
     "expo-constants": "~5.0.1",
     "expo-font": "~5.0.1",
+    "flatted": "^2.0.1",
     "jwt-decode": "^2.2.0",
     "native-base": "^2.12.1",
     "react": "16.8.3",

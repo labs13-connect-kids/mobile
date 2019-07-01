@@ -6,7 +6,9 @@ import {
   FETCH_SEARCH_RESULT,
   FETCH_SEARCH_RESULT_FAILURE,
   RESET_PERSON,
-  RESET_STATE
+  RESET_STATE,
+  POPULATE_SEARCH_RESULTS,
+  POPULATE_PERSON
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -53,6 +55,16 @@ export const peopleSearchReducer = (state = initialState, action) => {
       };
     case RESET_STATE:
       return initialState;
+    case POPULATE_SEARCH_RESULTS:
+      return {
+        ...state,
+        possiblePersons: [...action.payload]
+      };
+    case POPULATE_PERSON:
+      return {
+        ...state,
+        person: { ...action.payload }
+      };
     default:
       return state;
   }
