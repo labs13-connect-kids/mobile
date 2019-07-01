@@ -18,15 +18,6 @@ const PersonInfoRow = ({
 }) => {
 
   if (item[itemKey]) {
-    // handlePressDirections = (address, postalCode, city) => {
-    //   let daddr = encodeURIComponent(`${address} ${postalCode}, ${city}`);
-    //   console.log(daddr);
-    //   if (Platform.OS === 'ios') {
-    //     Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
-    //   } else {
-    //     Linking.openURL(`http://maps.google.com/?daddr=${daddr}`);
-    //   }
-    // };
 
     let OohKillEm = key => {
       if (!isLoggedIn) startRegister();
@@ -54,24 +45,6 @@ const PersonInfoRow = ({
         showConModal( key, type );
       }
     }
-
-    // let OnPress = key => {
-    //   if (!isLoggedIn) startRegister();
-    //   console.log('THIS IS KEY', key);
-    //   if (isLoggedIn) {
-    //     if (itemKey === 'emails') {
-    //       // console.log( 'key and item value', key[itemValue] )
-    //       Linking.openURL(`mailto:${key[itemValue]}`);
-    //     } else if (itemKey === 'phones') {
-    //       Linking.openURL(`tel:${key[itemValue]}`);
-    //     } else if (itemKey === 'urls') {
-    //       Linking.openURL(`${key['url']}`);
-    //     } else if (itemKey === 'addresses') {
-    //       let address = `${key.house} ${key.street}`;
-    //       handlePressDirections(address, key['zip_code'], key['city']);
-    //     }
-    //   }
-    // };
 
     return (
       <Row style={styles.rowContainer}>
