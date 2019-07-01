@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import { Button, Tabs, Tab, Input } from 'native-base';
 import constants from '../../helpers/constants';
-import { isName, isEmail, isPhone, isUrl } from '../../helpers/inputValidators';
+import {
+  isName,
+  isEmail,
+  isAddress,
+  isPhone,
+  isUrl
+} from '../../helpers/inputValidators';
+import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
+import { connect } from 'react-redux';
+import { getInfo, stopSearchMe } from '../../store/actions';
 
 class SearchForm extends Component {
   state = {
@@ -14,6 +23,17 @@ class SearchForm extends Component {
     url: '',
     tabPage: 0
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('SF CDU', this.props);
+    if (this.props.searchMe && this.props.queryType) {
+      this.inputHandler(this.props.queryType, this.props.info);
+      this.handleFormSubmit();
+      this.props.stopSearchMe();
+      console.log('Search Success');
+    }
+    console.log('its not starting');
+  }
 
   inputHandler = (name, value) => {
     const inputName = name;
@@ -61,32 +81,42 @@ class SearchForm extends Component {
       inputKey = key;
       inputValue = value;
     }
-
+    let searchType;
     if (isName(inputValue)) {
       if (!this.state.name) {
         this.setState({ name: inputValue, [inputKey]: '', tabPage: 0 });
       }
+      searchType = 'name';
       formattedObject = this.formatRequestObject(inputValue, 'name');
     } else if (isEmail(inputValue)) {
       if (!this.state.email) {
         this.setState({ email: inputValue, [inputKey]: '', tabPage: 1 });
       }
+      searchType = 'email';
       formattedObject = this.formatRequestObject(inputValue, 'email');
+    } else if (isAddress(inputValue)) {
+      if (!this.state.address) {
+        this.setState({ address: inputValue, [inputKey]: '', tabPage: 2 });
+      }
+      searchType = 'address';
+      formattedObject = this.formatRequestObject(inputValue, 'address');
     } else if (isPhone(inputValue)) {
       if (!this.state.phone) {
         this.setState({ phone: inputValue, [inputKey]: '', tabPage: 3 });
       }
+      searchType = 'phone';
       formattedObject = this.formatRequestObject(inputValue, 'phone');
     } else if (isUrl(inputValue)) {
       if (!this.state.url) {
         this.setState({ url: inputValue, [inputKey]: '', tabPage: 4 });
       }
+      searchType = 'url';
       formattedObject = this.formatRequestObject(inputValue, 'url');
     } else {
       console.log('your input is not valid');
     }
     if (formattedObject) {
-      this.props.handleSearch(formattedObject);
+      this.props.handleSearch(formattedObject, searchType, inputValue);
     } else {
       console.log('formattedObject: error');
     }
@@ -117,31 +147,13 @@ class SearchForm extends Component {
     switch (type) {
       case 'name':
         person.names = [];
-        let splitName = inputValue
-          .trim()
-          .replace(/,/g, '')
-          .split(' ');
-        if (splitName.length === 2) {
-          person.names.push({ first: splitName[0], last: splitName[1] });
-        } else if (splitName.length === 3) {
-          person.names.push({
-            first: splitName[0],
-            middle: splitName[2],
-            last: splitName[1]
-          });
-        }
+        const parsedName = parseName(inputValue);
+        person.names.push(parsedName);
 
         if (this.state.cityState.length) {
           person.addresses = [];
-          let splitAddress = this.state.cityState.trim().split(' ');
-          if (splitAddress.length > 1) {
-            let state = splitAddress.pop();
-            let city = splitAddress.join(' ').replace(/,/g, '');
-            person.addresses.push({
-              state: state,
-              city: city
-            });
-          }
+          const location = parseCityState(this.state.cityState);
+          person.addresses.push(location);
         }
         break;
 
@@ -150,6 +162,11 @@ class SearchForm extends Component {
         person.emails.push({
           address: inputValue
         });
+        break;
+      case 'address':
+        person.addresses = [];
+        const addresses = parseAddress(inputValue);
+        person.addresses.push(addresses);
         break;
 
       case 'phone':
@@ -186,6 +203,7 @@ class SearchForm extends Component {
   };
 
   render() {
+    console.log('IN RENDER', this.props);
     return (
       <View>
         <Tabs
@@ -199,6 +217,8 @@ class SearchForm extends Component {
             style={[styles.nameInput, { color: '#64aab8' }]}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View style={styles.nameInputFullWidth}>
               <Input
@@ -220,6 +240,8 @@ class SearchForm extends Component {
             heading="Email"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
@@ -234,6 +256,8 @@ class SearchForm extends Component {
             heading="Address"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
@@ -248,6 +272,8 @@ class SearchForm extends Component {
             heading="Phone"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
@@ -262,6 +288,8 @@ class SearchForm extends Component {
             heading="URL"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
@@ -274,13 +302,17 @@ class SearchForm extends Component {
           </Tab>
         </Tabs>
         <View style={{ flexDirection: 'row' }}>
-          <Button info style={styles.button} onPress={this.handleFormSubmit}>
+          <Button style={styles.button} onPress={this.handleFormSubmit}>
             <Text style={styles.buttonText}> Search </Text>
           </Button>
 
-          <Button info style={styles.greyButton} onPress={this.startOver}>
+          <Button style={styles.greyButton} onPress={this.startOver}>
             <Text style={styles.buttonText}> Start Over </Text>
           </Button>
+
+          {/* <Button info style={styles.greyButton} onPress={this.getData}>
+            <Text style={styles.buttonText}> get object </Text>
+          </Button> */}
         </View>
       </View>
     );
@@ -309,7 +341,7 @@ const styles = StyleSheet.create({
   button: {
     margin: 10,
     padding: 10,
-    backgroundColor: '#508DB3'
+    backgroundColor: `${constants.highlightColor}`
   },
 
   tab: {
@@ -324,13 +356,13 @@ const styles = StyleSheet.create({
     color: '#64aab8',
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
+    backgroundColor: `${constants.highlightColor}`,
     borderRadius: 10,
     marginBottom: 20
   },
   matchesText: {
     fontSize: 20,
-    color: '#508DB3',
+    color: `${constants.highlightColor}`,
     marginBottom: 20
   },
   greyButton: {
@@ -353,4 +385,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SearchForm;
+const mapStateToProps = state => {
+  const { info, queryType, searchMe } = state.confirmationModal;
+  return {
+    info,
+    queryType,
+    searchMe
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { getInfo, stopSearchMe }
+)(SearchForm);

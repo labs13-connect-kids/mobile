@@ -1,8 +1,9 @@
 import { AsyncStorage } from 'react-native';
 import { AuthSession } from 'expo';
+import getEnvVars from '../../environment';
+import jwtDecode from 'jwt-decode';
 
-const auth0Domain = `lambda-connect-kids.auth0.com`;
-const auth0ClientId = 'CxJ6UkC11uAAwCyvdTW20fudtLtJ21gz';
+const { auth0Domain, auth0ClientId } = getEnvVars();
 
 const toQueryString = params => {
   return (
@@ -15,20 +16,6 @@ const toQueryString = params => {
       .join('&')
   );
 };
-const getToken = async () => {
-  try {
-    const value = await AsyncStorage.getItem('token');
-    if (value !== null) {
-      // value previously stored
-      console.log('TOKEN VALUE FROM ASYNC', JSON.parse(value));
-    } else {
-      console.log('NOTHING HERE');
-    }
-  } catch (e) {
-    // error reading value
-    console.log('ERROR IN GET DATA');
-  }
-};
 const setItem = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
@@ -36,13 +23,13 @@ const setItem = async (key, value) => {
     console.log('SET TOKEN ERROR', e);
   }
 };
-const _loginWithAuth0 = async handleResponse => {
+const _loginWithAuth0 = async () => {
   const redirectUrl = AuthSession.getRedirectUrl();
   let authUrl =
     `https://${auth0Domain}/authorize` +
     toQueryString({
       client_id: auth0ClientId,
-      response_type: 'token',
+      response_type: 'token id_token',
       scope: 'openid profile email',
       redirect_uri: redirectUrl,
       nonce:
@@ -54,17 +41,21 @@ const _loginWithAuth0 = async handleResponse => {
           .substring(2, 15)
     });
 
-  const result = await AuthSession.startAsync({ authUrl });
-  console.log('RESULT', result);
+  return await AuthSession.startAsync({ authUrl });
+};
+const handleLogin = async (authSession, setUserCreds) => {
+  // Retrieve the JWT token and decode it
+  result = await authSession();
+  const jwtToken = result.params.id_token;
+  const decoded = jwtDecode(jwtToken);
 
-  if (result.type === 'success') {
-    handleResponse(result);
-  }
+  setItem('auth0Data', result);
+  setUserCreds(decoded, result);
 };
 
 export default {
   toQueryString,
   setItem,
-  getToken,
-  _loginWithAuth0
+  _loginWithAuth0,
+  handleLogin
 };

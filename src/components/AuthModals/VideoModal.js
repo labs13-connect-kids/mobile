@@ -5,8 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   WebView,
-  Platform,
-  TouchableOpacity
+  Platform
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
@@ -15,14 +14,6 @@ const VideoModal = props => {
   return (
     <>
       <View style={styles.videoWrapper}>
-        <TouchableOpacity
-          style={styles.close}
-          onPress={() => {
-            props.setModalVisible(!props.modalVisible);
-          }}
-        >
-          <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
-        </TouchableOpacity>
         <WebView
           style={styles.WebViewContainer}
           javaScriptEnabled={true}
@@ -31,8 +22,24 @@ const VideoModal = props => {
             uri: 'https://www.youtube.com/embed/04V1mNZxNE0'
           }}
         />
-        <Button style={styles.noButton} block onPress={props.onLogin}>
+        <Button
+          style={styles.noButton}
+          block
+          onPress={() => {
+            props.setModalVisible(false);
+            props.onLogin();
+          }}
+        >
           <Text style={styles.btnText}>Take me to sign up</Text>
+        </Button>
+        <Button
+          style={styles.close}
+          block
+          onPress={() => {
+            props.setModalVisible(false);
+          }}
+        >
+          <Text style={styles.btnText}>Close</Text>
         </Button>
       </View>
     </>
@@ -58,13 +65,12 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   noButton: {
-    backgroundColor: '#6C757D',
+    backgroundColor: constants.highlightColor,
     marginBottom: 10
   },
   close: {
     backgroundColor: 'red',
-    borderRadius: 3,
-    marginLeft: 'auto'
+    width: '100%'
   },
   closeBtn: {
     padding: 5

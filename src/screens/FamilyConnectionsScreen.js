@@ -5,22 +5,91 @@ import {
   Text,
   View,
   WebView,
-  Platform
+  Platform,
+  Modal,
+  Alert
 } from 'react-native';
 import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
-
+import { trackEmail } from './../store/actions';
+import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
 import constants from '../helpers/constants';
 class FamilyConnectionsScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Family Connections', navigation);
+
+  state = {
+    modalVisible: false
+  };
+
+  toggleModal = () => {
+    this.setState({
+      modalVisible: !this.state.modalVisible
+    });
+  };
+
+  trackInterest = trackingEmail => {
+    if (this.props.email === null) {
+      this.props
+        .trackEmail({ emailAddress: trackingEmail })
+        .then(res => {
+          this.props.error
+            ? Alert.alert(this.props.error.message)
+            : this.props.message !== undefined
+            ? Alert.alert(this.props.message)
+            : Alert.alert(
+                'there was a problem talking to the database, Please try again later'
+              );
+          this.toggleModal();
+        })
+        .catch(res => {
+          Alert.alert(this.props.message);
+          this.toggleModal();
+        });
+    } else {
+      this.props
+        .trackEmail({ emailAddress: this.props.email })
+        .then(res => {
+          this.props.error
+            ? Alert.alert(this.props.error.message)
+            : this.props.message !== undefined
+            ? Alert.alert(this.props.message)
+            : Alert.alert(
+                'there was a problem talking to the database, Please try again later'
+              );
+          this.toggleModal();
+        })
+        .catch(res => {
+          Alert.alert(this.props.message);
+          this.toggleModal();
+        });
+    }
+  };
+
   render() {
     return (
       <Container style={styles.container}>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={this.toggleModal}
+          >
+            <FamilyConnectionsModal
+              trackInterest={this.trackInterest}
+              toggleModal={this.toggleModal}
+              startRegister={this.startRegister}
+              email={this.props.email}
+            />
+          </Modal>
+        </View>
+
         <SafeAreaView>
           <ScrollView>
-            <Text style={{ fontFamily: constants.fontFamily, fontSize: 18 }}>
+            <Text style={styles.mainText}>
               Learn about a revolutionary way to discover and engage extended
               families for at-risk foster youth.
             </Text>
@@ -33,7 +102,7 @@ class FamilyConnectionsScreen extends Component {
               />
             </View>
 
-            <Button style={styles.button} block>
+            <Button style={styles.button} block onPress={this.toggleModal}>
               <Text style={styles.buttonText}>
                 I Want To Access Family Connections
               </Text>
@@ -56,6 +125,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 25
   },
+  mainText: {
+    fontFamily: constants.fontFamily,
+    fontSize: 18,
+    lineHeight: 26,
+    marginBottom: 20
+  },
   button: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -76,7 +151,27 @@ const styles = StyleSheet.create({
   },
   WebViewContainer: {
     marginTop: Platform.OS == 'ios' ? 20 : 0
+  },
+  loginContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
-export default FamilyConnectionsScreen;
+const mapStateToProps = state => {
+  console.log('redux state FCS: ', state);
+  const { message, error } = state.famConInterest;
+  return {
+    email: state.auth.user ? state.auth.user.email : null,
+    message,
+    error
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    trackEmail
+  }
+)(FamilyConnectionsScreen);
