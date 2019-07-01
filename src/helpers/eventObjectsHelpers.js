@@ -5,30 +5,30 @@ const notLoggedIn = {
   // notSocialWorker: 'click-i-am-not-a-social-worker',
   // logo: 'click-logo',
   // modalSignUp: 'click-post-watch-video-sign-up',
-  personClick: 'click-possible_person',
+  // personClick: 'click-possible_person',
   // signUp: 'click-sign-up',
   // watchVideo: 'click-watch-video',
   // confirmSocialWorker: 'click-yes-i-am-a-social-worker',
   closeVideo: 'close-introduction-video', // Need to add link to open modal PeopleSearchScreen
-  openVideo: 'open-introduction-video', // Need to add link to open modal PeopleSearchScreen
-  successfulSearch: 'search-person-success'
+  openVideo: 'open-introduction-video' // Need to add link to open modal PeopleSearchScreen
+  // successfulSearch: 'search-person-success'
 };
 const loggedIn = {
-  clickRelationship: 'click-relationship',
+  // clickRelationship: 'click-relationship',
   // logo: 'click-logo',
   // logOut: 'click-logout',
-  clickAddressSearch: 'click-person_address_search',
-  clickAddressView: 'click-person_address_view',
-  clickEmailSearch: 'click-person_email_search',
-  clickEmailSend: 'click-person_email_send',
-  clickPhoneCall: 'click-person_phone_call',
-  clickPhoneSearch: 'click-person_phone_search',
-  clickUrlSearch: 'click-person_url_search',
-  clickUrlView: 'click-person_url_view',
-  personClick: 'click-possible_person',
+  // clickAddressSearch: 'click-person_address_search',
+  // clickAddressView: 'click-person_address_view',
+  // clickEmailSearch: 'click-person_email_search',
+  // clickEmailSend: 'click-person_email_send',
+  // clickPhoneCall: 'click-person_phone_call',
+  // clickPhoneSearch: 'click-person_phone_search',
+  // clickUrlSearch: 'click-person_url_search',
+  // clickUrlView: 'click-person_url_view',
+  // personClick: 'click-possible_person',
   closeVideo: 'close-introduction-video', // Need to add link to open modal PeopleSearchScreen
   openVideo: 'open-introduction-video', // Need to add link to open modal PeopleSearchScreen
-  successfulSearch: 'search-person-success',
+  // successfulSearch: 'search-person-success',
   servedChild: 'served-child-success' // Need to add link to open modal serving new child?
 };
 

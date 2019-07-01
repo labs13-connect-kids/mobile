@@ -42,7 +42,8 @@ class SearchResultScreen extends React.Component {
     key: '',
     type: '',
     address: '',
-    info: ''
+    info: '',
+    index: null
   };
 
   toggleModal = () => {
@@ -54,7 +55,6 @@ class SearchResultScreen extends React.Component {
   componentDidMount() {
     const {
       accessToken,
-      eventTrack,
       fetchPerson,
       idToken,
       isLoggedIn,
@@ -106,54 +106,22 @@ class SearchResultScreen extends React.Component {
     }
   }
 
-  // createEvent = success => {
-  //   let emailAddress = '';
-  //   let options = {};
-  //   if (typeof success === 'string') {
-  //     options = {
-  //       possibleMatches: this.props.possiblePersons.length,
-  //       personMatch: false
-  //     };
-  //   } else {
-  //     options = {
-  //       possibleMatches: 0,
-  //       personMatch: true
-  //     };
-  //   }
-  //   if (!this.props.user) {
-  //     emailAddress = 'anonymous@unknown.org';
-  //   } else {
-  //     emailAddress = this.props.user.email;
-  //   }
-  //   const event = {
-  //     emailAddress,
-  //     event:
-  //       typeof success === 'string'
-  //         ? `person-search-${success}`
-  //         : `person-search-${success[0]}`,
-  //     options
-  //   };
-  //   return event;
-  // };
-
   startRegister = () => {
     this.props.setModalVisible(true);
   };
 
-  showConModal = (key, type) => {
-    this.setState({ key: key, type: type });
+  showConModal = (key, type, index) => {
+    this.setState({ key, type, index });
     this.toggleModal();
   };
 
   setData = (key, type) => {
-    // console.log('SET DATA', key, type);
     this.setState({ info: key, type: type });
     this.props.getInfo(key, type);
   };
 
   render() {
-    const { isLoggedIn, person } = this.props;
-    // console.log('PERSON', person, 'SRS STATE: ', this.state);
+    const { isLoggedIn, person, user } = this.props;
     return (
       <Container style={styles.container}>
         <View>
@@ -162,7 +130,6 @@ class SearchResultScreen extends React.Component {
             transparent={false}
             visible={this.state.modalVisible}
             onRequestClose={this.toggleModal}
-            // onRequestClose={Alert.alert( 'sup fam' )}
           >
             <ConfirmationModal
               toggleModal={this.toggleModal}
@@ -171,6 +138,8 @@ class SearchResultScreen extends React.Component {
               home={this.state.address}
               navigation={this.props.navigation}
               setData={this.setData}
+              user={user}
+              index={this.state.index}
             />
           </Modal>
         </View>

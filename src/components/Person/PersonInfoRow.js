@@ -16,30 +16,30 @@ const PersonInfoRow = ({
   showConModal
 }) => {
   if (item[itemKey]) {
-    let startUserModal = key => {
+    let startUserModal = (key, index) => {
       if (!isLoggedIn) startRegister();
 
       if (isLoggedIn && itemKey === 'emails') {
         const type = 'email';
-        showConModal(key, type);
+        showConModal(key, type, index);
       }
       if (isLoggedIn && itemKey === 'phones') {
         const type = 'phone';
-        showConModal(key, type);
+        showConModal(key, type, index);
       }
       if (isLoggedIn && itemKey === 'addresses') {
         let address = `${key.house} ${key.street}`;
         const type = 'address';
-        showConModal(address, type);
+        showConModal(address, type, index);
       }
       if (isLoggedIn && itemKey === 'urls') {
         const type = 'url';
-        showConModal(key, type);
+        showConModal(key, type, index);
       }
       if (isLoggedIn && itemKey === 'relationships') {
         // console.log('THIS IS RELATIONSHIP KEY', key);
         const type = 'name';
-        showConModal(key, type);
+        showConModal(key, type, index);
       }
     };
 
@@ -55,7 +55,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity
                   style={styles.colListContainer}
                   key={index}
-                  onPress={() => startUserModal(key)}
+                  onPress={() => startUserModal(key, index)}
                 >
                   <Text style={styles.colListText}>
                     {key.house && renderMaskedOrResult(key.house, 'house')}{' '}
@@ -76,7 +76,9 @@ const PersonInfoRow = ({
                 <TouchableOpacity
                   style={styles.colListContainer}
                   key={index}
-                  onPress={() => startUserModal(key[itemValue][0].display)}
+                  onPress={() =>
+                    startUserModal(key[itemValue][0].display, index)
+                  }
                 >
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(key[itemValue][0].display, itemKey)}
@@ -88,7 +90,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity style={styles.colListContainer} key={index}>
                   <Text
                     style={styles.colListText}
-                    onPress={() => startUserModal(key)}
+                    onPress={() => startUserModal(key, index)}
                   >
                     {renderMaskedOrResult(key[itemValue], itemKey)}
                   </Text>

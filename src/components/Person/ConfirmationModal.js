@@ -9,13 +9,16 @@ import {
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
+import { sendEvent, createOptions } from '../../helpers/createEvent';
 
 export const ConfirmationModal = ({
   toggleModal,
   data,
   type,
   navigation,
-  setData
+  setData,
+  user,
+  index
 }) => {
   const handlePressDirections = data => {
     let daddr = data;
@@ -109,26 +112,66 @@ export const ConfirmationModal = ({
             onPress={() => {
               if (type === 'email') {
                 // console.log( 'EMAIL TO:', data.address )
+                let options = createOptions(null, 'email', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_email_send',
+                  null,
+                  options
+                );
                 Linking.openURL(`mailto:${data.address}`);
               }
 
               if (type === 'phone') {
                 // console.log( 'CALL TO:', data.number )
+                let options = createOptions(null, 'phone', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_phone_call',
+                  null,
+                  options
+                );
                 Linking.openURL(`tel:${data.number}`);
               }
 
               if (type === 'address') {
                 // console.log( 'MAP TO:', data )
+                let options = createOptions(null, 'address', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_address_view',
+                  null,
+                  options
+                );
                 handlePressDirections(data);
               }
 
               if (type === 'url') {
                 // console.log( 'URL TO:', data )
+                let options = createOptions(null, 'url', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_url_view',
+                  null,
+                  options
+                );
                 Linking.openURL(`${data.url}`);
               }
 
               if (type === 'name') {
                 // console.log( 'RELATIONSHIP TO:', data )
+                let options = createOptions(null, 'relationship', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_possible_person',
+                  null,
+                  options
+                );
                 Linking.openURL(`${data}`);
               }
             }}
@@ -158,6 +201,14 @@ export const ConfirmationModal = ({
             if (type === 'email') {
               info = data.address;
               // console.log('SEARCH EMAIL:', data.address);
+              let options = createOptions(null, 'email', index);
+              sendEvent(
+                user.email,
+                'click',
+                'person_email_search',
+                null,
+                options
+              );
               navigation.goBack();
               setData(info, type);
             }
@@ -165,6 +216,14 @@ export const ConfirmationModal = ({
             if (type === 'phone') {
               info = data.display;
               // console.log('SEARCH PHONE:', data.number);
+              let options = createOptions(null, 'phone', index);
+              sendEvent(
+                user.email,
+                'click',
+                'person_phone_search',
+                null,
+                options
+              );
               navigation.navigate('PeopleSearch');
               setData(info, type);
             }
@@ -172,6 +231,14 @@ export const ConfirmationModal = ({
             if (type === 'address') {
               info = data;
               // console.log('SEARCH MAP TO:', data);
+              let options = createOptions(null, 'address', index);
+              sendEvent(
+                user.email,
+                'click',
+                'person_address_search',
+                null,
+                options
+              );
               navigation.navigate('PeopleSearch');
               setData(info, type);
             }
@@ -179,6 +246,14 @@ export const ConfirmationModal = ({
             if (type === 'url') {
               info = data.url;
               // console.log('SEARCH URL:', data);
+              let options = createOptions(null, 'url', index);
+              sendEvent(
+                user.email,
+                'click',
+                'person_url_search',
+                null,
+                options
+              );
               navigation.navigate('PeopleSearch');
               setData(info, type);
             }
@@ -186,6 +261,8 @@ export const ConfirmationModal = ({
             if (type === 'name') {
               info = data;
               // console.log('RELATIONSHIP TO:', data);
+              let options = createOptions(null, 'relationship', index);
+              sendEvent(user.email, 'click', 'possible_person', null, options);
               navigation.navigate('PeopleSearch');
               setData(info, type);
             }
