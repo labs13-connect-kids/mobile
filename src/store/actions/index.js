@@ -19,7 +19,10 @@ import {
   SET_VIDEO_PLAYER_VISIBLE,
   RESET_PERSON,
   SET_REDIRECT_PATH,
-  CLEAR_REDIRECT_PATH
+  CLEAR_REDIRECT_PATH,
+  MODAL_VISIBLE,
+  GET_INFO,
+  STOP_SEARCH_ME
 } from './actionTypes';
 import constants from '../../helpers/constants';
 
@@ -119,3 +122,16 @@ export const setRedirectPath = path => {
 export const clearRedirectPath = () => {
   return { type: CLEAR_REDIRECT_PATH };
 };
+
+export const showModal = visible => {
+  return{ type: MODAL_VISIBLE , payload: visible }
+}
+
+export const getInfo = ( key , type ) => {
+  console.log('payload from redux = ', key , type)
+  return{ type: GET_INFO , payload: { key: key , queryType: type} }
+}
+
+export const stopSearchMe = () => {
+  return { type: STOP_SEARCH_ME }
+}

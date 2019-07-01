@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  Modal
 } from 'react-native';
 
 import { Container, Button } from 'native-base';
@@ -17,7 +18,9 @@ import {
   setModalVisible,
   setAgreeModalVisible,
   setUserCreds,
-  setVideoPlayerModalVisible
+  setVideoPlayerModalVisible,
+  showModal,
+  getInfo
 } from '../store/actions';
 // import { createEvent } from '../helpers/createEvent';
 import headerConfig from '../helpers/headerConfig';
@@ -27,12 +30,25 @@ import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
+import { ConfirmationModal } from '../components/Person/ConfirmationModal';
+
 class SearchResultScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
   state = {
-    requestObject: {}
+    requestObject: {},
+    modalVisible: false,
+    key: '',
+    type: '',
+    address: '', 
+    info: ''
+  };
+
+  toggleModal = () => {
+    this.setState({
+      modalVisible: !this.state.modalVisible
+    });
   };
 
   componentDidMount() {
@@ -66,6 +82,7 @@ class SearchResultScreen extends React.Component {
       fetchPerson(JSON.stringify(requestObject), eventTrack, this.createEvent);
     }
   }
+
   componentDidUpdate(prevProps, prevState) {
     console.log('CDU SRS');
     if (
@@ -121,11 +138,41 @@ class SearchResultScreen extends React.Component {
     this.props.setModalVisible(true);
   };
 
+  showConModal = (key, type) => {
+    this.setState({ key: key, type: type })
+    this.toggleModal()
+
+  }
+
+  setData = ( key , type ) => {
+    console.log( 'SET DATA', key , type )
+    this.setState({ info: key , type: type })
+    this.props.getInfo(key , type)
+  }
+
   render() {
     const { isLoggedIn, person } = this.props;
     console.log('PERSON', person, 'SRS STATE: ', this.state);
     return (
       <Container style={styles.container}>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={this.toggleModal}
+            // onRequestClose={Alert.alert( 'sup fam' )}
+          >
+            <ConfirmationModal
+              toggleModal={this.toggleModal}
+              type={this.state.type}
+              data={this.state.key}
+              home={this.state.address}
+              navigation={this.props.navigation}
+              setData={this.setData}
+            />
+          </Modal>
+        </View>
         <RegisterModalsContainer
           modalVisible={this.props.modalVisible}
           setAgreeModalVisible={this.props.setAgreeModalVisible}
@@ -163,13 +210,14 @@ class SearchResultScreen extends React.Component {
               {!person ? (
                 <Loader />
               ) : (
-                <PersonInfo
-                  item={person}
-                  setModalVisible={this.props.setModalVisible}
-                  startRegister={this.startRegister}
-                  isLoggedIn={isLoggedIn}
-                />
-              )}
+                  <PersonInfo
+                    item={person}
+                    setModalVisible={this.props.setModalVisible}
+                    startRegister={this.startRegister}
+                    isLoggedIn={isLoggedIn}
+                    showConModal={this.showConModal}
+                  />
+                )}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -245,6 +293,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
+  console.log(state)
   const { error, isFetching, person, possiblePersons } = state.people;
   const {
     accessToken,
@@ -266,7 +315,8 @@ const mapStateToProps = state => {
     user,
     modalVisible,
     videoAgree,
-    videoVisible
+    videoVisible,
+    getInfo: state.confirmationModal.info
   };
 };
 
@@ -279,6 +329,8 @@ export default connect(
     setModalVisible,
     setAgreeModalVisible,
     setUserCreds,
-    setVideoPlayerModalVisible
+    setVideoPlayerModalVisible,
+    showModal,
+    getInfo
   }
 )(SearchResultScreen);
