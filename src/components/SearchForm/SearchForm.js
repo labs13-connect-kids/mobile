@@ -10,6 +10,8 @@ import {
   isUrl
 } from '../../helpers/inputValidators';
 import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
+import { connect } from 'react-redux';
+import { getInfo, stopSearchMe } from '../../store/actions';
 
 class SearchForm extends Component {
   state = {
@@ -21,6 +23,17 @@ class SearchForm extends Component {
     url: '',
     tabPage: 0
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('SF CDU', this.props);
+    if (this.props.searchMe && this.props.queryType) {
+      this.inputHandler(this.props.queryType, this.props.info);
+      this.handleFormSubmit();
+      this.props.stopSearchMe();
+      console.log('Search Success');
+    }
+    console.log('its not starting');
+  }
 
   inputHandler = (name, value) => {
     const inputName = name;
@@ -190,6 +203,7 @@ class SearchForm extends Component {
   };
 
   render() {
+    console.log('IN RENDER', this.props);
     return (
       <View>
         <Tabs
@@ -295,6 +309,10 @@ class SearchForm extends Component {
           <Button style={styles.greyButton} onPress={this.startOver}>
             <Text style={styles.buttonText}> Start Over </Text>
           </Button>
+
+          {/* <Button info style={styles.greyButton} onPress={this.getData}>
+            <Text style={styles.buttonText}> get object </Text>
+          </Button> */}
         </View>
       </View>
     );
@@ -367,4 +385,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SearchForm;
+const mapStateToProps = state => {
+  const { info, queryType, searchMe } = state.confirmationModal;
+  return {
+    info,
+    queryType,
+    searchMe
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { getInfo, stopSearchMe }
+)(SearchForm);

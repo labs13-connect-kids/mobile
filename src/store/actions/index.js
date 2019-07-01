@@ -24,7 +24,10 @@ import {
   POPULATE_SEARCH_RESULTS,
   POPULATE_PERSON,
   SAVING_RECENT_SEARCHES,
-  STOP_SAVING_RECENT_SEARCHES
+  STOP_SAVING_RECENT_SEARCHES,
+  MODAL_VISIBLE,
+  GET_INFO,
+  STOP_SEARCH_ME
 } from './actionTypes';
 import constants from '../../helpers/constants';
 import saveToRecentSearches from '../../helpers/saveToRecentSearches';
@@ -190,4 +193,16 @@ export const populatePerson = data => {
 };
 export const stopSavingRecentSearches = () => {
   return { type: STOP_SAVING_RECENT_SEARCHES };
+};
+export const showModal = visible => {
+  return { type: MODAL_VISIBLE, payload: visible };
+};
+
+export const getInfo = (key, type) => {
+  console.log('payload from redux = ', key, type);
+  return { type: GET_INFO, payload: { key: key, queryType: type } };
+};
+
+export const stopSearchMe = () => {
+  return { type: STOP_SEARCH_ME };
 };

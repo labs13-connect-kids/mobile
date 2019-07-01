@@ -16,10 +16,11 @@ import {
   setModalVisible,
   setAgreeModalVisible,
   setUserCreds,
-  setVideoPlayerModalVisible
+  setVideoPlayerModalVisible,
+  getInfo
 } from '../store/actions';
 
-import { Container } from 'native-base';
+import { Container, Button } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 // import { createEvent } from '../helpers/createEvent';
 
@@ -38,6 +39,11 @@ import RegisterModalsContainer from './../components/AuthModals/RegisterModalsCo
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
+
+  state = {
+    data: this.props.info,
+    type: this.props.type
+  };
 
   createEvent = success => {
     let emailAddress = '';
@@ -159,6 +165,7 @@ class PeopleSearchScreen extends React.Component {
               <SearchForm
                 handleSearch={this.handleSearchRequest}
                 resetReduxState={this.resetReduxState}
+                data={this.props.data}
               />
 
               {!isLoggedIn && (
@@ -301,7 +308,9 @@ const mapStateToProps = state => {
     modalVisible,
     videoAgree,
     videoVisible,
-    user
+    user,
+    info: state.confirmationModal.info,
+    queryType: state.confirmationModal.queryType
   };
 };
 
@@ -315,6 +324,7 @@ export default connect(
     setModalVisible,
     setAgreeModalVisible,
     setUserCreds,
-    setVideoPlayerModalVisible
+    setVideoPlayerModalVisible,
+    getInfo
   }
 )(PeopleSearchScreen);
