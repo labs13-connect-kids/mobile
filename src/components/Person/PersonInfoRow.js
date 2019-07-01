@@ -4,7 +4,7 @@ import { Col, Row, Text } from 'native-base';
 import { styles } from '../../styles';
 import renderMaskedOrResult from '../../helpers/renderMaskedOrResult';
 import { connect } from 'react-redux';
-
+ 
 const PersonInfoRow = ({
   isLoggedIn,
   item,

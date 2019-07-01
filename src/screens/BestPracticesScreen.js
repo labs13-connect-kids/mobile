@@ -23,7 +23,7 @@ class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Best Practices', navigation);
   async componentDidMount() {
-    console.log('BPS CDM', this.props);
+    // console.log('BPS CDM', this.props);
     // NOTE: TODO check for JWT expiration to confirm if logged in
     let confirmedUser = await AsyncStorage.getItem('auth0Data');
 

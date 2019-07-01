@@ -36,7 +36,7 @@ class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
-  createEvent = success => {
+  createEvent = success => { 
     let emailAddress = '';
     let options = {};
     if (typeof success === 'string') {
@@ -157,7 +157,7 @@ class PeopleSearchScreen extends React.Component {
                 </TouchableHighlight>
               )}
               {this.props.isFetching && <Loader />}
-              {this.props.error && <ErrorMessage />}
+              {this.props.error && <ErrorMessage data={this.props.data}/>}
               {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { error, isFetching, person, possiblePersons } = state.people;
+  const { error, isFetching, person, possiblePersons, data } = state.people;
   const {
     accessToken,
     idToken,
@@ -282,7 +282,8 @@ const mapStateToProps = state => {
     modalVisible,
     videoAgree,
     videoVisible,
-    user
+    user,
+    data
   };
 };
 

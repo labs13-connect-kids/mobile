@@ -4,7 +4,7 @@ import LoginWithAuth0 from '../components/Authentication/LoginWithAuth0';
 import { connect } from 'react-redux';
 import RegisterModalsContainer from '../components/AuthModals/RegisterModalsContainer';
 import {
-  setModalVisible,
+  setModalVisible, 
   setAgreeModalVisible,
   setVideoPlayerModalVisible,
   setUserCreds

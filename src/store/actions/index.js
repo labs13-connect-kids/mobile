@@ -34,6 +34,9 @@ export const fetchSearchResult = (
   axios
     .post(`${constants.devURL}`, body)
     .then(res => {
+      // console.log("accessing names: ", res.data.query.names)
+      // console.log("accessing emials: ", res.data.query.emails)
+      console.log("res data person!!!!!", res.data.query.names[0].display)
       if (res.data.possible_persons) {
         dispatch({
           type: FETCH_PEOPLE_SUCCESS,
@@ -47,11 +50,13 @@ export const fetchSearchResult = (
           payload: res.data.person
         });
         eventTrack(createEvent(['success']));
-      } else if (res.data.persons_count === 0) {
+      } else if (res.data.persons_count === 0 || res.data["@persons_count"] === 0) {
         dispatch({
           type: FETCH_SEARCH_RESULT_FAILURE,
+          data: res.data.query, 
           payload: true
         });
+        
         eventTrack(createEvent(['failed']));
       }
     })
@@ -61,8 +66,8 @@ export const fetchSearchResult = (
       }
     })
     .catch(err => {
+      console.log(err)
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
-
       eventTrack(createEvent('failed'));
     });
 };
