@@ -9,11 +9,6 @@ import {
   RESET_STATE,
   SET_USER_CREDS,
   LOG_OUT,
-  EVENT_ERROR,
-  EVENT_SUCCESS,
-  TRACK_EMAIL,
-  TRACK_EMAIL_SUCCESS,
-  TRACK_EMAIL_FAILURE,
   SET_MODAL_VISIBLE,
   SET_VIDEO_AGREE_VISIBLE,
   SET_VIDEO_PLAYER_VISIBLE,
@@ -124,14 +119,14 @@ export const clearRedirectPath = () => {
 };
 
 export const showModal = visible => {
-  return{ type: MODAL_VISIBLE , payload: visible }
-}
+  return { type: MODAL_VISIBLE, payload: visible };
+};
 
-export const getInfo = ( key , type ) => {
-  console.log('payload from redux = ', key , type)
-  return{ type: GET_INFO , payload: { key: key , queryType: type} }
-}
+export const getInfo = (key, type) => {
+  console.log('payload from redux = ', key, type);
+  return { type: GET_INFO, payload: { key: key, queryType: type } };
+};
 
 export const stopSearchMe = () => {
-  return { type: STOP_SEARCH_ME }
-}
+  return { type: STOP_SEARCH_ME };
+};

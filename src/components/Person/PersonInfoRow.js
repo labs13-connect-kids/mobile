@@ -1,11 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, Linking, Platform } from 'react-native';
-import { Col, Row, Text, View, Modal } from 'native-base';
+import { TouchableOpacity } from 'react-native';
+import { Col, Row, Text } from 'native-base';
 import { styles } from '../../styles';
 import renderMaskedOrResult from '../../helpers/renderMaskedOrResult';
 import { connect } from 'react-redux';
 import { showModal } from '../../store/actions';
-import ConfirmationModal from './ConfirmationModal';
 
 const PersonInfoRow = ({
   isLoggedIn,
@@ -17,17 +16,7 @@ const PersonInfoRow = ({
   showConModal
 }) => {
   if (item[itemKey]) {
-    // handlePressDirections = (address, postalCode, city) => {
-    //   let daddr = encodeURIComponent(`${address} ${postalCode}, ${city}`);
-    //   console.log(daddr);
-    //   if (Platform.OS === 'ios') {
-    //     Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
-    //   } else {
-    //     Linking.openURL(`http://maps.google.com/?daddr=${daddr}`);
-    //   }
-    // };
-
-    let OohKillEm = key => {
+    let startUserModal = key => {
       if (!isLoggedIn) startRegister();
 
       if (isLoggedIn && itemKey === 'emails') {
@@ -54,24 +43,6 @@ const PersonInfoRow = ({
       }
     };
 
-    // let OnPress = key => {
-    //   if (!isLoggedIn) startRegister();
-    //   console.log('THIS IS KEY', key);
-    //   if (isLoggedIn) {
-    //     if (itemKey === 'emails') {
-    //       // console.log( 'key and item value', key[itemValue] )
-    //       Linking.openURL(`mailto:${key[itemValue]}`);
-    //     } else if (itemKey === 'phones') {
-    //       Linking.openURL(`tel:${key[itemValue]}`);
-    //     } else if (itemKey === 'urls') {
-    //       Linking.openURL(`${key['url']}`);
-    //     } else if (itemKey === 'addresses') {
-    //       let address = `${key.house} ${key.street}`;
-    //       handlePressDirections(address, key['zip_code'], key['city']);
-    //     }
-    //   }
-    // };
-
     return (
       <Row style={styles.rowContainer}>
         <Col size={30} style={styles.rowLabel}>
@@ -84,7 +55,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity
                   style={styles.colListContainer}
                   key={index}
-                  onPress={() => OohKillEm(key)}
+                  onPress={() => startUserModal(key)}
                 >
                   <Text style={styles.colListText}>
                     {key.house && renderMaskedOrResult(key.house, 'house')}{' '}
@@ -105,7 +76,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity
                   style={styles.colListContainer}
                   key={index}
-                  onPress={() => OohKillEm(key[itemValue][0].display)}
+                  onPress={() => startUserModal(key[itemValue][0].display)}
                 >
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(key[itemValue][0].display, itemKey)}
@@ -117,7 +88,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity style={styles.colListContainer} key={index}>
                   <Text
                     style={styles.colListText}
-                    onPress={() => OohKillEm(key)}
+                    onPress={() => startUserModal(key)}
                   >
                     {renderMaskedOrResult(key[itemValue], itemKey)}
                   </Text>
