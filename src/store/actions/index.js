@@ -96,39 +96,6 @@ export const logOut = () => {
   return { type: LOG_OUT };
 };
 
-export const eventTrack = event => dispatch =>
-  axios
-    .post(constants.devEventTrackingURL, event)
-    .then(res => {
-      if (res.status !== 502) {
-        dispatch({ type: EVENT_ERROR });
-      } else {
-        dispatch({ type: EVENT_SUCCESS });
-      }
-    })
-    .catch(err => {
-      dispatch({ type: EVENT_SUCCESS });
-    });
-
-export const trackEmail = event => dispatch => {
-  dispatch({ type: TRACK_EMAIL });
-  return axios
-    .post(constants.devFamilyConnectionsInterestURL, event)
-    .then(res => {
-      return dispatch({
-        type: TRACK_EMAIL_SUCCESS,
-        payload: event
-      });
-    })
-    .catch(err => {
-      return dispatch({
-        type: TRACK_EMAIL_FAILURE,
-        payload: err,
-        email: event.emailAddress
-      });
-    });
-};
-
 export const setModalVisible = visible => {
   return { type: SET_MODAL_VISIBLE, payload: visible };
 };

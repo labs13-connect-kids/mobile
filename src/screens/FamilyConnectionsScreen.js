@@ -13,7 +13,7 @@ import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
-import { trackEmail } from './../store/actions';
+import { sendEvent } from './../helpers/createEvent';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
 import constants from '../helpers/constants';
 class FamilyConnectionsScreen extends Component {
@@ -33,7 +33,7 @@ class FamilyConnectionsScreen extends Component {
   trackInterest = trackingEmail => {
     let email = this.props.email ? this.props.email : trackingEmail;
     this.props
-      .trackEmail({ emailAddress: email })
+      .sendEvent(email, 'click', 'request-familyconnections')
       .then(res => {
         this.props.error
           ? Alert.alert(this.props.error.message)
@@ -150,9 +150,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    trackEmail
-  }
-)(FamilyConnectionsScreen);
+export default connect(mapStateToProps)(FamilyConnectionsScreen);
