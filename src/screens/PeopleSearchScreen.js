@@ -16,10 +16,11 @@ import {
   setModalVisible,
   setAgreeModalVisible,
   setUserCreds,
-  setVideoPlayerModalVisible
+  setVideoPlayerModalVisible,
+  getInfo
 } from '../store/actions';
 
-import { Container } from 'native-base';
+import { Container, Button } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 // import { createEvent } from '../helpers/createEvent';
 
@@ -29,6 +30,9 @@ import constants from '../helpers/constants';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
+import RecentSearches from '../components/RecentSearches/RecentSearches';
+
+import saveToRecentSearches from '../helpers/saveToRecentSearches';
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 
@@ -36,7 +40,16 @@ class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
+<<<<<<< HEAD
   createEvent = success => { 
+=======
+  state = {
+    data: this.props.info,
+    type: this.props.type
+  };
+
+  createEvent = success => {
+>>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
     let emailAddress = '';
     let options = {};
     if (typeof success === 'string') {
@@ -70,7 +83,7 @@ class PeopleSearchScreen extends React.Component {
     return encodeURI(JSON.stringify(person));
   };
 
-  handleSearchRequest = person => {
+  handleSearchRequest = (person, searchType, searchInput) => {
     const {
       accessToken,
       fetchSearchResult,
@@ -78,17 +91,27 @@ class PeopleSearchScreen extends React.Component {
       isLoggedIn,
       navigation
     } = this.props;
+
+    const body = {};
     const requestObject = {};
 
     if (isLoggedIn) {
       requestObject['authToken'] = accessToken;
       requestObject['idToken'] = idToken;
+      // Add to save to recent searcg
+      body['searchType'] = searchType;
+      body['searchInput'] = searchInput;
+      // saveToRecentSearches({
+      //   searchType: searchType,
+      //   searchInput: searchInput,
+      //   formattedObject: person
+      // });
     }
 
     requestObject['person'] = this.handleEncodeURI(person);
-
+    body['requestObject'] = JSON.stringify(requestObject);
     fetchSearchResult(
-      JSON.stringify(requestObject),
+      body,
       () => navigation.navigate('SearchResult'),
       this.props.eventTrack,
       this.createEvent
@@ -119,7 +142,7 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, navigation } = this.props;
     return (
       <Container style={styles.container}>
         <RegisterModalsContainer
@@ -146,6 +169,7 @@ class PeopleSearchScreen extends React.Component {
               <SearchForm
                 handleSearch={this.handleSearchRequest}
                 resetReduxState={this.resetReduxState}
+                data={this.props.data}
               />
 
               {!isLoggedIn && (
@@ -179,6 +203,12 @@ class PeopleSearchScreen extends React.Component {
                   />
                 </>
               ) : null}
+              {isLoggedIn && (
+                <RecentSearches
+                  handleSearch={this.handleSearchRequest}
+                  navigation={navigation}
+                />
+              )}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -283,7 +313,12 @@ const mapStateToProps = state => {
     videoAgree,
     videoVisible,
     user,
+<<<<<<< HEAD
     data
+=======
+    info: state.confirmationModal.info,
+    queryType: state.confirmationModal.queryType
+>>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
   };
 };
 
@@ -297,6 +332,7 @@ export default connect(
     setModalVisible,
     setAgreeModalVisible,
     setUserCreds,
-    setVideoPlayerModalVisible
+    setVideoPlayerModalVisible,
+    getInfo
   }
 )(PeopleSearchScreen);

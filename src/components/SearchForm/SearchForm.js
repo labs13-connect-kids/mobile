@@ -11,7 +11,12 @@ import {
   isCityState
 } from '../../helpers/inputValidators';
 import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
+<<<<<<< HEAD
 import ErrorMessage from '../Messages/ErrorMessage';
+=======
+import { connect } from 'react-redux';
+import { getInfo, stopSearchMe } from '../../store/actions';
+>>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
 
 class SearchForm extends Component {
   state = {
@@ -25,6 +30,17 @@ class SearchForm extends Component {
     tabPage: 0,
     showCityStateInput: true,
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('SF CDU', this.props);
+    if (this.props.searchMe && this.props.queryType) {
+      this.inputHandler(this.props.queryType, this.props.info);
+      this.handleFormSubmit();
+      this.props.stopSearchMe();
+      console.log('Search Success');
+    }
+    console.log('its not starting');
+  }
 
   inputHandler = (name, value) => {
     const inputName = name;
@@ -95,31 +111,36 @@ class SearchForm extends Component {
       inputKey = key;
       inputValue = value;
     }
-
+    let searchType;
     if (isName(inputValue)) {
       if (!this.state.name) {
         this.setState({ name: inputValue, [inputKey]: '', tabPage: 0 });
       }
+      searchType = 'name';
       formattedObject = this.formatRequestObject(inputValue, 'name');
     } else if (isEmail(inputValue)) {
       if (!this.state.email) {
         this.setState({ email: inputValue, [inputKey]: '', tabPage: 1 });
       }
+      searchType = 'email';
       formattedObject = this.formatRequestObject(inputValue, 'email');
     } else if (isAddress(inputValue)) {
       if (!this.state.address) {
         this.setState({ address: inputValue, [inputKey]: '', tabPage: 2 });
       }
+      searchType = 'address';
       formattedObject = this.formatRequestObject(inputValue, 'address');
     } else if (isPhone(inputValue)) {
       if (!this.state.phone) {
         this.setState({ phone: inputValue, [inputKey]: '', tabPage: 3 });
       }
+      searchType = 'phone';
       formattedObject = this.formatRequestObject(inputValue, 'phone');
     } else if (isUrl(inputValue)) {
       if (!this.state.url) {
         this.setState({ url: inputValue, [inputKey]: '', tabPage: 4 });
       }
+      searchType = 'url';
       formattedObject = this.formatRequestObject(inputValue, 'url');
     } 
     else {
@@ -127,9 +148,14 @@ class SearchForm extends Component {
     }
 
     if (formattedObject) {
+<<<<<<< HEAD
       this.props.handleSearch(formattedObject);
     } 
     else {
+=======
+      this.props.handleSearch(formattedObject, searchType, inputValue);
+    } else {
+>>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
       console.log('formattedObject: error');
     }
   };
@@ -220,6 +246,7 @@ class SearchForm extends Component {
   // }
 
   render() {
+    console.log('IN RENDER', this.props);
     return (
       <View>
         <Tabs
@@ -336,15 +363,24 @@ class SearchForm extends Component {
             </View>
           </Tab>
         </Tabs>
+<<<<<<< HEAD
         {/*<Content style={{ flexDirection: 'row' }}>*/}
         <View style={[{ flexDirection: 'row' }, this.state.margin ? styles.buttonMargin : null]}>
           <Button info style={styles.button} onPress={this.handleFormSubmit} >
+=======
+        <View style={{ flexDirection: 'row' }}>
+          <Button style={styles.button} onPress={this.handleFormSubmit}>
+>>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
             <Text style={styles.buttonText}> Search </Text>
           </Button>
 
-          <Button info style={styles.greyButton} onPress={this.startOver}>
+          <Button style={styles.greyButton} onPress={this.startOver}>
             <Text style={styles.buttonText}> Start Over </Text>
           </Button>
+
+          {/* <Button info style={styles.greyButton} onPress={this.getData}>
+            <Text style={styles.buttonText}> get object </Text>
+          </Button> */}
         </View>
       </View>
     )
@@ -373,7 +409,7 @@ const styles = StyleSheet.create({
   button: {
     margin: 10,
     padding: 10,
-    backgroundColor: '#508DB3'
+    backgroundColor: `${constants.highlightColor}`
   },
 
   tab: {
@@ -388,13 +424,13 @@ const styles = StyleSheet.create({
     color: '#64aab8',
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
+    backgroundColor: `${constants.highlightColor}`,
     borderRadius: 10,
     marginBottom: 20
   },
   matchesText: {
     fontSize: 20,
-    color: '#508DB3',
+    color: `${constants.highlightColor}`,
     marginBottom: 20
   },
   greyButton: {
@@ -413,6 +449,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   nameInputFullWidth: {
+<<<<<<< HEAD
     flex: 1,
   },
   error: {
@@ -428,6 +465,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'red'
   }
 
+=======
+    width: '100%'
+  }
+>>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
 });
 
-export default SearchForm;
+const mapStateToProps = state => {
+  const { info, queryType, searchMe } = state.confirmationModal;
+  return {
+    info,
+    queryType,
+    searchMe
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { getInfo, stopSearchMe }
+)(SearchForm);

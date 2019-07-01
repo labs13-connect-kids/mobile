@@ -25,10 +25,14 @@ class Auth0LoginContainer extends Component {
   render() {
     console.log('login props: ', this.props);
     return (
-      
       <Login
         navigation={this.props.navigation}
-        onLogin={() => authHelpers.handleLogin(authHelpers._loginWithAuth0)}
+        onLogin={() =>
+          authHelpers.handleLogin(
+            authHelpers._loginWithAuth0,
+            this.props.setUserCreds
+          )
+        }
         onRegister={() =>
           authHelpers.handleLogin(
             authHelpers._loginWithAuth0,

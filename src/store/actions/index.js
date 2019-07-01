@@ -18,10 +18,19 @@ import {
   SET_VIDEO_AGREE_VISIBLE,
   SET_VIDEO_PLAYER_VISIBLE,
   RESET_PERSON,
+  SET_RECENT_SEARCHES,
   SET_REDIRECT_PATH,
-  CLEAR_REDIRECT_PATH
+  CLEAR_REDIRECT_PATH,
+  POPULATE_SEARCH_RESULTS,
+  POPULATE_PERSON,
+  SAVING_RECENT_SEARCHES,
+  STOP_SAVING_RECENT_SEARCHES,
+  MODAL_VISIBLE,
+  GET_INFO,
+  STOP_SEARCH_ME
 } from './actionTypes';
 import constants from '../../helpers/constants';
+import saveToRecentSearches from '../../helpers/saveToRecentSearches';
 
 export const fetchSearchResult = (
   body,
@@ -32,7 +41,7 @@ export const fetchSearchResult = (
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
   axios
-    .post(`${constants.devURL}`, body)
+    .post(`${constants.devURL}`, body.requestObject)
     .then(res => {
       // console.log("accessing names: ", res.data.query.names)
       // console.log("accessing emials: ", res.data.query.emails)
@@ -43,6 +52,15 @@ export const fetchSearchResult = (
           payload: res.data.possible_persons
         });
         eventTrack(createEvent('success'));
+        // SAVE TO RECENT SEARCH
+        if (body.searchType && body.searchInput) {
+          saveToRecentSearches({
+            searchType: body.searchType,
+            searchInput: body.searchInput,
+            data: res.data.possible_persons
+          });
+          dispatch({ type: SAVING_RECENT_SEARCHES });
+        }
       } else if (res.data.person) {
         isPerson = true;
         dispatch({
@@ -50,6 +68,15 @@ export const fetchSearchResult = (
           payload: res.data.person
         });
         eventTrack(createEvent(['success']));
+        // SAVE TO RECENT SEARCH
+        if (body.searchType && body.searchInput) {
+          saveToRecentSearches({
+            searchType: body.searchType,
+            searchInput: body.searchInput,
+            data: res.data.person
+          });
+          dispatch({ type: SAVING_RECENT_SEARCHES });
+        }
       } else if (res.data.persons_count === 0 || res.data["@persons_count"] === 0) {
         dispatch({
           type: FETCH_SEARCH_RESULT_FAILURE,
@@ -150,10 +177,37 @@ export const resetPerson = () => {
   return { type: RESET_PERSON };
 };
 
+export const setRecentSearches = recentSearches => {
+  return { type: SET_RECENT_SEARCHES, payload: recentSearches };
+};
+
 export const setRedirectPath = path => {
   return { type: SET_REDIRECT_PATH, payload: path };
 };
 
 export const clearRedirectPath = () => {
   return { type: CLEAR_REDIRECT_PATH };
+};
+
+export const populateSearchResults = data => {
+  return { type: POPULATE_SEARCH_RESULTS, payload: data };
+};
+
+export const populatePerson = data => {
+  return { type: POPULATE_PERSON, payload: data };
+};
+export const stopSavingRecentSearches = () => {
+  return { type: STOP_SAVING_RECENT_SEARCHES };
+};
+export const showModal = visible => {
+  return { type: MODAL_VISIBLE, payload: visible };
+};
+
+export const getInfo = (key, type) => {
+  console.log('payload from redux = ', key, type);
+  return { type: GET_INFO, payload: { key: key, queryType: type } };
+};
+
+export const stopSearchMe = () => {
+  return { type: STOP_SEARCH_ME };
 };
