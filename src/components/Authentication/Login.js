@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Linking, Platform } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
+import { sendEvent } from '../../helpers/createEvent';
 
 const Login = props => {
   return (
@@ -27,6 +28,7 @@ const Login = props => {
               block
               onPress={() => {
                 props.setModalVisible(true);
+                sendEvent(null, 'click', 'sign-up');
               }}
             >
               <Text style={styles.btnText}>Sign Up</Text>

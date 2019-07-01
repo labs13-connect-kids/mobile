@@ -6,9 +6,9 @@ const notLoggedIn = {
   // logo: 'click-logo',
   // modalSignUp: 'click-post-watch-video-sign-up',
   personClick: 'click-possible_person',
-  signUp: 'click-sign-up',
-  watchVideo: 'click-watch-video',
-  confirmSocialWorker: 'click-yes-i-am-a-social-worker',
+  // signUp: 'click-sign-up',
+  // watchVideo: 'click-watch-video',
+  // confirmSocialWorker: 'click-yes-i-am-a-social-worker',
   closeVideo: 'close-introduction-video',
   openVideo: 'open-introduction-video',
   successfulSearch: 'search-person-success'

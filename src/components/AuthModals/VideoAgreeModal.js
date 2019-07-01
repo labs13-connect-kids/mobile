@@ -31,7 +31,14 @@ const VideoAgreeModal = props => {
         know everything about People Search.
       </Text>
       <View style={styles.buttonContainer}>
-        <Button style={styles.yesButton} block onPress={props.advanceModal}>
+        <Button
+          style={styles.yesButton}
+          block
+          onPress={() => {
+            props.sendEvent(null, 'click', 'watch-video');
+            props.advanceModal();
+          }}
+        >
           <Text style={styles.btnText}>Show me the video</Text>
         </Button>
         <Button
