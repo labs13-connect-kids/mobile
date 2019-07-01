@@ -54,9 +54,9 @@ class FamilyConnectionsModal extends Component {
           <Button
             style={styles.yesButton}
             block
-            onPress={async () => {
+            onPress={() => {
               trackingEmail = this.state.email;
-              await this.props.trackInterest(trackingEmail);
+              this.props.trackInterest(trackingEmail);
             }}
           >
             <Text style={styles.btnText}>Yes, add my email to the list</Text>

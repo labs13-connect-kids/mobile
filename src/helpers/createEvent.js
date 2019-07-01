@@ -48,3 +48,17 @@ export const sendEvent = (
       return err;
     });
 };
+
+export const createOptions = (listLength, noun, index) => {
+  let options = {};
+  if (listLength === null) {
+    options[`${noun}Index`] = index;
+    console.log(options);
+    return options;
+  } else {
+    options.possibleMatches = listLength;
+    options.personMatch = listLength === 0;
+    console.log(options);
+    return options;
+  }
+};

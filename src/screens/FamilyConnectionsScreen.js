@@ -32,22 +32,9 @@ class FamilyConnectionsScreen extends Component {
 
   trackInterest = trackingEmail => {
     let email = this.props.email ? this.props.email : trackingEmail;
-    this.props
-      .sendEvent(email, 'click', 'request-familyconnections')
-      .then(res => {
-        this.props.error
-          ? Alert.alert(this.props.error.message)
-          : this.props.message !== undefined
-          ? Alert.alert(this.props.message)
-          : Alert.alert(
-              'there was a problem talking to the database, Please try again later'
-            );
-        this.toggleModal();
-      })
-      .catch(res => {
-        Alert.alert(this.props.message);
-        this.toggleModal();
-      });
+    sendEvent(email, 'click', 'request-familyconnections');
+    Alert.alert(`${email} had been added to our list`);
+    this.toggleModal();
   };
 
   render() {
@@ -142,11 +129,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   console.log('redux state FCS: ', state);
-  const { message, error } = state.famConInterest;
   return {
-    email: state.auth.user ? state.auth.user.email : null,
-    message,
-    error
+    email: state.auth.user ? state.auth.user.email : null
   };
 };
 
