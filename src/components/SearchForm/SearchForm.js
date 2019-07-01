@@ -21,18 +21,18 @@ class SearchForm extends Component {
     address: '',
     phone: '',
     url: '',
-    tabPage: 0,
+    tabPage: 0
   };
 
-  componentDidUpdate( prevProps, prevState) {
-    console.log( 'SF CDU' , this.props )
-    if ( this.props.searchMe  && this.props.queryType ) {
-      this.inputHandler( this.props.queryType , this.props.info)
+  componentDidUpdate(prevProps, prevState) {
+    console.log('SF CDU', this.props);
+    if (this.props.searchMe && this.props.queryType) {
+      this.inputHandler(this.props.queryType, this.props.info);
       this.handleFormSubmit();
       this.props.stopSearchMe();
-      console.log('Search Success')
+      console.log('Search Success');
     }
-    console.log('its not starting')
+    console.log('its not starting');
   }
 
   inputHandler = (name, value) => {
@@ -81,37 +81,42 @@ class SearchForm extends Component {
       inputKey = key;
       inputValue = value;
     }
-
+    let searchType;
     if (isName(inputValue)) {
       if (!this.state.name) {
         this.setState({ name: inputValue, [inputKey]: '', tabPage: 0 });
       }
+      searchType = 'name';
       formattedObject = this.formatRequestObject(inputValue, 'name');
     } else if (isEmail(inputValue)) {
       if (!this.state.email) {
         this.setState({ email: inputValue, [inputKey]: '', tabPage: 1 });
       }
+      searchType = 'email';
       formattedObject = this.formatRequestObject(inputValue, 'email');
     } else if (isAddress(inputValue)) {
       if (!this.state.address) {
         this.setState({ address: inputValue, [inputKey]: '', tabPage: 2 });
       }
+      searchType = 'address';
       formattedObject = this.formatRequestObject(inputValue, 'address');
     } else if (isPhone(inputValue)) {
       if (!this.state.phone) {
         this.setState({ phone: inputValue, [inputKey]: '', tabPage: 3 });
       }
+      searchType = 'phone';
       formattedObject = this.formatRequestObject(inputValue, 'phone');
     } else if (isUrl(inputValue)) {
       if (!this.state.url) {
         this.setState({ url: inputValue, [inputKey]: '', tabPage: 4 });
       }
+      searchType = 'url';
       formattedObject = this.formatRequestObject(inputValue, 'url');
     } else {
       console.log('your input is not valid');
     }
     if (formattedObject) {
-      this.props.handleSearch(formattedObject);
+      this.props.handleSearch(formattedObject, searchType, inputValue);
     } else {
       console.log('formattedObject: error');
     }
@@ -198,7 +203,7 @@ class SearchForm extends Component {
   };
 
   render() {
-    console.log( 'IN RENDER' , this.props )
+    console.log('IN RENDER', this.props);
     return (
       <View>
         <Tabs
@@ -297,11 +302,11 @@ class SearchForm extends Component {
           </Tab>
         </Tabs>
         <View style={{ flexDirection: 'row' }}>
-          <Button info style={styles.button} onPress={this.handleFormSubmit}>
+          <Button style={styles.button} onPress={this.handleFormSubmit}>
             <Text style={styles.buttonText}> Search </Text>
           </Button>
 
-          <Button info style={styles.greyButton} onPress={this.startOver}>
+          <Button style={styles.greyButton} onPress={this.startOver}>
             <Text style={styles.buttonText}> Start Over </Text>
           </Button>
 
@@ -336,7 +341,7 @@ const styles = StyleSheet.create({
   button: {
     margin: 10,
     padding: 10,
-    backgroundColor: '#508DB3'
+    backgroundColor: `${constants.highlightColor}`
   },
 
   tab: {
@@ -351,13 +356,13 @@ const styles = StyleSheet.create({
     color: '#64aab8',
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
+    backgroundColor: `${constants.highlightColor}`,
     borderRadius: 10,
     marginBottom: 20
   },
   matchesText: {
     fontSize: 20,
-    color: '#508DB3',
+    color: `${constants.highlightColor}`,
     marginBottom: 20
   },
   greyButton: {
@@ -377,11 +382,11 @@ const styles = StyleSheet.create({
   },
   nameInputFullWidth: {
     width: '100%'
-  },
+  }
 });
 
 const mapStateToProps = state => {
-  const { info , queryType, searchMe } = state.confirmationModal
+  const { info, queryType, searchMe } = state.confirmationModal;
   return {
     info,
     queryType,
