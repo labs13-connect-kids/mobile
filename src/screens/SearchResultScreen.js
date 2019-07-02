@@ -41,8 +41,9 @@ class SearchResultScreen extends React.Component {
     modalVisible: false,
     key: '',
     type: '',
-    address: '', 
-    info: ''
+    address: '',
+    info: '',
+    index: null
   };
 
   toggleModal = () => {
@@ -54,7 +55,6 @@ class SearchResultScreen extends React.Component {
   componentDidMount() {
     const {
       accessToken,
-      eventTrack,
       fetchPerson,
       idToken,
       isLoggedIn,
@@ -79,80 +79,49 @@ class SearchResultScreen extends React.Component {
         this.setState({ requestObject });
       }
 
-      fetchPerson(JSON.stringify(requestObject), eventTrack, this.createEvent);
+      fetchPerson(
+        JSON.stringify(requestObject),
+        this.props.user ? this.props.user.email : null
+      );
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('CDU SRS');
+    // console.log('CDU SRS');
     if (
       prevProps.isLoggedIn === false &&
       this.props.isLoggedIn === true &&
       this.state.requestObject
     ) {
-      console.log('requestobj: ', this.state.requestObject);
+      // console.log('requestobj: ', this.state.requestObject);
       this.props.resetPerson();
       let requestObject = { ...this.state.requestObject };
       requestObject['authToken'] = this.props.accessToken;
       requestObject['idToken'] = this.props.idToken;
       this.props.fetchPerson(
         JSON.stringify(requestObject),
-        this.props.eventTrack,
-        this.createEvent
+        this.props.user ? this.props.user.email : null
       );
       this.setState({ requestObject: {} });
     }
   }
 
-  createEvent = success => {
-    let emailAddress = '';
-    let options = {};
-    if (typeof success === 'string') {
-      options = {
-        possibleMatches: this.props.possiblePersons.length,
-        personMatch: false
-      };
-    } else {
-      options = {
-        possibleMatches: 0,
-        personMatch: true
-      };
-    }
-    if (!this.props.user) {
-      emailAddress = 'anonymous@unknown.org';
-    } else {
-      emailAddress = this.props.user.email;
-    }
-    const event = {
-      emailAddress,
-      event:
-        typeof success === 'string'
-          ? `person-search-${success}`
-          : `person-search-${success[0]}`,
-      options
-    };
-    return event;
-  };
-
   startRegister = () => {
     this.props.setModalVisible(true);
   };
 
-  showConModal = (key, type) => {
-    this.setState({ key: key, type: type })
-    this.toggleModal()
+  showConModal = (key, type, index) => {
+    this.setState({ key, type, index });
+    this.toggleModal();
+  };
 
-  }
-
-  setData = ( key , type ) => {
-    console.log( 'SET DATA', key , type )
-    this.setState({ info: key , type: type })
-    this.props.getInfo(key , type)
-  }
+  setData = (key, type) => {
+    this.setState({ info: key, type: type });
+    this.props.getInfo(key, type);
+  };
 
   render() {
-    const { isLoggedIn, person } = this.props;
-    console.log('PERSON', person, 'SRS STATE: ', this.state);
+    const { isLoggedIn, person, user } = this.props;
     return (
       <Container style={styles.container}>
         <View>
@@ -161,7 +130,6 @@ class SearchResultScreen extends React.Component {
             transparent={false}
             visible={this.state.modalVisible}
             onRequestClose={this.toggleModal}
-            // onRequestClose={Alert.alert( 'sup fam' )}
           >
             <ConfirmationModal
               toggleModal={this.toggleModal}
@@ -170,6 +138,8 @@ class SearchResultScreen extends React.Component {
               home={this.state.address}
               navigation={this.props.navigation}
               setData={this.setData}
+              user={user}
+              index={this.state.index}
             />
           </Modal>
         </View>
@@ -210,14 +180,14 @@ class SearchResultScreen extends React.Component {
               {!person ? (
                 <Loader />
               ) : (
-                  <PersonInfo
-                    item={person}
-                    setModalVisible={this.props.setModalVisible}
-                    startRegister={this.startRegister}
-                    isLoggedIn={isLoggedIn}
-                    showConModal={this.showConModal}
-                  />
-                )}
+                <PersonInfo
+                  item={person}
+                  setModalVisible={this.props.setModalVisible}
+                  startRegister={this.startRegister}
+                  isLoggedIn={isLoggedIn}
+                  showConModal={this.showConModal}
+                />
+              )}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -293,7 +263,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log(state)
+  // console.log(state);
   const { error, isFetching, person, possiblePersons } = state.people;
   const {
     accessToken,

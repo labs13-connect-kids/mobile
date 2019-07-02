@@ -13,7 +13,7 @@ import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
-import { trackEmail } from './../store/actions';
+import { sendEvent } from './../helpers/createEvent';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
 import constants from '../helpers/constants';
 class FamilyConnectionsScreen extends Component {
@@ -31,63 +31,31 @@ class FamilyConnectionsScreen extends Component {
   };
 
   trackInterest = trackingEmail => {
-    if (this.props.email === null) {
-      this.props
-        .trackEmail({ emailAddress: trackingEmail })
-        .then(res => {
-          this.props.error
-            ? Alert.alert(this.props.error.message)
-            : this.props.message !== undefined
-            ? Alert.alert(this.props.message)
-            : Alert.alert(
-                'there was a problem talking to the database, Please try again later'
-              );
-          this.toggleModal();
-        })
-        .catch(res => {
-          Alert.alert(this.props.message);
-          this.toggleModal();
-        });
-    } else {
-      this.props
-        .trackEmail({ emailAddress: this.props.email })
-        .then(res => {
-          this.props.error
-            ? Alert.alert(this.props.error.message)
-            : this.props.message !== undefined
-            ? Alert.alert(this.props.message)
-            : Alert.alert(
-                'there was a problem talking to the database, Please try again later'
-              );
-          this.toggleModal();
-        })
-        .catch(res => {
-          Alert.alert(this.props.message);
-          this.toggleModal();
-        });
-    }
+    let email = this.props.email ? this.props.email : trackingEmail;
+    sendEvent(email, 'click', 'request-familyconnections');
+    Alert.alert(`${email} had been added to our list`);
+    this.toggleModal();
   };
 
   render() {
     return (
       <Container style={styles.container}>
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={this.state.modalVisible}
-            onRequestClose={this.toggleModal}
-          >
-            <FamilyConnectionsModal
-              trackInterest={this.trackInterest}
-              toggleModal={this.toggleModal}
-              startRegister={this.startRegister}
-              email={this.props.email}
-            />
-          </Modal>
-        </View>
-
         <SafeAreaView>
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={this.toggleModal}
+            >
+              <FamilyConnectionsModal
+                trackInterest={this.trackInterest}
+                toggleModal={this.toggleModal}
+                startRegister={this.startRegister}
+                email={this.props.email}
+              />
+            </Modal>
+          </View>
           <ScrollView>
             <Text style={styles.mainText}>
               Learn about a revolutionary way to discover and engage extended
@@ -160,18 +128,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  console.log('redux state FCS: ', state);
-  const { message, error } = state.famConInterest;
+  // console.log('redux state FCS: ', state);
   return {
-    email: state.auth.user ? state.auth.user.email : null,
-    message,
-    error
+    email: state.auth.user ? state.auth.user.email : null
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    trackEmail
-  }
-)(FamilyConnectionsScreen);
+export default connect(mapStateToProps)(FamilyConnectionsScreen);

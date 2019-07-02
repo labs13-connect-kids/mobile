@@ -30,15 +30,15 @@ class RecentSearches extends Component {
         this.props.setRecentSearches([]);
       }
     } catch (error) {
-      console.log(error);
+      // console.log('Recent Searches Error: ', error);
     }
   }
 
   async componentDidUpdate(prevProps) {
-    console.log('CDM RECENT');
+    // console.log('CDM RECENT');
     // set boolean
     if (this.props.isSavingRecentSearches) {
-      console.log('CDM INSIDE');
+      // console.log('CDM INSIDE');
       let cache = await AsyncStorage.getItem('recentSearchesCache');
       cache = JSON.parse(cache);
       if (cache !== null) {
@@ -53,7 +53,7 @@ class RecentSearches extends Component {
       await AsyncStorage.removeItem('recentSearchesCache');
       this.props.setRecentSearches([]);
     } catch (error) {
-      console.log(error);
+      // console.log('Clear Recent Searches Error: ', error);
     }
   };
 

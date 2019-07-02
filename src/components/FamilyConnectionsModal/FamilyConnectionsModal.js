@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
@@ -34,7 +35,7 @@ class FamilyConnectionsModal extends Component {
               this.props.toggleModal();
             }}
           >
-            <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
+            <Text style={styles.closeBtn}>❌</Text>
           </TouchableOpacity>
         </View>
         <Text style={styles.modalTextStyle}>
@@ -53,9 +54,9 @@ class FamilyConnectionsModal extends Component {
           <Button
             style={styles.yesButton}
             block
-            onPress={async () => {
+            onPress={() => {
               trackingEmail = this.state.email;
-              await this.props.trackInterest(trackingEmail);
+              this.props.trackInterest(trackingEmail);
             }}
           >
             <Text style={styles.btnText}>Yes, add my email to the list</Text>
@@ -83,7 +84,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'baseline',
     flexDirection: 'row',
-    width: Dimensions.get('window').width
+    width: Dimensions.get('window').width,
+    marginTop: Platform.OS === 'ios' ? 40 : null
   },
   yesButton: {
     backgroundColor: constants.highlightColor,
@@ -94,12 +96,11 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   close: {
-    backgroundColor: 'red',
-    borderRadius: 3,
     marginLeft: 'auto'
   },
   closeBtn: {
-    padding: 5
+    padding: 5,
+    color: '#000'
   },
   btnText: {
     color: '#fff'

@@ -8,17 +8,25 @@ import {
 } from 'react-native';
 import { Icon } from 'native-base';
 import React from 'react';
+import { sendEvent } from '../helpers/createEvent';
 
 export default (headerConfig = (title, navigation) => {
   return {
-    headerTitle: <HeaderTitle title={title} />,
+    headerTitle: <HeaderTitle title={title} navigation={navigation} />,
     headerLeft:
       Platform.OS === 'ios' ? (
-        <Image
-          source={logoImg}
-          style={styles.imageStyles}
-          resizeMode="contain"
-        />
+        <TouchableWithoutFeedback
+          onPress={() => {
+            navigation.navigate('BestPractices');
+            sendEvent(email, 'click', 'logo');
+          }}
+        >
+          <Image
+            source={logoImg}
+            style={styles.imageStyles}
+            resizeMode="contain"
+          />
+        </TouchableWithoutFeedback>
       ) : null,
     headerRight: (
       <TouchableWithoutFeedback

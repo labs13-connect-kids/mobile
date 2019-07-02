@@ -23,7 +23,7 @@ const SocialWorkerModal = props => {
             props.setModalVisible(!props.modalVisible);
           }}
         >
-          <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
+          <Text style={[styles.btnText, styles.closeBtn]}>❌</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.modalTextStyle}>
@@ -32,13 +32,21 @@ const SocialWorkerModal = props => {
         more about what we do.
       </Text>
       <View style={styles.buttonContainer}>
-        <Button style={styles.yesButton} block onPress={props.advanceModal}>
+        <Button
+          style={styles.yesButton}
+          block
+          onPress={() => {
+            props.sendEvent(null, 'click', 'yes-i-am-a-social-worker');
+            props.advanceModal();
+          }}
+        >
           <Text style={styles.btnText}>Yes, I work with foster kids</Text>
         </Button>
         <Button
           style={styles.noButton}
           block
           onPress={() => {
+            props.sendEvent(null, 'click', 'i-am-not-a-social-worker');
             Linking.openURL('https://connectourkids.org');
           }}
         >
@@ -70,12 +78,11 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   close: {
-    backgroundColor: 'red',
-    borderRadius: 3,
     marginLeft: 'auto'
   },
   closeBtn: {
-    padding: 5
+    padding: 5,
+    color: '#000'
   },
   btnText: {
     color: '#fff'

@@ -20,7 +20,7 @@ const setItem = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
   } catch (e) {
-    console.log('SET TOKEN ERROR', e);
+    // console.log('SET TOKEN ERROR', e);
   }
 };
 const _loginWithAuth0 = async () => {
@@ -45,7 +45,9 @@ const _loginWithAuth0 = async () => {
 };
 const handleLogin = async (authSession, setUserCreds) => {
   // Retrieve the JWT token and decode it
-  result = await authSession();
+  let result = await authSession();
+  // if users cancels login process, terminate method
+  if (result.type === 'dismiss') return;
   const jwtToken = result.params.id_token;
   const decoded = jwtDecode(jwtToken);
 

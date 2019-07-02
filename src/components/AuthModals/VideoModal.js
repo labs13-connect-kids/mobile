@@ -27,6 +27,7 @@ const VideoModal = props => {
           block
           onPress={() => {
             props.setModalVisible(false);
+            props.sendEvent(null, 'click', 'post-watch-video-sign-up');
             props.onLogin();
           }}
         >
