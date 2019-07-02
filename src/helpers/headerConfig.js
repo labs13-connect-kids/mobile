@@ -10,7 +10,7 @@ import { Icon } from 'native-base';
 import React from 'react';
 import { sendEvent } from '../helpers/createEvent';
 
-export default (headerConfig = (title, navigation) => {
+export default (headerConfig = (title, navigation, email) => {
   return {
     headerTitle: <HeaderTitle title={title} navigation={navigation} />,
     headerLeft:
