@@ -179,6 +179,19 @@ export const ConfirmationModal = ({
                 Linking.openURL(`${data.url}`);
                 toggleModal()
               }
+              if (type === 'name') {
+                // console.log( 'RELATIONSHIP TO:', data )
+                let options = createOptions(null, 'relationship', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_possible_person',
+                  null,
+                  options
+                );
+                Linking.openURL(`${data}`);
+                toggleModal()
+              }
             }}
           >
             {type === 'email' ? (
@@ -264,6 +277,22 @@ export const ConfirmationModal = ({
                   user.email,
                   'click',
                   'person_url_search',
+                  null,
+                  options
+                );
+                navigation.navigate('PeopleSearch');
+                setData(info, type);
+                toggleModal()
+              }
+
+              if (type === 'name') {
+                info = data;
+                // console.log('RELATIONSHIP TO:', data);
+                let options = createOptions(null, 'relationship', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'possible_person',
                   null,
                   options
                 );
