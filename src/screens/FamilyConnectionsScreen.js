@@ -151,9 +151,13 @@ const styles = StyleSheet.create({
   videoContainer: { height: 300, marginBottom: 30 },
   thankyouMessage: {
     fontSize: 24,
-    color: 'green',
+    color: '#fff',
+    fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 20
+    marginTop: 20,
+    padding: 10,
+    textTransform: 'uppercase',
+    backgroundColor: constants.highlightColor
   }
 });
 
