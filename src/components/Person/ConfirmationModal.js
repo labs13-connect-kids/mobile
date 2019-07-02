@@ -104,20 +104,6 @@ export const ConfirmationModal = ({
         </View>
       ) : null}
 
-      {type === 'name' ? (
-        <View>
-          <View style={options.border}>
-            <Text style={options.header}>View Relationship or Search?</Text>
-            <TouchableOpacity onPress={() => toggleModal()}>
-              <Text style={options.button}>❌</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={options.question}>
-            Would you like to view this relation?
-          </Text>
-        </View>
-      ) : null}
-
       <View style={options.buttonContainer}>
         {type === 'name' ? null : (
           <Button
@@ -193,7 +179,6 @@ export const ConfirmationModal = ({
                 Linking.openURL(`${data.url}`);
                 toggleModal()
               }
-
               if (type === 'name') {
                 // console.log( 'RELATIONSHIP TO:', data )
                 let options = createOptions(null, 'relationship', index);
