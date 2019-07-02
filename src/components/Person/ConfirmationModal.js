@@ -30,6 +30,9 @@ export const ConfirmationModal = ({
     }
   };
 
+  //toggle modal closed after search
+  //no relations if not logged in
+
   return (
     <View style={options.container}>
       {type === 'email' ? (
@@ -135,6 +138,7 @@ export const ConfirmationModal = ({
                   options
                 );
                 Linking.openURL(`mailto:${data.address}`);
+                toggleModal()
               }
 
               if (type === 'phone') {
@@ -148,6 +152,7 @@ export const ConfirmationModal = ({
                   options
                 );
                 Linking.openURL(`tel:${data.number}`);
+                toggleModal()
               }
 
               if (type === 'address') {
@@ -161,6 +166,7 @@ export const ConfirmationModal = ({
                   options
                 );
                 handlePressDirections(data);
+                toggleModal()
               }
 
               if (type === 'address404') {
@@ -174,6 +180,7 @@ export const ConfirmationModal = ({
                   options
                 );
                 handlePressDirections(data);
+                toggleModal()
               }
 
               if (type === 'url') {
@@ -187,6 +194,7 @@ export const ConfirmationModal = ({
                   options
                 );
                 Linking.openURL(`${data.url}`);
+                toggleModal()
               }
 
               if (type === 'name') {
@@ -200,6 +208,7 @@ export const ConfirmationModal = ({
                   options
                 );
                 Linking.openURL(`${data}`);
+                toggleModal()
               }
             }}
           >
@@ -243,6 +252,7 @@ export const ConfirmationModal = ({
                 );
                 navigation.goBack();
                 setData(info, type);
+                toggleModal()
               }
 
               if (type === 'phone') {
@@ -258,6 +268,7 @@ export const ConfirmationModal = ({
                 );
                 navigation.navigate('PeopleSearch');
                 setData(info, type);
+                toggleModal()
               }
 
               if (type === 'address') {
@@ -273,6 +284,7 @@ export const ConfirmationModal = ({
                 );
                 navigation.navigate('PeopleSearch');
                 setData(info, type);
+                toggleModal()
               }
 
               if (type === 'url') {
@@ -288,6 +300,7 @@ export const ConfirmationModal = ({
                 );
                 navigation.navigate('PeopleSearch');
                 setData(info, type);
+                toggleModal()
               }
 
               if (type === 'name') {
@@ -303,6 +316,7 @@ export const ConfirmationModal = ({
                 );
                 navigation.navigate('PeopleSearch');
                 setData(info, type);
+                toggleModal()
               }
             }}
           >

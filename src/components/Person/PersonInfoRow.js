@@ -112,7 +112,7 @@ const PersonInfoRow = ({
                   </Text>
                 </TouchableOpacity>
               );
-            } else if (itemKey === 'relationships') {
+            } else if ( isLoggedIn && itemKey === 'relationships' ) {
               return (
                 <TouchableOpacity
                   style={styles.colListContainer}
