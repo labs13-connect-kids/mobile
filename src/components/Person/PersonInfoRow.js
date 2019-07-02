@@ -13,7 +13,9 @@ const PersonInfoRow = ({
   itemValue,
   startRegister,
   title,
-  showConModal
+  showConModal,
+  navigation,
+  setData
 }) => {
   if (item[itemKey]) {
     handlePressDirections = (data, postalCode, city) => {
@@ -79,9 +81,11 @@ const PersonInfoRow = ({
         const type = 'url';
         showConModal(key, type, index);
       }
+
       if (isLoggedIn && itemKey === 'relationships') {
         const type = 'name';
-        showConModal(key, type, index);
+        navigation.goBack();
+        setData( key , type);
       }
     };
     return (
