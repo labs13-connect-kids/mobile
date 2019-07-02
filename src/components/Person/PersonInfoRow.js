@@ -34,7 +34,7 @@ const PersonInfoRow = ({
       }
     };
 
-    let handleShowConModal = key => {
+    let handleShowConModal = (key, index) => {
       if (!isLoggedIn) startRegister();
 
       if (isLoggedIn && itemKey === 'emails') {

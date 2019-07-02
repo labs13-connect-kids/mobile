@@ -102,7 +102,7 @@ export const fetchSearchResult = (body, cb, email) => dispatch => {
     });
 };
 
-export const fetchPerson = (body, eventTrack, createEvent) => dispatch => {
+export const fetchPerson = (body, email) => dispatch => {
   dispatch({ type: FETCH_PERSON });
   axios
     .post(`${constants.devURL}`, body)
@@ -111,11 +111,12 @@ export const fetchPerson = (body, eventTrack, createEvent) => dispatch => {
         type: FETCH_PERSON_SUCCESS,
         payload: res.data.person
       });
-      eventTrack(createEvent(['success']));
+      options = createOptions(0, null, null);
+      sendEvent(email, 'search', 'person', 'success', options);
     })
     .catch(err => {
       dispatch({ type: FETCH_PERSON_FAILURE, payload: err });
-      eventTrack(createEvent(['failed']));
+      sendEvent(email, 'search', 'person', 'failed');
     });
 };
 
