@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { setUserCreds, logOut } from '../../store/actions';
 import Login from './Login';
 
-class Auth0LoginContainer extends Component {
+class LoginWithAuth0 extends Component {
   onRegister = () => {};
 
   render() {
@@ -41,4 +41,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { setUserCreds, logOut }
-)(Auth0LoginContainer);
+)(LoginWithAuth0);

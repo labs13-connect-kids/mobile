@@ -149,6 +149,19 @@ export const ConfirmationModal = ({
                 handlePressDirections(data);
               }
 
+              if (type === 'address404') {
+                // console.log('MAP TO:', data)
+                let options = createOptions(null, 'address', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_address_view',
+                  null,
+                  options
+                );
+                handlePressDirections(data);
+              }
+
               if (type === 'url') {
                 // console.log( 'URL TO:', data )
                 let options = createOptions(null, 'url', index);
@@ -188,88 +201,100 @@ export const ConfirmationModal = ({
               <Text style={{ color: 'white' }}>View on map</Text>
             ) : null}
 
+            {type === 'address404' ? (
+              <Text style={{ color: 'white' }}>View on map</Text>
+            ) : null}
+
             {type === 'url' ? (
               <Text style={{ color: 'white' }}>View the URL</Text>
             ) : null}
           </Button>
         )}
 
-        <Button
-          info
-          style={options.greyButton}
-          onPress={() => {
-            if (type === 'email') {
-              info = data.address;
-              // console.log('SEARCH EMAIL:', data.address);
-              let options = createOptions(null, 'email', index);
-              sendEvent(
-                user.email,
-                'click',
-                'person_email_search',
-                null,
-                options
-              );
-              navigation.goBack();
-              setData(info, type);
-            }
+        {type === 'address404' ? null : (
+          <Button
+            info
+            style={options.greyButton}
+            onPress={() => {
+              if (type === 'email') {
+                info = data.address;
+                // console.log('SEARCH EMAIL:', data.address);
+                let options = createOptions(null, 'email', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_email_search',
+                  null,
+                  options
+                );
+                navigation.goBack();
+                setData(info, type);
+              }
 
-            if (type === 'phone') {
-              info = data.display;
-              // console.log('SEARCH PHONE:', data.number);
-              let options = createOptions(null, 'phone', index);
-              sendEvent(
-                user.email,
-                'click',
-                'person_phone_search',
-                null,
-                options
-              );
-              navigation.navigate('PeopleSearch');
-              setData(info, type);
-            }
+              if (type === 'phone') {
+                info = data.display;
+                // console.log('SEARCH PHONE:', data.number);
+                let options = createOptions(null, 'phone', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_phone_search',
+                  null,
+                  options
+                );
+                navigation.navigate('PeopleSearch');
+                setData(info, type);
+              }
 
-            if (type === 'address') {
-              info = data;
-              // console.log('SEARCH MAP TO:', data);
-              let options = createOptions(null, 'address', index);
-              sendEvent(
-                user.email,
-                'click',
-                'person_address_search',
-                null,
-                options
-              );
-              navigation.navigate('PeopleSearch');
-              setData(info, type);
-            }
+              if (type === 'address') {
+                info = data;
+                // console.log('SEARCH MAP TO:', data);
+                let options = createOptions(null, 'address', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_address_search',
+                  null,
+                  options
+                );
+                navigation.navigate('PeopleSearch');
+                setData(info, type);
+              }
 
-            if (type === 'url') {
-              info = data.url;
-              // console.log('SEARCH URL:', data);
-              let options = createOptions(null, 'url', index);
-              sendEvent(
-                user.email,
-                'click',
-                'person_url_search',
-                null,
-                options
-              );
-              navigation.navigate('PeopleSearch');
-              setData(info, type);
-            }
+              if (type === 'url') {
+                info = data.url;
+                // console.log('SEARCH URL:', data);
+                let options = createOptions(null, 'url', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'person_url_search',
+                  null,
+                  options
+                );
+                navigation.navigate('PeopleSearch');
+                setData(info, type);
+              }
 
-            if (type === 'name') {
-              info = data;
-              // console.log('RELATIONSHIP TO:', data);
-              let options = createOptions(null, 'relationship', index);
-              sendEvent(user.email, 'click', 'possible_person', null, options);
-              navigation.navigate('PeopleSearch');
-              setData(info, type);
-            }
-          }}
-        >
-          <Text style={{ color: 'white' }}>Perform a Search</Text>
-        </Button>
+              if (type === 'name') {
+                info = data;
+                // console.log('RELATIONSHIP TO:', data);
+                let options = createOptions(null, 'relationship', index);
+                sendEvent(
+                  user.email,
+                  'click',
+                  'possible_person',
+                  null,
+                  options
+                );
+                navigation.navigate('PeopleSearch');
+                setData(info, type);
+              }
+            }}
+          >
+            <Text style={{ color: 'white' }}>Perform a Search</Text>
+          </Button>
+        )}
       </View>
     </View>
   );

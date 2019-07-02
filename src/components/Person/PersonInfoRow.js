@@ -16,33 +16,74 @@ const PersonInfoRow = ({
   showConModal
 }) => {
   if (item[itemKey]) {
-    let startUserModal = (key, index) => {
+    handlePressDirections = (data, postalCode, city) => {
+      console.log('DATA', data);
+      console.log('POSTAL CODE', postalCode);
+      console.log('CITY', city);
+
+      if (postalCode === undefined) {
+        let address = `${city}, ${data}`;
+        console.log(address);
+        const type = 'address';
+        showConModal(address, type);
+      } else {
+        let address = `${city}, ${data} ${postalCode}`;
+        console.log(address);
+        const type = 'address404';
+        showConModal(address, type);
+      }
+    };
+
+    let handleShowConModal = key => {
       if (!isLoggedIn) startRegister();
 
       if (isLoggedIn && itemKey === 'emails') {
         const type = 'email';
         showConModal(key, type, index);
       }
+
       if (isLoggedIn && itemKey === 'phones') {
         const type = 'phone';
         showConModal(key, type, index);
       }
+
       if (isLoggedIn && itemKey === 'addresses') {
-        let address = `${key.house} ${key.street}`;
-        const type = 'address';
-        showConModal(address, type, index);
+        if (key.zip_code === undefined) {
+          let address = `${key.display}`;
+          console.log('NO ZIP_CODE FOUND');
+          let type = 'address';
+          console.log('ADDRESS', `${key.display}`);
+          showConModal(address, type, index);
+        } else if (key.house === undefined) {
+          if (key.street === undefined) {
+            let data = `${key.state}`;
+            handlePressDirections(data, key['zip_code'], key['city']);
+          } else {
+            let data = `${key.street} ${key.state}`;
+            handlePressDirections(data, key['zip_code'], key['city']);
+          }
+        } else if (key.zip_code === undefined) {
+          let address = `${key.display}`;
+          let type = 'address';
+          console.log('ADDRESS', `${key.display}`);
+          showConModal(address, type, index);
+        } else {
+          let address = `${key.display}, ${key.zip_code}`;
+          let type = 'address';
+          console.log('ADDRESS', `${key.display}`);
+          showConModal(address, type, index);
+        }
       }
+
       if (isLoggedIn && itemKey === 'urls') {
         const type = 'url';
         showConModal(key, type, index);
       }
       if (isLoggedIn && itemKey === 'relationships') {
-        // console.log('THIS IS RELATIONSHIP KEY', key);
         const type = 'name';
         showConModal(key, type, index);
       }
     };
-
     return (
       <Row style={styles.rowContainer}>
         <Col size={30} style={styles.rowLabel}>
@@ -55,7 +96,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity
                   style={styles.colListContainer}
                   key={index}
-                  onPress={() => startUserModal(key, index)}
+                  onPress={() => handleShowConModal(key, index)}
                 >
                   <Text style={styles.colListText}>
                     {key.house && renderMaskedOrResult(key.house, 'house')}{' '}
@@ -77,7 +118,7 @@ const PersonInfoRow = ({
                   style={styles.colListContainer}
                   key={index}
                   onPress={() =>
-                    startUserModal(key[itemValue][0].display, index)
+                    handleShowConModal(key[itemValue][0].display, index)
                   }
                 >
                   <Text style={styles.colListText}>
@@ -90,7 +131,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity style={styles.colListContainer} key={index}>
                   <Text
                     style={styles.colListText}
-                    onPress={() => startUserModal(key, index)}
+                    onPress={() => handleShowConModal(key, index)}
                   >
                     {renderMaskedOrResult(key[itemValue], itemKey)}
                   </Text>
