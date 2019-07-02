@@ -2,10 +2,11 @@
   "expo": {
     "name": "connectOurKids",
     "slug": "connectOurKids",
+    "scheme": "connectourkids",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
