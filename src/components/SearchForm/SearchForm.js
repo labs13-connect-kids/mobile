@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Button, Tabs, Tab, Input } from 'native-base';
 import constants from '../../helpers/constants';
 import {
@@ -25,14 +25,14 @@ class SearchForm extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('SF CDU', this.props);
+    // console.log('SF CDU', this.props);
     if (this.props.searchMe && this.props.queryType) {
       this.inputHandler(this.props.queryType, this.props.info);
       this.handleFormSubmit();
       this.props.stopSearchMe();
-      console.log('Search Success');
+      // console.log('Search Success');
     }
-    console.log('its not starting');
+    // console.log('its not starting');
   }
 
   inputHandler = (name, value) => {
@@ -73,7 +73,7 @@ class SearchForm extends Component {
     const inputObj = this.findInputWithLength();
 
     if (!inputObj) {
-      console.log('No input');
+      // console.log('No input');
       return;
     }
 
@@ -113,12 +113,12 @@ class SearchForm extends Component {
       searchType = 'url';
       formattedObject = this.formatRequestObject(inputValue, 'url');
     } else {
-      console.log('your input is not valid');
+      // console.log('your input is not valid');
     }
     if (formattedObject) {
       this.props.handleSearch(formattedObject, searchType, inputValue);
     } else {
-      console.log('formattedObject: error');
+      // console.log('formattedObject: error');
     }
   };
 
@@ -137,7 +137,7 @@ class SearchForm extends Component {
     if (name && input) {
       return { [name]: input };
     } else {
-      console.log('Something went wrong!');
+      // console.log('Something went wrong!');
     }
   };
 
@@ -184,7 +184,7 @@ class SearchForm extends Component {
         break;
 
       default:
-        console.log('Something happened ERROR');
+        // console.log('Something happened ERROR');
         break;
     }
     return person;
@@ -203,7 +203,7 @@ class SearchForm extends Component {
   };
 
   render() {
-    console.log('IN RENDER', this.props);
+    // console.log('IN RENDER', this.props);
     return (
       <View>
         <Tabs

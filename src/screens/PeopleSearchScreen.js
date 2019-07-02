@@ -12,7 +12,6 @@ import {
   fetchPerson,
   fetchSearchResult,
   resetState,
-  eventTrack,
   setModalVisible,
   setAgreeModalVisible,
   setUserCreds,
@@ -22,7 +21,6 @@ import {
 
 import { Container, Button } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
-// import { createEvent } from '../helpers/createEvent';
 
 import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
@@ -32,7 +30,6 @@ import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
 import RecentSearches from '../components/RecentSearches/RecentSearches';
 
-import saveToRecentSearches from '../helpers/saveToRecentSearches';
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 
@@ -45,36 +42,6 @@ class PeopleSearchScreen extends React.Component {
     type: this.props.type
   };
 
-  createEvent = success => {
-    let emailAddress = '';
-    let options = {};
-    if (typeof success === 'string') {
-      options = {
-        possibleMatches: this.props.possiblePersons.length,
-        personMatch: false
-      };
-    } else {
-      options = {
-        possibleMatches: 0,
-        personMatch: true
-      };
-    }
-    if (!this.props.user) {
-      emailAddress = 'anonymous@unknown.org';
-    } else {
-      emailAddress = this.props.user.email;
-    }
-    const event = {
-      emailAddress,
-      event:
-        typeof success === 'string'
-          ? `person-search-${success}`
-          : `person-search-${success[0]}`,
-      options
-    };
-    return event;
-  };
-
   handleEncodeURI = person => {
     return encodeURI(JSON.stringify(person));
   };
@@ -85,7 +52,8 @@ class PeopleSearchScreen extends React.Component {
       fetchSearchResult,
       idToken,
       isLoggedIn,
-      navigation
+      navigation,
+      user
     } = this.props;
 
     const body = {};
@@ -109,19 +77,14 @@ class PeopleSearchScreen extends React.Component {
     fetchSearchResult(
       body,
       () => navigation.navigate('SearchResult'),
-      this.props.eventTrack,
-      this.createEvent
+      user ? user.email : null
     );
   };
 
   handleNavigateToResult = async searchPointer => {
     const { person } = this.state;
     if (!person) {
-      await this.handlePersonRequest(
-        searchPointer,
-        this.props.eventTrack,
-        this.createEvent
-      );
+      await this.handlePersonRequest(searchPointer);
     }
     await this.props.navigation.navigate('SearchResult', {
       person: person
@@ -141,21 +104,21 @@ class PeopleSearchScreen extends React.Component {
     const { isLoggedIn, navigation } = this.props;
     return (
       <Container style={styles.container}>
-        <RegisterModalsContainer
-          modalVisible={this.props.modalVisible}
-          setAgreeModalVisible={this.props.setAgreeModalVisible}
-          videoAgree={this.props.videoAgree}
-          videoVisible={this.props.videoVisible}
-          setModalVisible={this.props.setModalVisible}
-          setVideoPlayerModalVisible={this.props.setVideoPlayerModalVisible}
-          onLogin={() =>
-            authHelpers.handleLogin(
-              authHelpers._loginWithAuth0,
-              this.props.setUserCreds
-            )
-          }
-        />
         <SafeAreaView>
+          <RegisterModalsContainer
+            modalVisible={this.props.modalVisible}
+            setAgreeModalVisible={this.props.setAgreeModalVisible}
+            videoAgree={this.props.videoAgree}
+            videoVisible={this.props.videoVisible}
+            setModalVisible={this.props.setModalVisible}
+            setVideoPlayerModalVisible={this.props.setVideoPlayerModalVisible}
+            onLogin={() =>
+              authHelpers.handleLogin(
+                authHelpers._loginWithAuth0,
+                this.props.setUserCreds
+              )
+            }
+          />
           <ScrollView>
             <View>
               <Text style={styles.intro}>Search By:</Text>
@@ -320,7 +283,6 @@ export default connect(
     fetchPerson,
     fetchSearchResult,
     resetState,
-    eventTrack,
     setModalVisible,
     setAgreeModalVisible,
     setUserCreds,
