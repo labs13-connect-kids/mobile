@@ -30,9 +30,6 @@ export const ConfirmationModal = ({
     }
   };
 
-  //toggle modal closed after search
-  //no relations if not logged in
-
   return (
     <View style={options.container}>
       {type === 'email' ? (
