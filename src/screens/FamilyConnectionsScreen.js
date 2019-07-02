@@ -93,10 +93,12 @@ class FamilyConnectionsScreen extends Component {
               </Text>
             </Button>
             {this.state.message && (
-              <Text style={styles.thankyouMessage}>
-                Thank you for showing interest, {this.state.email} has been
-                added to our list.
-              </Text>
+              <View style={styles.messageContainer}>
+                <Text style={styles.thankyouMessage}>
+                  Thank you for showing interest, {this.state.email} has been
+                  added to our list.
+                </Text>
+              </View>
             )}
           </ScrollView>
         </SafeAreaView>
@@ -154,10 +156,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
+    textTransform: 'uppercase'
+  },
+  messageContainer: {
     marginTop: 20,
     padding: 10,
-    textTransform: 'uppercase',
-    backgroundColor: constants.highlightColor
+    backgroundColor: constants.highlightColor,
+    borderRadius: 5
   }
 });
 
