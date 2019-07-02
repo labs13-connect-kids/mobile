@@ -186,6 +186,8 @@ class SearchResultScreen extends React.Component {
                   startRegister={this.startRegister}
                   isLoggedIn={isLoggedIn}
                   showConModal={this.showConModal}
+                  navigation={this.props.navigation}
+                  setData = {this.setData}
                 />
               )}
             </View>

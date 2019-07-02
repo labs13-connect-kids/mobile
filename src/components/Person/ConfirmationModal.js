@@ -104,20 +104,6 @@ export const ConfirmationModal = ({
         </View>
       ) : null}
 
-      {type === 'name' ? (
-        <View>
-          <View style={options.border}>
-            <Text style={options.header}>View Relationship or Search?</Text>
-            <TouchableOpacity onPress={() => toggleModal()}>
-              <Text style={options.button}>❌</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={options.question}>
-            Would you like to view this relation?
-          </Text>
-        </View>
-      ) : null}
-
       <View style={options.buttonContainer}>
         {type === 'name' ? null : (
           <Button
@@ -191,20 +177,6 @@ export const ConfirmationModal = ({
                   options
                 );
                 Linking.openURL(`${data.url}`);
-                toggleModal()
-              }
-
-              if (type === 'name') {
-                // console.log( 'RELATIONSHIP TO:', data )
-                let options = createOptions(null, 'relationship', index);
-                sendEvent(
-                  user.email,
-                  'click',
-                  'person_possible_person',
-                  null,
-                  options
-                );
-                Linking.openURL(`${data}`);
                 toggleModal()
               }
             }}
@@ -292,22 +264,6 @@ export const ConfirmationModal = ({
                   user.email,
                   'click',
                   'person_url_search',
-                  null,
-                  options
-                );
-                navigation.navigate('PeopleSearch');
-                setData(info, type);
-                toggleModal()
-              }
-
-              if (type === 'name') {
-                info = data;
-                // console.log('RELATIONSHIP TO:', data);
-                let options = createOptions(null, 'relationship', index);
-                sendEvent(
-                  user.email,
-                  'click',
-                  'possible_person',
                   null,
                   options
                 );
