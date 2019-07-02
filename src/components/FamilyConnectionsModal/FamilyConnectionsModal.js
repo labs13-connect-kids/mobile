@@ -22,6 +22,10 @@ class FamilyConnectionsModal extends Component {
     });
   };
 
+  resetInput = () => {
+    this.setState({ email: '' });
+  };
+
   render() {
     return (
       <>
@@ -32,7 +36,7 @@ class FamilyConnectionsModal extends Component {
           <TouchableOpacity
             style={styles.close}
             onPress={() => {
-              this.props.toggleModal();
+              this.props.closeModal();
             }}
           >
             <Text style={styles.closeBtn}>❌</Text>
@@ -49,23 +53,22 @@ class FamilyConnectionsModal extends Component {
               style={styles.textInput}
               onChangeText={text => this.handleInput(text)}
               placeholder="sample@email.com"
+              value={this.state.email}
             />
           )}
           <Button
             style={styles.yesButton}
+            disabled={!this.props.email && this.state.email === ''}
             block
             onPress={() => {
               trackingEmail = this.state.email;
               this.props.trackInterest(trackingEmail);
+              this.resetInput();
             }}
           >
             <Text style={styles.btnText}>Yes, add my email to the list</Text>
           </Button>
-          <Button
-            style={styles.noButton}
-            block
-            onPress={this.props.toggleModal}
-          >
+          <Button style={styles.noButton} block onPress={this.props.closeModal}>
             <Text style={styles.btnText}>Don't add my email</Text>
           </Button>
         </View>

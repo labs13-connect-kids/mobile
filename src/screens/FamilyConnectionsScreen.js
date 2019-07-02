@@ -6,8 +6,7 @@ import {
   View,
   WebView,
   Platform,
-  Modal,
-  Alert
+  Modal
 } from 'react-native';
 import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -21,20 +20,38 @@ class FamilyConnectionsScreen extends Component {
     headerConfig('Family Connections', navigation);
 
   state = {
-    modalVisible: false
+    modalVisible: false,
+    message: false,
+    email: ''
   };
 
-  toggleModal = () => {
+  openModal = () => {
     this.setState({
-      modalVisible: !this.state.modalVisible
+      modalVisible: true
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalVisible: false
     });
   };
 
   trackInterest = trackingEmail => {
     let email = this.props.email ? this.props.email : trackingEmail;
     sendEvent(email, 'click', 'request-familyconnections');
-    Alert.alert(`${email} had been added to our list`);
-    this.toggleModal();
+    this.setState({
+      modalVisible: false,
+      email,
+      message: true
+    });
+    this.startClearState();
+  };
+
+  startClearState = () => {
+    setTimeout(() => {
+      this.setState({ message: false, email: '' });
+    }, 3000);
   };
 
   render() {
@@ -46,11 +63,11 @@ class FamilyConnectionsScreen extends Component {
               animationType="slide"
               transparent={false}
               visible={this.state.modalVisible}
-              onRequestClose={this.toggleModal}
+              onRequestClose={this.closeModal}
             >
               <FamilyConnectionsModal
                 trackInterest={this.trackInterest}
-                toggleModal={this.toggleModal}
+                closeModal={this.closeModal}
                 startRegister={this.startRegister}
                 email={this.props.email}
               />
@@ -61,7 +78,7 @@ class FamilyConnectionsScreen extends Component {
               Learn about a revolutionary way to discover and engage extended
               families for at-risk foster youth.
             </Text>
-            <View style={{ height: 300, marginBottom: 30 }}>
+            <View style={styles.videoContainer}>
               <WebView
                 style={styles.WebViewContainer}
                 javaScriptEnabled={true}
@@ -70,11 +87,19 @@ class FamilyConnectionsScreen extends Component {
               />
             </View>
 
-            <Button style={styles.button} block onPress={this.toggleModal}>
+            <Button style={styles.button} block onPress={this.openModal}>
               <Text style={styles.buttonText}>
                 I Want To Access Family Connections
               </Text>
             </Button>
+            {this.state.message && (
+              <View style={styles.messageContainer}>
+                <Text style={styles.thankyouMessage}>
+                  Thank you for showing interest, {this.state.email} has been
+                  added to our list.
+                </Text>
+              </View>
+            )}
           </ScrollView>
         </SafeAreaView>
       </Container>
@@ -124,6 +149,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  videoContainer: { height: 300, marginBottom: 30 },
+  thankyouMessage: {
+    fontSize: 24,
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textTransform: 'uppercase'
+  },
+  messageContainer: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: constants.highlightColor,
+    borderRadius: 5
   }
 });
 
