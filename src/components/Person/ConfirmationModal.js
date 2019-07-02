@@ -76,6 +76,20 @@ export const ConfirmationModal = ({
         </View>
       ) : null}
 
+      {type === 'address404' ? (
+        <View>
+          <View style={options.border}>
+            <Text style={options.header}>View?</Text>
+            <TouchableOpacity onPress={() => toggleModal()}>
+              <Text style={options.button}>❌</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={options.question}>
+            Would you like to view this address on a map?
+          </Text>
+        </View>
+      ) : null}
+
       {type === 'url' ? (
         <View>
           <View style={options.border}>
