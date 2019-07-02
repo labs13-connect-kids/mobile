@@ -9,12 +9,13 @@ import {
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
+import Loader from '../Loader/Loader'
 
 export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData }) => {
 
     const handlePressDirections = data => {
         let daddr = data;
-        console.log( daddr );
+        console.log(daddr);
         if (Platform.OS === 'ios') {
             Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
         } else {
@@ -23,160 +24,186 @@ export const ConfirmationModal = ({ toggleModal, data, type, navigation, setData
     };
 
     return (
-        <View style={ options.container }>
+        <View style={options.container}>
 
-            { type === 'email' ?
+            {type === 'email' ?
                 <View>
-                    <View style={ options.border }>
-                        <Text style={ options.header }>Send Email or Search?</Text>
+                    <View style={options.border}>
+                        <Text style={options.header}>Send Email or Search?</Text>
                         <TouchableOpacity onPress={() => toggleModal()}>
-                            <Text style={ options.button }>❌</Text>
+                            <Text style={options.button}>❌</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={ options.question }>Would you like to send an email, or perform a search?</Text>
+                    <Text style={options.question}>Would you like to send an email, or perform a search?</Text>
                 </View>
-            : null }
+                : null}
 
-            { type === 'phone' ?
+            {type === 'phone' ?
                 <View>
-                    <View style={ options.border }>
-                        <Text style={ options.header }>Call or Search?</Text>
+                    <View style={options.border}>
+                        <Text style={options.header}>Call or Search?</Text>
                         <TouchableOpacity onPress={() => toggleModal()}>
-                            <Text style={ options.button }>❌</Text>
+                            <Text style={options.button}>❌</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={ options.question }>Would you like to call this number, or perform a search? Calling requires a device capable of dialing phone numbers.</Text>
+                    <Text style={options.question}>Would you like to call this number, or perform a search? Calling requires a device capable of dialing phone numbers.</Text>
                 </View>
-            : null }
+                : null}
 
-            { type === 'address' ?
+            {type === 'address' ?
                 <View>
-                    <View style={ options.border }>
-                        <Text style={ options.header }>View or Search?</Text>
+                    <View style={options.border}>
+                        <Text style={options.header}>View or Search?</Text>
                         <TouchableOpacity onPress={() => toggleModal()}>
-                            <Text style={ options.button }>❌</Text>
+                            <Text style={options.button}>❌</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={ options.question }>Would you like to view this address on a map, or perform a search on it?</Text>
+                    <Text style={options.question}>Would you like to view this address on a map, or perform a search on it?</Text>
                 </View>
-            : null }
+                : null}
 
-            { type === 'url' ?
+            {type === 'address404' ?
                 <View>
-                    <View style={ options.border }>
-                        <Text style={ options.header }>View or Search?</Text>
+                    <View style={options.border}>
+                        <Text style={options.header}>View?</Text>
                         <TouchableOpacity onPress={() => toggleModal()}>
-                            <Text style={ options.button }>❌</Text>
+                            <Text style={options.button}>❌</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={ options.question }>Would you like to view this URL, or perform a search on it?</Text>
+                    <Text style={options.question}>Would you like to view this address on a map?</Text>
                 </View>
-            : null }
+                : null}
 
-            { type === 'name' ?
+
+            {type === 'url' ?
                 <View>
-                    <View style={ options.border }>
-                        <Text style={ options.header }>View Relationship or Search?</Text>
+                    <View style={options.border}>
+                        <Text style={options.header}>View or Search?</Text>
                         <TouchableOpacity onPress={() => toggleModal()}>
-                            <Text style={ options.button }>❌</Text>
+                            <Text style={options.button}>❌</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={ options.question }>Would you like to view this relation?</Text>
+                    <Text style={options.question}>Would you like to view this URL, or perform a search on it?</Text>
                 </View>
-            : null }
+                : null}
 
-            <View style={ options.buttonContainer }>
-                { type === 'name' ?
+            {type === 'name' ?
+                <View>
+                    <View style={options.border}>
+                        <Text style={options.header}>View Relationship or Search?</Text>
+                        <TouchableOpacity onPress={() => toggleModal()}>
+                            <Text style={options.button}>❌</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={options.question}>Would you like to view this relation?</Text>
+                </View>
+                : null}
+
+            <View style={options.buttonContainer}>
+                {type === 'name' ?
                     null
-                :
-                    <Button info style={ options.blueButton } onPress={() => {
+                    :
+                    <Button info style={options.blueButton} onPress={() => {
 
-                        if ( type === 'email' ) {
-                            console.log( 'EMAIL TO:', data.address )
+                        if (type === 'email') {
+                            console.log('EMAIL TO:', data.address)
                             Linking.openURL(`mailto:${data.address}`);
                         }
 
-                        if ( type === 'phone' ) {
-                            console.log( 'CALL TO:', data.number )
+                        if (type === 'phone') {
+                            console.log('CALL TO:', data.number)
                             Linking.openURL(`tel:${data.number}`);
                         }
 
-                        if ( type === 'address' ) {
-                            console.log( 'MAP TO:', data )
+                        if (type === 'address') {
+                            console.log('MAP TO:', data)
                             handlePressDirections(data);
                         }
 
-                        if ( type === 'url' ) {
-                            console.log( 'URL TO:', data )
+                        if (type === 'address404') {
+                            console.log('MAP TO:', data)
+                            handlePressDirections(data);
+                        }
+
+                        if (type === 'url') {
+                            console.log('URL TO:', data)
                             Linking.openURL(`${data.url}`);
                         }
 
-                        if ( type === 'name' ) {
-                            console.log( 'RELATIONSHIP TO:', data )
+                        if (type === 'name') {
+                            console.log('RELATIONSHIP TO:', data)
                             Linking.openURL(`${data}`);
                         }
 
                     }}>
 
-                        { type === 'email' ?
+                        {type === 'email' ?
                             <Text style={{ color: 'white' }}>Send Email</Text>
-                        : null }
+                            : null}
 
-                        { type === 'phone' ?
+                        {type === 'phone' ?
                             <Text style={{ color: 'white' }}>Call this number</Text>
-                        : null }
+                            : null}
 
-                        { type === 'address' ?
+                        {type === 'address' ?
                             <Text style={{ color: 'white' }}>View on map</Text>
-                        : null }
+                            : null}
 
-                        { type === 'url' ?
+                        {type === 'address404' ?
+                            <Text style={{ color: 'white' }}>View on map</Text>
+                            : null}
+
+                        {type === 'url' ?
                             <Text style={{ color: 'white' }}>View the URL</Text>
-                        : null }
+                            : null}
 
                     </Button>
                 }
 
-                <Button info style={ options.greyButton } onPress={() => {
+                {type === 'address404' ?
+                    null
+                    :
+                    <Button info style={options.greyButton} onPress={() => {
 
-                    if ( type === 'email' ) {
-                        info = data.address
-                        console.log( 'SEARCH EMAIL:', data.address )
-                        navigation.goBack()
-                        setData(info, type)
-                    }
+                        if (type === 'email') {
+                            info = data.address
+                            console.log('SEARCH EMAIL:', data.address)
+                            navigation.goBack()
+                            setData(info, type)
+                        }
 
-                    if ( type === 'phone' ) {
-                        info = data.display
-                        console.log( 'SEARCH PHONE:', data.number )
-                        navigation.navigate('PeopleSearch')
-                        setData( info, type )
-                    }
+                        if (type === 'phone') {
+                            info = data.display
+                            console.log('SEARCH PHONE:', data.number)
+                            navigation.navigate('PeopleSearch')
+                            setData(info, type)
+                        }
 
-                    if ( type === 'address' ) {
-                        info = data
-                        console.log( 'SEARCH MAP TO:', data )
-                        navigation.navigate('PeopleSearch')
-                        setData( info, type )
-                    }
+                        if (type === 'address') {
+                            info = data
+                            console.log('SEARCH MAP TO:', data)
+                            navigation.navigate('PeopleSearch')
+                            setData(info, type)
+                        }
 
-                    if ( type === 'url' ) {
-                        info = data.url
-                        console.log( 'SEARCH URL:', data )
-                        navigation.navigate('PeopleSearch')
-                        setData( info, type )
-                    }
+                        if (type === 'url') {
+                            info = data.url
+                            console.log('SEARCH URL:', data)
+                            navigation.navigate('PeopleSearch')
+                            setData(info, type)
+                        }
 
-                    if ( type === 'name' ) {
-                        info = data
-                        console.log( 'RELATIONSHIP TO:', data )
-                        navigation.navigate('PeopleSearch')
-                        setData( info, type )
-                    }
+                        if (type === 'name') {
+                            info = data
+                            console.log('RELATIONSHIP TO:', data)
+                            navigation.navigate('PeopleSearch')
+                            setData(info, type)
+                        }
 
-                }}>
-                    <Text style={{ color: 'white' }}>Perform a Search</Text>
-                </Button>
+                    }}>
+                        <Text style={{ color: 'white' }}>Perform a Search</Text>
+                    </Button>
+                }
             </View>
         </View >
     );
@@ -236,5 +263,5 @@ const options = StyleSheet.create({
         margin: 10,
         padding: 10
     }
-    
+
 });

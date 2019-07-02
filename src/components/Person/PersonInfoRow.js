@@ -1,11 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, Linking, Platform } from 'react-native';
-import { Col, Row, Text, View, Modal } from 'native-base';
+import { TouchableOpacity } from 'react-native';
+import { Col, Row, Text } from 'native-base';
 import { styles } from '../../styles';
 import renderMaskedOrResult from '../../helpers/renderMaskedOrResult';
 import { connect } from 'react-redux';
 import { showModal } from '../../store/actions'
-import ConfirmationModal from './ConfirmationModal';
 
 const PersonInfoRow = ({
   isLoggedIn,
@@ -19,22 +18,66 @@ const PersonInfoRow = ({
 
   if (item[itemKey]) {
 
-    let OohKillEm = key => {
+    handlePressDirections = (data, postalCode, city) => {
+      console.log('DATA', data)
+      console.log('POSTAL CODE', postalCode)
+      console.log('CITY', city)
+
+      if (postalCode === undefined) {
+        let address = `${city}, ${data}`;
+        console.log(address);
+        const type = 'address'
+        showConModal(address, type);
+      } else {
+        let address = `${city}, ${data} ${postalCode}`;
+        console.log(address);
+        const type = 'address404'
+        showConModal(address, type);
+      }
+
+    };
+
+    let handleShowConModal = key => {
       if (!isLoggedIn) startRegister();
 
       if (isLoggedIn && itemKey === 'emails') {
         const type = 'email'
         showConModal(key, type);
       }
+
       if (isLoggedIn && itemKey === 'phones') {
         const type = 'phone'
         showConModal(key, type);
       }
+
       if (isLoggedIn && itemKey === 'addresses') {
-        let address = `${key.house} ${key.street}`;
-        const type = 'address'
-        showConModal(address, type);
+        if (key.zip_code === undefined) {
+          let address = `${key.display}`;
+          console.log('NO ZIP_CODE FOUND')
+          let type = 'address'
+          console.log('ADDRESS', `${key.display}`)
+          showConModal(address, type)
+        } else if (key.house === undefined) {
+          if ( key.street === undefined ) {
+            let data = `${key.state}`;
+            handlePressDirections(data, key['zip_code'], key['city'])
+          } else {
+            let data = `${key.street} ${key.state}`;
+            handlePressDirections(data, key['zip_code'], key['city'])
+          }
+        } else if ( key.zip_code === undefined ) {
+          let address = `${key.display}`;
+          let type = 'address'
+          console.log('ADDRESS', `${key.display}`)
+          showConModal(address, type)
+        } else {
+          let address = `${key.display}, ${key.zip_code}`;
+          let type = 'address'
+          console.log('ADDRESS', `${key.display}`)
+          showConModal(address, type)
+        }
       }
+
       if (isLoggedIn && itemKey === 'urls') {
         const type = 'url'
         showConModal(key, type);
@@ -42,7 +85,7 @@ const PersonInfoRow = ({
       if (isLoggedIn && itemKey === 'relationships') {
         console.log('THIS IS RELATIONSHIP KEY', key)
         const type = 'name'
-        showConModal( key, type );
+        showConModal(key, type);
       }
     }
 
@@ -58,7 +101,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity
                   style={styles.colListContainer}
                   key={index}
-                  onPress={() => OohKillEm(key)}
+                  onPress={() => handleShowConModal(key)}
                 >
                   <Text style={styles.colListText}>
                     {key.house && renderMaskedOrResult(key.house, 'house')}{' '}
@@ -76,7 +119,7 @@ const PersonInfoRow = ({
               );
             } else if (itemKey === 'relationships') {
               return (
-                <TouchableOpacity style={styles.colListContainer} key={index} onPress={() => OohKillEm(key[itemValue][0].display)}>
+                <TouchableOpacity style={styles.colListContainer} key={index} onPress={() => handleShowConModal(key[itemValue][0].display)}>
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(key[itemValue][0].display, itemKey)}
                   </Text>
@@ -85,7 +128,7 @@ const PersonInfoRow = ({
             } else {
               return (
                 <TouchableOpacity style={styles.colListContainer} key={index} >
-                  <Text style={styles.colListText} onPress={() => OohKillEm(key)}>
+                  <Text style={styles.colListText} onPress={() => handleShowConModal(key)}>
                     {renderMaskedOrResult(key[itemValue], itemKey)}
                   </Text>
 

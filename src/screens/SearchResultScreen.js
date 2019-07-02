@@ -161,7 +161,6 @@ class SearchResultScreen extends React.Component {
             transparent={false}
             visible={this.state.modalVisible}
             onRequestClose={this.toggleModal}
-            // onRequestClose={Alert.alert( 'sup fam' )}
           >
             <ConfirmationModal
               toggleModal={this.toggleModal}
