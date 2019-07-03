@@ -9,9 +9,6 @@ import {
   isCityState
 } from '../../helpers/inputValidators';
 
-// const handleOpenEmail = () =>
-//   Linking.openURL('mailto:support@connectourkids.org');
-
 const handleOpenEmail = () => {
   Linking.canOpenURL('mailto:support@connectourkids.org:')
     .then(supported => {
@@ -27,25 +24,83 @@ const handleOpenEmail = () => {
 };
 
 const ErrorMessage = (props) => {
+
   renderMessage = () => {
-    if (props.data) {
-      if (isName(props.data.names[0].first && props.data.names[0].last)) {
-        return (<Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
-        </Text>)
-      } else if(isName(props.data.names[0].first)){
-        return <Text>Please enter both a first and last name</Text>
+    if (props.data.inputKey && props.data.inputValue) {
+      if (props.data.inputKey === "name") {
+        // if (splitValue === 1){
+        if (!isName(props.data.inputValue)) {
+          return <Text style={{ color: '#856404' }}>Please enter both a first and last name</Text>
+        }
+      }
+      else if (props.data.inputKey === "email") {
+        if (!isEmail(props.data.inputValue)) {
+          return <Text style={{ color: '#856404' }}>Please enter a valid email address</Text>
+        }
+      }
+      else if (props.data.inputKey === "address") {
+        if (!isAddress(props.data.inputValue)) {
+          return <Text style={{ color: '#856404' }}>Addresses should contain house numbers, street names, city, and state</Text>
+        }
+      }
+      else if (props.data.inputKey === "phone") {
+        if (!isPhone(props.data.inputValue)) {
+          return <Text style={{ color: '#856404' }}>Phone numbers must not contain alpha or special symbols</Text>
+        }
+      }
+      else if (props.data.inputKey === "url") {
+        if (!isUrl(props.data.inputValue)) {
+          return <Text style={{ color: '#856404' }}>Please enter a valid URL</Text>
+        }
+      }
+    } else {
+      console.log('fetching...')
+    }
+
+    if (props.query) {
+      // const name = props.query.names[0]["display"];
+      // const email = props.query.emails[0]["address"];
+      // const address = props.query.addresses[0]["display"];
+      // const phone = props.query.phones[0]["number"];
+      if (props.query.names) {
+        // if (isName(props.query.names[0].display)) {
+        if (isName(props.query.names[0]["display"])) {
+          return <Text>Sorry, no results were found for your search. Check the spelling and try again. </Text>
+        }
+      }
+      else if (props.query.emails) {
+        if (isEmail(props.query.emails[0]["address"])) {
+          return <Text>Sorry, no results were found for your search. Check the spelling and try again.</Text>
+        }
+      }
+
+      else if (props.query.addresses) {
+        if (isAddress(props.query.addresses[0]["display"])) {
+          return (<Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
+          </Text>)
+        }
+      }
+      else if (props.query.phones) {
+        if (isPhone(props.query.phones[0]["number"])) {
+          return (<Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
+          </Text>)
+        }
+      }
+      else if (isUrl(props.query.urls[0]["@source_id"])) {
+        return <Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
+       </Text>
       }
     }
+    else{
+      console.log("ERROR in ErrorMessage.js")
+    }
   }
-  console.log("props from ErrorMessage", props.data)
+
   return (
     <View style={{ backgroundColor: '#fff3cd', padding: 15 }}>
       {this.renderMessage()}
-
-      {/*<Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
-  </Text>*/}
     </View>
-  );
+  )
 };
 
 export default ErrorMessage;

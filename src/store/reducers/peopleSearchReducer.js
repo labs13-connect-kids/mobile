@@ -5,15 +5,10 @@ import {
   FETCH_PERSON_SUCCESS,
   FETCH_SEARCH_RESULT,
   FETCH_SEARCH_RESULT_FAILURE,
-<<<<<<< HEAD
-  RESET_PERSON, 
-  RESET_STATE
-=======
   RESET_PERSON,
   RESET_STATE,
   POPULATE_SEARCH_RESULTS,
   POPULATE_PERSON
->>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -52,7 +47,8 @@ export const peopleSearchReducer = (state = initialState, action) => {
         isFetching: false,
         person: null,
         possiblePersons: [],
-        data:action.data
+        data: action.data,
+        query:action.query
       };
     case RESET_PERSON:
       return {

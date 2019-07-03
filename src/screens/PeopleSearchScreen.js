@@ -40,16 +40,12 @@ class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('People Search', navigation);
 
-<<<<<<< HEAD
-  createEvent = success => { 
-=======
   state = {
     data: this.props.info,
     type: this.props.type
   };
 
   createEvent = success => {
->>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
     let emailAddress = '';
     let options = {};
     if (typeof success === 'string') {
@@ -181,7 +177,7 @@ class PeopleSearchScreen extends React.Component {
                 </TouchableHighlight>
               )}
               {this.props.isFetching && <Loader />}
-              {this.props.error && <ErrorMessage data={this.props.data}/>}
+              {this.props.error && <ErrorMessage data={this.props.error} query={this.props.query}/>}
               {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
@@ -291,7 +287,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { error, isFetching, person, possiblePersons, data } = state.people;
+  const { error, isFetching, person, possiblePersons, data, query } = state.people;
   const {
     accessToken,
     idToken,
@@ -313,12 +309,10 @@ const mapStateToProps = state => {
     videoAgree,
     videoVisible,
     user,
-<<<<<<< HEAD
-    data
-=======
     info: state.confirmationModal.info,
-    queryType: state.confirmationModal.queryType
->>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
+    queryType: state.confirmationModal.queryType,
+    data,
+    query
   };
 };
 

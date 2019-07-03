@@ -87,7 +87,9 @@ export const parseName = name => {
     .trim()
     .replace(/,/g, '')
     .split(' ');
-  if (splitName.length === 2) {
+  if(splitName.length === 1) {
+    return { first: splitName[0]}
+  } else if (splitName.length === 2) {
     return { first: splitName[0], last: splitName[1] };
   } else if (splitName.length === 3) {
     return {

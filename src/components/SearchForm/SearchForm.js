@@ -11,12 +11,8 @@ import {
   isCityState
 } from '../../helpers/inputValidators';
 import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
-<<<<<<< HEAD
-import ErrorMessage from '../Messages/ErrorMessage';
-=======
 import { connect } from 'react-redux';
-import { getInfo, stopSearchMe } from '../../store/actions';
->>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
+import { getInfo, stopSearchMe, sendSearchErrorMessage } from '../../store/actions';
 
 class SearchForm extends Component {
   state = {
@@ -28,7 +24,6 @@ class SearchForm extends Component {
     url: '',
     inputValidate: true,
     tabPage: 0,
-    showCityStateInput: true,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -148,15 +143,10 @@ class SearchForm extends Component {
     }
 
     if (formattedObject) {
-<<<<<<< HEAD
-      this.props.handleSearch(formattedObject);
-    } 
-    else {
-=======
       this.props.handleSearch(formattedObject, searchType, inputValue);
     } else {
->>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
       console.log('formattedObject: error');
+      this.props.sendSearchErrorMessage({inputKey, inputValue});
     }
   };
 
@@ -363,14 +353,8 @@ class SearchForm extends Component {
             </View>
           </Tab>
         </Tabs>
-<<<<<<< HEAD
-        {/*<Content style={{ flexDirection: 'row' }}>*/}
-        <View style={[{ flexDirection: 'row' }, this.state.margin ? styles.buttonMargin : null]}>
-          <Button info style={styles.button} onPress={this.handleFormSubmit} >
-=======
         <View style={{ flexDirection: 'row' }}>
           <Button style={styles.button} onPress={this.handleFormSubmit}>
->>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
             <Text style={styles.buttonText}> Search </Text>
           </Button>
 
@@ -449,26 +433,8 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   nameInputFullWidth: {
-<<<<<<< HEAD
-    flex: 1,
-  },
-  error: {
-    borderWidth: 1,
-    borderColor: 'red'
-  },
-  displayNoneInput: {
-    display: 'none'
-  },
-  buttonMargin: {
-    //marginTop: -50
-    transform: [{ translateY: -50 }],
-    backgroundColor: 'red'
-  }
-
-=======
     width: '100%'
   }
->>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
 });
 
 const mapStateToProps = state => {
@@ -482,5 +448,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getInfo, stopSearchMe }
+  { getInfo, stopSearchMe, sendSearchErrorMessage }
 )(SearchForm);

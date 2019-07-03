@@ -1,7 +1,7 @@
 export const isName = name => {
   if (name.length) {
     let numberOfWords = name.trim().split(' ').length;
-    let isNumberOfWordsTwoOrThree = numberOfWords === 1 || numberOfWords === 2 || numberOfWords === 3;
+    let isNumberOfWordsTwoOrThree = numberOfWords === 2 || numberOfWords === 3;
     let nameIsNotANumber = name.replace(/[^0-9]+/g, '').length === 0;
 
     return isNumberOfWordsTwoOrThree && nameIsNotANumber;

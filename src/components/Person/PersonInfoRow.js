@@ -4,13 +4,9 @@ import { Col, Row, Text, View, Modal } from 'native-base';
 import { styles } from '../../styles';
 import renderMaskedOrResult from '../../helpers/renderMaskedOrResult';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
- 
-=======
 import { showModal } from '../../store/actions'
 import ConfirmationModal from './ConfirmationModal';
 
->>>>>>> e98b54b2c734a81fd7d9d82010941b82a524c71e
 const PersonInfoRow = ({
   isLoggedIn,
   item,
