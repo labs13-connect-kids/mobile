@@ -65,15 +65,15 @@ class PeopleSearchScreen extends React.Component {
       // Add to save to recent searcg
       body['searchType'] = searchType;
       body['searchInput'] = searchInput;
-      // saveToRecentSearches({
-      //   searchType: searchType,
-      //   searchInput: searchInput,
-      //   formattedObject: person
-      // });
     }
 
     requestObject['person'] = this.handleEncodeURI(person);
     body['requestObject'] = JSON.stringify(requestObject);
+
+    if (this.props.person || this.props.possiblePersons.length) {
+      this.props.resetState();
+    }
+
     fetchSearchResult(
       body,
       () => navigation.navigate('SearchResult'),
