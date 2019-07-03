@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
-import LoginWithAuth0 from "../components/Authentication/LoginWithAuth0";
 import { connect } from "react-redux";
+import LoginWithAuth0 from "./../components/Authentication/LoginWithAuth0";
 import RegisterModalsContainer from "../components/AuthModals/RegisterModalsContainer";
 import {
   setModalVisible,
