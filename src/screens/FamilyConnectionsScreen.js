@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Platform,
-  Modal
-} from 'react-native';
-import { Container, Button } from 'native-base';
+import { SafeAreaView, StyleSheet, Text, View, Modal } from 'react-native';
+import { Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
@@ -16,6 +9,7 @@ import FamilyConnectionsModal from './../components/FamilyConnectionsModal/Famil
 import Video from '../components/Video/Video';
 import constants from '../helpers/constants';
 import MainText from '../UI/MainText';
+import ScreenContainer from '../UI/ScreenContainer';
 class FamilyConnectionsScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Family Connections', navigation);
@@ -57,7 +51,7 @@ class FamilyConnectionsScreen extends Component {
 
   render() {
     return (
-      <Container style={styles.container}>
+      <ScreenContainer>
         <SafeAreaView>
           <View>
             <Modal
@@ -98,22 +92,12 @@ class FamilyConnectionsScreen extends Component {
             )}
           </ScrollView>
         </SafeAreaView>
-      </Container>
+      </ScreenContainer>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    padding: 20
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 25
-  },
   button: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -123,17 +107,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: '700'
-  },
-  textInput: {
-    borderColor: 'black',
-    borderWidth: 1,
-    borderStyle: 'solid'
-  },
-  red: {
-    backgroundColor: 'red'
-  },
-  WebViewContainer: {
-    marginTop: Platform.OS == 'ios' ? 20 : 0
   },
   loginContainer: {
     flex: 1,
@@ -157,7 +130,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  // console.log('redux state FCS: ', state);
   return {
     email: state.auth.user ? state.auth.user.email : null
   };

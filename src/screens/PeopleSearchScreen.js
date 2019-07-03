@@ -19,7 +19,7 @@ import {
   getInfo
 } from '../store/actions';
 
-import { Container, Button } from 'native-base';
+import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
 import PersonRow from '../components/Person/PersonRow';
@@ -32,6 +32,7 @@ import RecentSearches from '../components/RecentSearches/RecentSearches';
 
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
+import Video from '../components/Video/Video';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -140,7 +141,12 @@ class PeopleSearchScreen extends React.Component {
                 </TouchableHighlight>
               )}
               {this.props.isFetching && <Loader />}
-              {this.props.error && <ErrorMessage data={this.props.error} query={this.props.query}/>}
+              {this.props.error && (
+                <ErrorMessage
+                  data={this.props.error}
+                  query={this.props.query}
+                />
+              )}
               {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
@@ -168,6 +174,7 @@ class PeopleSearchScreen extends React.Component {
                   navigation={navigation}
                 />
               )}
+              <Video uri={constants.peopleSearchURI} />
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -250,7 +257,14 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { error, isFetching, person, possiblePersons, data, query } = state.people;
+  const {
+    error,
+    isFetching,
+    person,
+    possiblePersons,
+    data,
+    query
+  } = state.people;
   const {
     accessToken,
     idToken,

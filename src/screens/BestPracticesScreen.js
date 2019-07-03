@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Text, Linking } from 'react-native';
-import { Container } from 'native-base';
+import { SafeAreaView, Text, Linking } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AsyncStorage } from 'react-native';
 import { setUserCreds, logOut } from '../store/actions';
@@ -12,10 +11,12 @@ import constants from '../helpers/constants';
 import Video from '../components/Video/Video';
 import MainText from '../UI/MainText';
 import NavigationButton from '../UI/NavigationButton';
+import ScreenContainer from '../UI/ScreenContainer';
 
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Best Practices', navigation);
+
   async componentDidMount() {
     // NOTE: TODO check for JWT expiration to confirm if logged in
     let confirmedUser = await AsyncStorage.getItem('auth0Data');
@@ -30,7 +31,7 @@ class BestPracticesScreen extends Component {
 
   render() {
     return (
-      <Container style={styles.container}>
+      <ScreenContainer>
         <SafeAreaView>
           <ScrollView>
             <MainText>
@@ -38,7 +39,13 @@ class BestPracticesScreen extends Component {
               permanency searches for foster kids.
             </MainText>
 
-            <Text style={styles.videoText}>
+            <Text
+              style={{
+                color: constants.highlightColor,
+                fontWeight: 'bold',
+                marginBottom: 5
+              }}
+            >
               Watch the video below to learn more about the free tools and
               resources in this app.
             </Text>
@@ -61,35 +68,14 @@ class BestPracticesScreen extends Component {
               titleText="Resources"
               subTitleText="Useful Materials and Information"
               handlePress={() => Linking.openURL('https://connectourkids.org')}
-              style={styles.lastBtn}
+              style={{ marginBottom: 20 }}
             />
           </ScrollView>
         </SafeAreaView>
-      </Container>
+      </ScreenContainer>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    padding: 20
-  },
-  videoText: {
-    color: constants.highlightColor,
-    fontWeight: 'bold',
-    marginBottom: 5
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 25
-  },
-  lastBtn: {
-    marginBottom: 50
-  }
-});
 
 const mapStateToProps = state => {
   const { isLoggedIn } = state.auth;
