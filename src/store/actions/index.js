@@ -33,6 +33,9 @@ export const fetchSearchResult = (body, cb, email) => dispatch => {
   axios
     .post(`${constants.devURL}`, body.requestObject)
     .then(res => {
+      // console.log("accessing names: ", res.data.query.names)
+      // console.log("accessing emials: ", res.data.query.emails)
+      console.log("RES DATA QUERY!!", res.data.possible_persons.names)
       if (res.data.possible_persons) {
         options = createOptions(res.data.possible_persons.length, null, null);
         dispatch({
@@ -82,9 +85,11 @@ export const fetchSearchResult = (body, cb, email) => dispatch => {
           });
           dispatch({ type: SAVING_RECENT_SEARCHES });
         }
-      } else if (res.data.persons_count === 0) {
+      } else if (res.data.persons_count === 0 || res.data["@persons_count"] === 0) {
         dispatch({
           type: FETCH_SEARCH_RESULT_FAILURE,
+          data: res.data.query,
+          query: res.data.query,
           payload: true
         });
         sendEvent(email, 'search', 'person', 'success', options);
@@ -96,6 +101,7 @@ export const fetchSearchResult = (body, cb, email) => dispatch => {
       }
     })
     .catch(err => {
+      console.log(err)
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
       console.log('search catch');
       sendEvent(email, 'search', 'person', 'failed');
@@ -175,3 +181,10 @@ export const getInfo = (key, type) => {
 export const stopSearchMe = () => {
   return { type: STOP_SEARCH_ME };
 };
+
+export const sendSearchErrorMessage = (errorObject) =>{
+  return { 
+    type: FETCH_SEARCH_RESULT_FAILURE,
+    payload: errorObject
+  }
+}

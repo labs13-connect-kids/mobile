@@ -140,7 +140,7 @@ class PeopleSearchScreen extends React.Component {
                 </TouchableHighlight>
               )}
               {this.props.isFetching && <Loader />}
-              {this.props.error && <ErrorMessage />}
+              {this.props.error && <ErrorMessage data={this.props.error} query={this.props.query}/>}
               {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { error, isFetching, person, possiblePersons } = state.people;
+  const { error, isFetching, person, possiblePersons, data, query } = state.people;
   const {
     accessToken,
     idToken,
@@ -273,7 +273,9 @@ const mapStateToProps = state => {
     videoVisible,
     user,
     info: state.confirmationModal.info,
-    queryType: state.confirmationModal.queryType
+    queryType: state.confirmationModal.queryType,
+    data,
+    query
   };
 };
 

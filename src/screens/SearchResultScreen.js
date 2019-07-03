@@ -176,7 +176,7 @@ class SearchResultScreen extends React.Component {
                   </Text>
                 </TouchableHighlight>
               )}
-              {this.props.error && <ErrorMessage />}
+              {this.props.error && <ErrorMessage/>}
               {!person ? (
                 <Loader />
               ) : (
