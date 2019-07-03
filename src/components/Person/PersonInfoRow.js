@@ -4,7 +4,7 @@ import { Col, Row, Text } from 'native-base';
 import { styles } from '../../styles';
 import renderMaskedOrResult from '../../helpers/renderMaskedOrResult';
 import { connect } from 'react-redux';
-import { showModal } from '../../store/actions';
+import { resetState, showModal } from '../../store/actions';
 
 const PersonInfoRow = ({
   isLoggedIn,
@@ -15,14 +15,11 @@ const PersonInfoRow = ({
   title,
   showConModal,
   navigation,
-  setData
+  setData,
+  resetState
 }) => {
   if (item[itemKey]) {
     handlePressDirections = (data, postalCode, city) => {
-      console.log('DATA', data);
-      console.log('POSTAL CODE', postalCode);
-      console.log('CITY', city);
-
       if (postalCode === undefined) {
         let address = `${city}, ${data}`;
         console.log(address);
@@ -85,7 +82,8 @@ const PersonInfoRow = ({
       if (isLoggedIn && itemKey === 'relationships') {
         const type = 'name';
         navigation.goBack();
-        setData( key , type);
+        resetState();
+        setData(key, type);
       }
     };
     return (
@@ -116,7 +114,7 @@ const PersonInfoRow = ({
                   </Text>
                 </TouchableOpacity>
               );
-            } else if ( isLoggedIn && itemKey === 'relationships' ) {
+            } else if (isLoggedIn && itemKey === 'relationships') {
               return (
                 <TouchableOpacity
                   style={styles.colListContainer}
@@ -174,5 +172,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { showModal }
+  { resetState, showModal }
 )(PersonInfoRow);
