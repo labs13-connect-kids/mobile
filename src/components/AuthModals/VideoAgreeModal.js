@@ -23,7 +23,7 @@ const VideoAgreeModal = props => {
             props.setModalVisible(false);
           }}
         >
-          <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
+          <Text style={[styles.btnText, styles.closeBtn]}>❌</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.modalTextStyle}>
@@ -31,7 +31,14 @@ const VideoAgreeModal = props => {
         know everything about People Search.
       </Text>
       <View style={styles.buttonContainer}>
-        <Button style={styles.yesButton} block onPress={props.advanceModal}>
+        <Button
+          style={styles.yesButton}
+          block
+          onPress={() => {
+            props.sendEvent(null, 'click', 'watch-video');
+            props.advanceModal();
+          }}
+        >
           <Text style={styles.btnText}>Show me the video</Text>
         </Button>
         <Button
@@ -40,6 +47,7 @@ const VideoAgreeModal = props => {
           onPress={() => {
             props.setModalVisible(false);
             props.onLogin();
+            props.sendEvent(null, 'click', 'do-not-watch-video');
           }}
         >
           <Text style={styles.btnText}>Skip the video</Text>
@@ -74,12 +82,11 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   close: {
-    backgroundColor: 'red',
-    borderRadius: 3,
     marginLeft: 'auto'
   },
   closeBtn: {
-    padding: 5
+    padding: 5,
+    color: '#000'
   },
   btnText: {
     color: '#fff'

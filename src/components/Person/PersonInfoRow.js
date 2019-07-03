@@ -1,11 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, Linking, Platform } from 'react-native';
-import { Col, Row, Text, View, Modal } from 'native-base';
+import { TouchableOpacity } from 'react-native';
+import { Col, Row, Text } from 'native-base';
 import { styles } from '../../styles';
 import renderMaskedOrResult from '../../helpers/renderMaskedOrResult';
 import { connect } from 'react-redux';
-import { showModal } from '../../store/actions'
-import ConfirmationModal from './ConfirmationModal';
+import { resetState, showModal } from '../../store/actions';
 
 const PersonInfoRow = ({
   isLoggedIn,
@@ -14,65 +13,79 @@ const PersonInfoRow = ({
   itemValue,
   startRegister,
   title,
-  showConModal
+  showConModal,
+  navigation,
+  setData,
+  resetState
 }) => {
-
   if (item[itemKey]) {
-    // handlePressDirections = (address, postalCode, city) => {
-    //   let daddr = encodeURIComponent(`${address} ${postalCode}, ${city}`);
-    //   console.log(daddr);
-    //   if (Platform.OS === 'ios') {
-    //     Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
-    //   } else {
-    //     Linking.openURL(`http://maps.google.com/?daddr=${daddr}`);
-    //   }
-    // };
+    handlePressDirections = (data, postalCode, city) => {
+      if (postalCode === undefined) {
+        let address = `${city}, ${data}`;
+        console.log(address);
+        const type = 'address';
+        showConModal(address, type);
+      } else {
+        let address = `${city}, ${data} ${postalCode}`;
+        console.log(address);
+        const type = 'address404';
+        showConModal(address, type);
+      }
+    };
 
-    let OohKillEm = key => {
+    let handleShowConModal = (key, index) => {
       if (!isLoggedIn) startRegister();
 
       if (isLoggedIn && itemKey === 'emails') {
-        const type = 'email'
-        showConModal(key, type);
+        const type = 'email';
+        showConModal(key, type, index);
       }
+
       if (isLoggedIn && itemKey === 'phones') {
-        const type = 'phone'
-        showConModal(key, type);
+        const type = 'phone';
+        showConModal(key, type, index);
       }
+
       if (isLoggedIn && itemKey === 'addresses') {
-        let address = `${key.house} ${key.street}`;
-        const type = 'address'
-        showConModal(address, type);
+        if (key.zip_code === undefined) {
+          let address = `${key.display}`;
+          console.log('NO ZIP_CODE FOUND');
+          let type = 'address';
+          console.log('ADDRESS', `${key.display}`);
+          showConModal(address, type, index);
+        } else if (key.house === undefined) {
+          if (key.street === undefined) {
+            let data = `${key.state}`;
+            handlePressDirections(data, key['zip_code'], key['city']);
+          } else {
+            let data = `${key.street} ${key.state}`;
+            handlePressDirections(data, key['zip_code'], key['city']);
+          }
+        } else if (key.zip_code === undefined) {
+          let address = `${key.display}`;
+          let type = 'address';
+          console.log('ADDRESS', `${key.display}`);
+          showConModal(address, type, index);
+        } else {
+          let address = `${key.display}, ${key.zip_code}`;
+          let type = 'address';
+          console.log('ADDRESS', `${key.display}`);
+          showConModal(address, type, index);
+        }
       }
+
       if (isLoggedIn && itemKey === 'urls') {
-        const type = 'url'
-        showConModal(key, type);
+        const type = 'url';
+        showConModal(key, type, index);
       }
+
       if (isLoggedIn && itemKey === 'relationships') {
-        console.log('THIS IS RELATIONSHIP KEY', key)
-        const type = 'name'
-        showConModal( key, type );
+        const type = 'name';
+        navigation.goBack();
+        resetState();
+        setData(key, type);
       }
-    }
-
-    // let OnPress = key => {
-    //   if (!isLoggedIn) startRegister();
-    //   console.log('THIS IS KEY', key);
-    //   if (isLoggedIn) {
-    //     if (itemKey === 'emails') {
-    //       // console.log( 'key and item value', key[itemValue] )
-    //       Linking.openURL(`mailto:${key[itemValue]}`);
-    //     } else if (itemKey === 'phones') {
-    //       Linking.openURL(`tel:${key[itemValue]}`);
-    //     } else if (itemKey === 'urls') {
-    //       Linking.openURL(`${key['url']}`);
-    //     } else if (itemKey === 'addresses') {
-    //       let address = `${key.house} ${key.street}`;
-    //       handlePressDirections(address, key['zip_code'], key['city']);
-    //     }
-    //   }
-    // };
-
+    };
     return (
       <Row style={styles.rowContainer}>
         <Col size={30} style={styles.rowLabel}>
@@ -85,7 +98,7 @@ const PersonInfoRow = ({
                 <TouchableOpacity
                   style={styles.colListContainer}
                   key={index}
-                  onPress={() => OohKillEm(key)}
+                  onPress={() => handleShowConModal(key, index)}
                 >
                   <Text style={styles.colListText}>
                     {key.house && renderMaskedOrResult(key.house, 'house')}{' '}
@@ -101,9 +114,15 @@ const PersonInfoRow = ({
                   </Text>
                 </TouchableOpacity>
               );
-            } else if (itemKey === 'relationships') {
+            } else if (isLoggedIn && itemKey === 'relationships') {
               return (
-                <TouchableOpacity style={styles.colListContainer} key={index} onPress={() => OohKillEm(key[itemValue][0].display)}>
+                <TouchableOpacity
+                  style={styles.colListContainer}
+                  key={index}
+                  onPress={() =>
+                    handleShowConModal(key[itemValue][0].display, index)
+                  }
+                >
                   <Text style={styles.colListText}>
                     {renderMaskedOrResult(key[itemValue][0].display, itemKey)}
                   </Text>
@@ -111,8 +130,11 @@ const PersonInfoRow = ({
               );
             } else {
               return (
-                <TouchableOpacity style={styles.colListContainer} key={index} >
-                  <Text style={styles.colListText} onPress={() => OohKillEm(key)}>
+                <TouchableOpacity style={styles.colListContainer} key={index}>
+                  <Text
+                    style={styles.colListText}
+                    onPress={() => handleShowConModal(key, index)}
+                  >
                     {renderMaskedOrResult(key[itemValue], itemKey)}
                   </Text>
 
@@ -125,12 +147,12 @@ const PersonInfoRow = ({
                       {key['@last_seen'].split('-')[0]}
                     </Text>
                   ) : (
-                      key['@valid_since'] && (
-                        <Text style={styles.colListLabelText}>
-                          {key['@valid_since'].split('-')[0]}
-                        </Text>
-                      )
-                    )}
+                    key['@valid_since'] && (
+                      <Text style={styles.colListLabelText}>
+                        {key['@valid_since'].split('-')[0]}
+                      </Text>
+                    )
+                  )}
                 </TouchableOpacity>
               );
             }
@@ -144,11 +166,11 @@ const PersonInfoRow = ({
 };
 const mapStateToProps = state => {
   const { isLoggedIn } = state.auth;
-  const { modalVisible, } = state.confirmationModal
+  const { modalVisible } = state.confirmationModal;
   return { isLoggedIn, modalVisible };
 };
 
 export default connect(
   mapStateToProps,
-  { showModal }
+  { resetState, showModal }
 )(PersonInfoRow);

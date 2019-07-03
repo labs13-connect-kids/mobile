@@ -6,14 +6,13 @@ import {
   View,
   WebView,
   Platform,
-  Modal,
-  Alert
+  Modal
 } from 'react-native';
 import { Container, Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
-import { trackEmail } from './../store/actions';
+import { sendEvent } from './../helpers/createEvent';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
 import constants from '../helpers/constants';
 class FamilyConnectionsScreen extends Component {
@@ -21,79 +20,65 @@ class FamilyConnectionsScreen extends Component {
     headerConfig('Family Connections', navigation);
 
   state = {
-    modalVisible: false
+    modalVisible: false,
+    message: false,
+    email: ''
   };
 
-  toggleModal = () => {
+  openModal = () => {
     this.setState({
-      modalVisible: !this.state.modalVisible
+      modalVisible: true
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalVisible: false
     });
   };
 
   trackInterest = trackingEmail => {
-    if (this.props.email === null) {
-      this.props
-        .trackEmail({ emailAddress: trackingEmail })
-        .then(res => {
-          this.props.error
-            ? Alert.alert(this.props.error.message)
-            : this.props.message !== undefined
-            ? Alert.alert(this.props.message)
-            : Alert.alert(
-                'there was a problem talking to the database, Please try again later'
-              );
-          this.toggleModal();
-        })
-        .catch(res => {
-          Alert.alert(this.props.message);
-          this.toggleModal();
-        });
-    } else {
-      this.props
-        .trackEmail({ emailAddress: this.props.email })
-        .then(res => {
-          this.props.error
-            ? Alert.alert(this.props.error.message)
-            : this.props.message !== undefined
-            ? Alert.alert(this.props.message)
-            : Alert.alert(
-                'there was a problem talking to the database, Please try again later'
-              );
-          this.toggleModal();
-        })
-        .catch(res => {
-          Alert.alert(this.props.message);
-          this.toggleModal();
-        });
-    }
+    let email = this.props.email ? this.props.email : trackingEmail;
+    sendEvent(email, 'click', 'request-familyconnections');
+    this.setState({
+      modalVisible: false,
+      email,
+      message: true
+    });
+    this.startClearState();
+  };
+
+  startClearState = () => {
+    setTimeout(() => {
+      this.setState({ message: false, email: '' });
+    }, 3000);
   };
 
   render() {
     return (
       <Container style={styles.container}>
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={this.state.modalVisible}
-            onRequestClose={this.toggleModal}
-          >
-            <FamilyConnectionsModal
-              trackInterest={this.trackInterest}
-              toggleModal={this.toggleModal}
-              startRegister={this.startRegister}
-              email={this.props.email}
-            />
-          </Modal>
-        </View>
-
         <SafeAreaView>
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={this.closeModal}
+            >
+              <FamilyConnectionsModal
+                trackInterest={this.trackInterest}
+                closeModal={this.closeModal}
+                startRegister={this.startRegister}
+                email={this.props.email}
+              />
+            </Modal>
+          </View>
           <ScrollView>
             <Text style={styles.mainText}>
               Learn about a revolutionary way to discover and engage extended
               families for at-risk foster youth.
             </Text>
-            <View style={{ height: 300, marginBottom: 30 }}>
+            <View style={styles.videoContainer}>
               <WebView
                 style={styles.WebViewContainer}
                 javaScriptEnabled={true}
@@ -102,11 +87,19 @@ class FamilyConnectionsScreen extends Component {
               />
             </View>
 
-            <Button style={styles.button} block onPress={this.toggleModal}>
+            <Button style={styles.button} block onPress={this.openModal}>
               <Text style={styles.buttonText}>
                 I Want To Access Family Connections
               </Text>
             </Button>
+            {this.state.message && (
+              <View style={styles.messageContainer}>
+                <Text style={styles.thankyouMessage}>
+                  Thank you for showing interest, {this.state.email} has been
+                  added to our list.
+                </Text>
+              </View>
+            )}
           </ScrollView>
         </SafeAreaView>
       </Container>
@@ -156,22 +149,28 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  videoContainer: { height: 300, marginBottom: 30 },
+  thankyouMessage: {
+    fontSize: 24,
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textTransform: 'uppercase'
+  },
+  messageContainer: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: constants.highlightColor,
+    borderRadius: 5
   }
 });
 
 const mapStateToProps = state => {
-  console.log('redux state FCS: ', state);
-  const { message, error } = state.famConInterest;
+  // console.log('redux state FCS: ', state);
   return {
-    email: state.auth.user ? state.auth.user.email : null,
-    message,
-    error
+    email: state.auth.user ? state.auth.user.email : null
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    trackEmail
-  }
-)(FamilyConnectionsScreen);
+export default connect(mapStateToProps)(FamilyConnectionsScreen);

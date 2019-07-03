@@ -52,7 +52,7 @@ export default function PersonsRow({ item }) {
                                     <Text>{url.usernames}</Text>
                                 )
                             })
-                        : null}
+                            : null}
                     </View>
                 </Body>
             </CardItem>

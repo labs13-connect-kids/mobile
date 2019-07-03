@@ -9,18 +9,11 @@ import {
   RESET_STATE,
   SET_USER_CREDS,
   LOG_OUT,
-  EVENT_ERROR,
-  EVENT_SUCCESS,
-  TRACK_EMAIL,
-  TRACK_EMAIL_SUCCESS,
-  TRACK_EMAIL_FAILURE,
   SET_MODAL_VISIBLE,
   SET_VIDEO_AGREE_VISIBLE,
   SET_VIDEO_PLAYER_VISIBLE,
   RESET_PERSON,
   SET_RECENT_SEARCHES,
-  SET_REDIRECT_PATH,
-  CLEAR_REDIRECT_PATH,
   POPULATE_SEARCH_RESULTS,
   POPULATE_PERSON,
   SAVING_RECENT_SEARCHES,
@@ -31,15 +24,12 @@ import {
 } from './actionTypes';
 import constants from '../../helpers/constants';
 import saveToRecentSearches from '../../helpers/saveToRecentSearches';
+import { sendEvent, createOptions } from './../../helpers/createEvent';
 
-export const fetchSearchResult = (
-  body,
-  cb,
-  eventTrack,
-  createEvent
-) => dispatch => {
+export const fetchSearchResult = (body, cb, email) => dispatch => {
   dispatch({ type: FETCH_SEARCH_RESULT });
   let isPerson = false;
+  let options;
   axios
     .post(`${constants.devURL}`, body.requestObject)
     .then(res => {
@@ -47,11 +37,20 @@ export const fetchSearchResult = (
       // console.log("accessing emials: ", res.data.query.emails)
       console.log("RES DATA QUERY!!", res.data.possible_persons.names)
       if (res.data.possible_persons) {
+        options = createOptions(res.data.possible_persons.length, null, null);
         dispatch({
           type: FETCH_PEOPLE_SUCCESS,
           payload: res.data.possible_persons
         });
-        eventTrack(createEvent('success'));
+        console.log(
+          'Sent payload people',
+          email,
+          'search',
+          'person',
+          'success',
+          options
+        );
+        sendEvent(email, 'search', 'person', 'success', options);
         // SAVE TO RECENT SEARCH
         if (body.searchType && body.searchInput) {
           saveToRecentSearches({
@@ -62,12 +61,21 @@ export const fetchSearchResult = (
           dispatch({ type: SAVING_RECENT_SEARCHES });
         }
       } else if (res.data.person) {
+        options = createOptions(0, null, null);
         isPerson = true;
         dispatch({
           type: FETCH_PERSON_SUCCESS,
           payload: res.data.person
         });
-        eventTrack(createEvent(['success']));
+        console.log(
+          'Sent payload person',
+          email,
+          'search',
+          'person',
+          'success',
+          options
+        );
+        sendEvent(email, 'search', 'person', 'success', options);
         // SAVE TO RECENT SEARCH
         if (body.searchType && body.searchInput) {
           saveToRecentSearches({
@@ -84,8 +92,7 @@ export const fetchSearchResult = (
           query: res.data.query,
           payload: true
         });
-        
-        eventTrack(createEvent(['failed']));
+        sendEvent(email, 'search', 'person', 'success', options);
       }
     })
     .then(() => {
@@ -96,11 +103,12 @@ export const fetchSearchResult = (
     .catch(err => {
       console.log(err)
       dispatch({ type: FETCH_SEARCH_RESULT_FAILURE, payload: err });
-      eventTrack(createEvent('failed'));
+      console.log('search catch');
+      sendEvent(email, 'search', 'person', 'failed');
     });
 };
 
-export const fetchPerson = (body, eventTrack, createEvent) => dispatch => {
+export const fetchPerson = (body, email) => dispatch => {
   dispatch({ type: FETCH_PERSON });
   axios
     .post(`${constants.devURL}`, body)
@@ -109,11 +117,12 @@ export const fetchPerson = (body, eventTrack, createEvent) => dispatch => {
         type: FETCH_PERSON_SUCCESS,
         payload: res.data.person
       });
-      eventTrack(createEvent(['success']));
+      options = createOptions(0, null, null);
+      sendEvent(email, 'search', 'person', 'success', options);
     })
     .catch(err => {
       dispatch({ type: FETCH_PERSON_FAILURE, payload: err });
-      eventTrack(createEvent(['failed']));
+      sendEvent(email, 'search', 'person', 'failed');
     });
 };
 
@@ -125,41 +134,9 @@ export const setUserCreds = (decodedToken, auth0Data) => {
   return { type: SET_USER_CREDS, decodedToken, auth0Data };
 };
 
-export const logOut = () => {
+export const logOut = email => {
+  sendEvent(email, 'click', 'logout');
   return { type: LOG_OUT };
-};
-
-export const eventTrack = event => dispatch =>
-  axios
-    .post(constants.devEventTrackingURL, event)
-    .then(res => {
-      if (res.status !== 502) {
-        dispatch({ type: EVENT_ERROR });
-      } else {
-        dispatch({ type: EVENT_SUCCESS });
-      }
-    })
-    .catch(err => {
-      dispatch({ type: EVENT_SUCCESS });
-    });
-
-export const trackEmail = email => dispatch => {
-  dispatch({ type: TRACK_EMAIL });
-  return axios
-    .post(constants.devFamilyConnectionsInterestURL, email)
-    .then(res => {
-      return dispatch({
-        type: TRACK_EMAIL_SUCCESS,
-        payload: email.emailAddress
-      });
-    })
-    .catch(err => {
-      return dispatch({
-        type: TRACK_EMAIL_FAILURE,
-        payload: err,
-        email: email.emailAddress
-      });
-    });
 };
 
 export const setModalVisible = visible => {
@@ -180,14 +157,6 @@ export const resetPerson = () => {
 
 export const setRecentSearches = recentSearches => {
   return { type: SET_RECENT_SEARCHES, payload: recentSearches };
-};
-
-export const setRedirectPath = path => {
-  return { type: SET_REDIRECT_PATH, payload: path };
-};
-
-export const clearRedirectPath = () => {
-  return { type: CLEAR_REDIRECT_PATH };
 };
 
 export const populateSearchResults = data => {

@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import { Button } from 'native-base';
 import constants from '../../helpers/constants';
@@ -21,6 +22,10 @@ class FamilyConnectionsModal extends Component {
     });
   };
 
+  resetInput = () => {
+    this.setState({ email: '' });
+  };
+
   render() {
     return (
       <>
@@ -31,10 +36,10 @@ class FamilyConnectionsModal extends Component {
           <TouchableOpacity
             style={styles.close}
             onPress={() => {
-              this.props.toggleModal();
+              this.props.closeModal();
             }}
           >
-            <Text style={[styles.btnText, styles.closeBtn]}>X</Text>
+            <Text style={styles.closeBtn}>❌</Text>
           </TouchableOpacity>
         </View>
         <Text style={styles.modalTextStyle}>
@@ -48,23 +53,22 @@ class FamilyConnectionsModal extends Component {
               style={styles.textInput}
               onChangeText={text => this.handleInput(text)}
               placeholder="sample@email.com"
+              value={this.state.email}
             />
           )}
           <Button
             style={styles.yesButton}
+            disabled={!this.props.email && this.state.email === ''}
             block
-            onPress={async () => {
+            onPress={() => {
               trackingEmail = this.state.email;
-              await this.props.trackInterest(trackingEmail);
+              this.props.trackInterest(trackingEmail);
+              this.resetInput();
             }}
           >
             <Text style={styles.btnText}>Yes, add my email to the list</Text>
           </Button>
-          <Button
-            style={styles.noButton}
-            block
-            onPress={this.props.toggleModal}
-          >
+          <Button style={styles.noButton} block onPress={this.props.closeModal}>
             <Text style={styles.btnText}>Don't add my email</Text>
           </Button>
         </View>
@@ -83,7 +87,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'baseline',
     flexDirection: 'row',
-    width: Dimensions.get('window').width
+    width: Dimensions.get('window').width,
+    marginTop: Platform.OS === 'ios' ? 40 : null
   },
   yesButton: {
     backgroundColor: constants.highlightColor,
@@ -94,12 +99,11 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   close: {
-    backgroundColor: 'red',
-    borderRadius: 3,
     marginLeft: 'auto'
   },
   closeBtn: {
-    padding: 5
+    padding: 5,
+    color: '#000'
   },
   btnText: {
     color: '#fff'
