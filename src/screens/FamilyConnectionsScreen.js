@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  WebView,
   Platform,
   Modal
 } from 'react-native';
@@ -14,7 +13,9 @@ import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
 import { sendEvent } from './../helpers/createEvent';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
+import Video from '../components/Video/Video';
 import constants from '../helpers/constants';
+import MainText from '../UI/MainText';
 class FamilyConnectionsScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Family Connections', navigation);
@@ -74,24 +75,19 @@ class FamilyConnectionsScreen extends Component {
             </Modal>
           </View>
           <ScrollView>
-            <Text style={styles.mainText}>
+            <MainText>
               Learn about a revolutionary way to discover and engage extended
               families for at-risk foster youth.
-            </Text>
-            <View style={styles.videoContainer}>
-              <WebView
-                style={styles.WebViewContainer}
-                javaScriptEnabled={true}
-                domStorageEnabled={true}
-                source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
-              />
-            </View>
+            </MainText>
+
+            <Video uri={constants.familyConnectionsURI} />
 
             <Button style={styles.button} block onPress={this.openModal}>
               <Text style={styles.buttonText}>
                 I Want To Access Family Connections
               </Text>
             </Button>
+
             {this.state.message && (
               <View style={styles.messageContainer}>
                 <Text style={styles.thankyouMessage}>
@@ -117,12 +113,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 25
-  },
-  mainText: {
-    fontFamily: constants.fontFamily,
-    fontSize: 18,
-    lineHeight: 26,
-    marginBottom: 20
   },
   button: {
     justifyContent: 'center',

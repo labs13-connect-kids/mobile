@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  WebView,
-  Platform,
-  Linking
-} from 'react-native';
-import { Container, Button } from 'native-base';
+import { SafeAreaView, StyleSheet, Text, Linking } from 'react-native';
+import { Container } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AsyncStorage } from 'react-native';
 import { setUserCreds, logOut } from '../store/actions';
@@ -17,22 +9,21 @@ import jwtDecode from 'jwt-decode';
 
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
-// import ErrorMessage from '../components/Messages/ErrorMessage';
+import Video from '../components/Video/Video';
+import MainText from '../UI/MainText';
+import NavigationButton from '../UI/NavigationButton';
 
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Best Practices', navigation);
   async componentDidMount() {
-    // console.log('BPS CDM', this.props);
     // NOTE: TODO check for JWT expiration to confirm if logged in
     let confirmedUser = await AsyncStorage.getItem('auth0Data');
 
     if (confirmedUser) {
       confirmedUser = JSON.parse(confirmedUser);
-
       const jwtToken = confirmedUser.params.id_token;
       const decoded = jwtDecode(jwtToken);
-
       this.props.setUserCreds(decoded, confirmedUser);
     }
   }
@@ -42,62 +33,36 @@ class BestPracticesScreen extends Component {
       <Container style={styles.container}>
         <SafeAreaView>
           <ScrollView>
-            <Text style={styles.mainText}>
+            <MainText>
               Connect Our Kids makes free tools for social workers engaged in
               permanency searches for foster kids.
-            </Text>
+            </MainText>
+
             <Text style={styles.videoText}>
               Watch the video below to learn more about the free tools and
               resources in this app.
             </Text>
-            <View style={styles.videoContainer}>
-              <WebView
-                style={styles.WebViewContainer}
-                javaScriptEnabled={true}
-                domStorageEnabled={true}
-                source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
-              />
-            </View>
-            <Button
-              style={[styles.button, styles.primaryBtn]}
-              block
-              onPress={() => this.props.navigation.navigate('PeopleSearch')}
-            >
-              <Text style={[styles.primaryBtnText, styles.lightBtn]}>
-                People Search
-              </Text>
-              <Text style={[styles.buttonText, styles.lightBtn]}>
-                Find Contact Information for Anyone
-              </Text>
-            </Button>
-            <Button
-              style={[styles.button, styles.primaryBtn]}
-              bordered
-              block
-              onPress={() =>
+
+            <Video uri={constants.bestPracticesURI} />
+
+            <NavigationButton
+              titleText="People Search"
+              subTitleText="Find Contact Information for Anyone"
+              handlePress={() => this.props.navigation.navigate('PeopleSearch')}
+            />
+            <NavigationButton
+              titleText="Family Connections"
+              subTitleText="Family Trees for Permanency"
+              handlePress={() =>
                 this.props.navigation.navigate('FamilyConnections')
               }
-            >
-              <Text style={[styles.primaryBtnText, styles.lightBtn]}>
-                Family Connections
-              </Text>
-              <Text style={[styles.buttonText, styles.lightBtn]}>
-                Family Trees for Permanency
-              </Text>
-            </Button>
-            <Button
-              style={[styles.button, styles.lastBtn, styles.primaryBtn]}
-              bordered
-              block
-              onPress={() => Linking.openURL('https://connectourkids.org')}
-            >
-              <Text style={[styles.primaryBtnText, styles.lightBtn]}>
-                Resources
-              </Text>
-              <Text style={[styles.buttonText, styles.lightBtn]}>
-                Useful Materials and Information
-              </Text>
-            </Button>
+            />
+            <NavigationButton
+              titleText="Resources"
+              subTitleText="Useful Materials and Information"
+              handlePress={() => Linking.openURL('https://connectourkids.org')}
+              style={styles.lastBtn}
+            />
           </ScrollView>
         </SafeAreaView>
       </Container>
@@ -110,12 +75,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20
   },
-  mainText: {
-    fontFamily: constants.fontFamily,
-    fontSize: 18,
-    lineHeight: 26,
-    marginBottom: 5
-  },
   videoText: {
     color: constants.highlightColor,
     fontWeight: 'bold',
@@ -127,51 +86,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 25
   },
-
-  button: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    marginBottom: 10
-  },
-  primaryBtn: {
-    backgroundColor: constants.highlightColor
-  },
-  primaryBtnText: {
-    fontSize: 12,
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-    color: constants.highlightColor,
-    flex: 1
-  },
-  buttonText: {
-    color: constants.highlightColor,
-    fontSize: 12,
-    textTransform: 'uppercase'
-  },
-  lightBtn: {
-    color: '#fff'
-  },
   lastBtn: {
     marginBottom: 50
-  },
-  textInput: {
-    borderColor: 'black',
-    borderWidth: 1,
-    borderStyle: 'solid'
-  },
-
-  red: {
-    backgroundColor: 'red'
-  },
-  videoContainer: {
-    justifyContent: 'center',
-    height: 300,
-    marginBottom: 30
-  },
-  WebViewContainer: {
-    marginTop: Platform.OS == 'ios' ? 20 : 0
   }
 });
 

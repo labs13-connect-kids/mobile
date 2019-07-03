@@ -1,7 +1,6 @@
 import { GET_INFO, MODAL_VISIBLE, STOP_SEARCH_ME } from './actionTypes';
 
 export const getInfo = (key, type) => {
-  console.log('payload from redux = ', key, type);
   return { type: GET_INFO, payload: { key: key, queryType: type } };
 };
 
