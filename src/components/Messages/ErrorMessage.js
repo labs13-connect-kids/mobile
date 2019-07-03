@@ -6,7 +6,6 @@ import {
   isAddress,
   isPhone,
   isUrl,
-  isCityState
 } from '../../helpers/inputValidators';
 
 const handleOpenEmail = () => {
@@ -58,10 +57,6 @@ const ErrorMessage = (props) => {
     }
 
     if (props.query) {
-      // const name = props.query.names[0]["display"];
-      // const email = props.query.emails[0]["address"];
-      // const address = props.query.addresses[0]["display"];
-      // const phone = props.query.phones[0]["number"];
       if (props.query.names) {
         // if (isName(props.query.names[0].display)) {
         if (isName(props.query.names[0]["display"])) {
