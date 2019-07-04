@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   SafeAreaView,
   StyleSheet,
@@ -19,7 +18,7 @@ import {
   getInfo
 } from '../store/actions';
 
-import { Container, Button } from 'native-base';
+import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
 import PersonRow from '../components/Person/PersonRow';
@@ -32,6 +31,7 @@ import RecentSearches from '../components/RecentSearches/RecentSearches';
 
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
+import Video from '../components/Video/Video';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -140,7 +140,12 @@ class PeopleSearchScreen extends React.Component {
                 </TouchableHighlight>
               )}
               {this.props.isFetching && <Loader />}
-              {this.props.error && <ErrorMessage />}
+              {this.props.error && (
+                <ErrorMessage
+                  data={this.props.error}
+                  query={this.props.query}
+                />
+              )}
               {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
@@ -168,6 +173,7 @@ class PeopleSearchScreen extends React.Component {
                   navigation={navigation}
                 />
               )}
+              <Video uri={constants.peopleSearchURI} />
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -181,53 +187,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 5
   },
-
-  header: {
-    flexDirection: 'row',
-    textAlign: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 25
-  },
-  loginContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   intro: {
     padding: 10,
-
     fontFamily: constants.fontFamily,
     fontSize: 18
   },
-
-  textInput: {
-    borderColor: constants.highlightColor,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    flex: 2
-  },
-
-  textInputSmall: {
-    flex: 1
-  },
-  nameInput: {
-    flexDirection: 'row'
-  },
-
-  button: {
-    margin: 10,
-    padding: 10,
-    backgroundColor: '#508DB3'
-  },
-
-  tab: {
-    backgroundColor: 'white'
-  },
-
-  buttonText: {
-    color: 'white'
-  },
-
   link: {
     color: `${constants.highlightColor}`,
     lineHeight: 17,
@@ -238,19 +202,21 @@ const styles = StyleSheet.create({
   },
   matchesText: {
     fontSize: 20,
-    color: '#508DB3',
-    marginBottom: 20
-  },
-
-  greyButton: {
-    backgroundColor: 'grey',
-    margin: 10,
-    padding: 10
+    color: `${constants.highlightColor}`,
+    marginBottom: 20,
+    marginLeft: 10
   }
 });
 
 const mapStateToProps = state => {
-  const { error, isFetching, person, possiblePersons } = state.people;
+  const {
+    error,
+    isFetching,
+    person,
+    possiblePersons,
+    data,
+    query
+  } = state.people;
   const {
     accessToken,
     idToken,
@@ -273,7 +239,9 @@ const mapStateToProps = state => {
     videoVisible,
     user,
     info: state.confirmationModal.info,
-    queryType: state.confirmationModal.queryType
+    queryType: state.confirmationModal.queryType,
+    data,
+    query
   };
 };
 
