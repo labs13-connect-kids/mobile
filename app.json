@@ -21,6 +21,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.connectourkids.connect-our-kids"
+    },
+    "android": {
+      "package": "com.connectOurKids.connectOurKids",
+      "versionCode": 2
     }
   }
 }
