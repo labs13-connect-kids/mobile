@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Modal } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  StatusBar
+} from 'react-native';
 import { Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -53,6 +60,7 @@ class FamilyConnectionsScreen extends Component {
     return (
       <ScreenContainer>
         <SafeAreaView>
+          <StatusBar barStyle="dark-content" />
           <View>
             <Modal
               animationType="slide"
