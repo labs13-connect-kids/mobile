@@ -25,6 +25,7 @@ import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import SearchForm from '../components/SearchForm/SearchForm';
+import { sendEvent } from '../helpers/createEvent';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
 import RecentSearches from '../components/RecentSearches/RecentSearches';
@@ -39,7 +40,8 @@ class PeopleSearchScreen extends React.Component {
 
   state = {
     data: this.props.info,
-    type: this.props.type
+    type: this.props.type,
+    videoPlayerOpen: false
   };
 
   handleEncodeURI = person => {
@@ -91,6 +93,24 @@ class PeopleSearchScreen extends React.Component {
     });
   };
 
+  openVideo = () => {
+    this.setState({ videoPlayerOpen: true });
+    sendEvent(
+      this.props.isLoggedIn ? this.props.user.email : 'anonymous@unknown.org',
+      'open',
+      'introduction-video'
+    );
+  };
+
+  closeVideo = () => {
+    this.setState({ videoPlayerOpen: false });
+    sendEvent(
+      this.props.isLoggedIn ? this.props.user.email : 'anonymous@unknown.org',
+      'close',
+      'introduction-video'
+    );
+  };
+
   resetReduxState = () => {
     const { resetState } = this.props;
     resetState();
@@ -101,6 +121,7 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
+    console.log('PROPS', this.props);
     const { isLoggedIn, navigation } = this.props;
     return (
       <Container style={styles.container}>
@@ -173,7 +194,31 @@ class PeopleSearchScreen extends React.Component {
                   navigation={navigation}
                 />
               )}
-              <Video uri={constants.peopleSearchURI} />
+              {this.state.videoPlayerOpen ? (
+                <View>
+                  <Video uri={constants.peopleSearchURI} />
+                  <TouchableHighlight
+                    style={[
+                      styles.videoButton,
+                      { borderColor: 'red', marginTop: 5, marginBottom: 20 }
+                    ]}
+                    onPress={this.closeVideo}
+                  >
+                    <Text style={[styles.videoButtonText, { color: 'red' }]}>
+                      Close Video
+                    </Text>
+                  </TouchableHighlight>
+                </View>
+              ) : (
+                <TouchableHighlight
+                  style={styles.videoButton}
+                  onPress={this.openVideo}
+                >
+                  <Text style={styles.videoButtonText}>
+                    Watch a 2 minute quick introductory video
+                  </Text>
+                </TouchableHighlight>
+              )}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -205,6 +250,19 @@ const styles = StyleSheet.create({
     color: `${constants.highlightColor}`,
     marginBottom: 20,
     marginLeft: 10
+  },
+  videoButton: {
+    alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: constants.highlightColor,
+    borderStyle: 'solid',
+    borderRadius: 5
+  },
+  videoButtonText: {
+    color: constants.highlightColor,
+    fontWeight: 'bold',
+    textTransform: 'uppercase'
   }
 });
 
