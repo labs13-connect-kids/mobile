@@ -18,7 +18,8 @@ export default class App extends Component {
 
   async componentDidMount() {
     await Font.loadAsync({
-      [constants.fontFamily]: require('./assets/fonts/Futura-Light.otf')
+      [constants.fontFamily]: require("./assets/fonts/Futura-Light.otf"),
+      ["Roboto_medium"]: require("./assets/fonts/Roboto_medium.otf")
     });
     this.setState({ fontLoaded: true });
   }
