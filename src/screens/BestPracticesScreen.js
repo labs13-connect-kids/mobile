@@ -12,20 +12,29 @@ import Video from '../components/Video/Video';
 import MainText from '../UI/MainText';
 import NavigationButton from '../UI/NavigationButton';
 import ScreenContainer from '../UI/ScreenContainer';
+import authHelpers from '../helpers/authHelpers';
 
 class BestPracticesScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Best Practices', navigation);
 
   async componentDidMount() {
-    // NOTE: TODO check for JWT expiration to confirm if logged in
     let confirmedUser = await AsyncStorage.getItem('auth0Data');
-
     if (confirmedUser) {
       confirmedUser = JSON.parse(confirmedUser);
-      const jwtToken = confirmedUser.params.id_token;
-      const decoded = jwtDecode(jwtToken);
-      this.props.setUserCreds(decoded, confirmedUser);
+      const expiresAt = await AsyncStorage.getItem('expiresAt');
+      const isAuthenticated = new Date().getTime() < JSON.parse(expiresAt);
+      if (isAuthenticated) {
+        const jwtToken = confirmedUser.params.id_token;
+        const decoded = jwtDecode(jwtToken);
+        this.props.setUserCreds(decoded, confirmedUser);
+      } else {
+        // re-login
+        authHelpers.handleLogin(
+          authHelpers._loginWithAuth0,
+          this.props.setUserCreds
+        );
+      }
     }
   }
 

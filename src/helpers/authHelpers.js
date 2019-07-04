@@ -50,7 +50,9 @@ const handleLogin = async (authSession, setUserCreds) => {
   if (result.type === 'dismiss') return;
   const jwtToken = result.params.id_token;
   const decoded = jwtDecode(jwtToken);
-
+  // SET THE TIME TOKEN EXPIRES IN ASYNC STORAGE
+  const expiresAt = result.params.expires_in * 1000 + new Date().getTime();
+  setItem('expiresAt', expiresAt);
   setItem('auth0Data', result);
   setUserCreds(decoded, result);
 };
