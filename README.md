@@ -10,17 +10,11 @@ You can find the repo for the project at [connect our kids repo](https://github.
 |                [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/AsaOfDiamonds)                |                                                              [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/rytwalker)                                                              |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/NightlyD3V)                           |                         [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/maxgunter99)                          |                            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/pedrolmr)                            |                         [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wcolts2000)                         |
 | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/shalom1/) |                          [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/https://www.linkedin.com/in/ryan-walker-41082b47/)                          | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/tyler-spaulding-58337b132/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/michael-gunter-5383a0181/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/pedro-montesinos-64a247127/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/sean-pheneger-5393a089/) |
 
-🚫 Optional examples of using badges with links for your tech stack, make sure to change these to fit your project
 
-[![Swift Version][swift-image]][swift-url]
-[![Build Status][travis-image]][travis-url]
-[![License][license-image]][license-url]
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/EZSwiftExtensions.svg)](https://img.shields.io/cocoapods/v/LFAlertController.svg)  
-[![Platform](https://img.shields.io/cocoapods/p/LFAlertController.svg?style=flat)](http://cocoapods.org/pods/LFAlertController)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-🚫 more info on using badges [here](https://github.com/badges/shields)
+[![React Native Version][rn-image]][rn-url]
+[![License][license-image]][license-url] 
+
 
 ## Project Overview
 
@@ -82,6 +76,13 @@ People Search API [development api](https://dev.search.connectourkids.org/)
 - Redux_Devtools-Extension https://www.npmjs.com/package/redux-devtools-extension
 - Redux-Thunk https://www.npmjs.com/package/redux-thunk
 
+## Recommended Tools
+
+- Android Studio https://developer.android.com/studio
+- Android Studio Emulator https://docs.expo.io/versions/latest/workflow/android-studio-emulator/
+- Xcode https://developer.apple.com/xcode/
+- iOS Simulator https://docs.expo.io/versions/v33.0.0/workflow/ios-simulator/ 
+
 ## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
@@ -131,9 +132,8 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 See [People Search API](https://docs.google.com/document/d/1145R9-FcmA1NMXMAwbzFmNZ4DRtdWuazCsZYtJa8Owg/edit) for details on the backend of our project.
 
-[swift-image]: https://img.shields.io/badge/swift-3.0-orange.svg
-[swift-url]: https://swift.org/
+[rn-image]: https://img.shields.io/badge/React%20Native-.60-blue.svg
+[rn-url]: https://facebook.github.io/react-native/
 [license-image]: https://img.shields.io/badge/License-MIT-blue.svg
 [license-url]: LICENSE
-[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
+
