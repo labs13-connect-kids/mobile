@@ -33,6 +33,7 @@ import RecentSearches from '../components/RecentSearches/RecentSearches';
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 import Video from '../components/Video/Video';
+import SearchFooter from '../components/SearchFooter/SearchFooter';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -177,6 +178,7 @@ class PeopleSearchScreen extends React.Component {
               )}
               <Video uri={constants.peopleSearchURI} />
             </View>
+            <SearchFooter />
           </ScrollView>
         </SafeAreaView>
       </Container>
