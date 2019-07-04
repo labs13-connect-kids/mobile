@@ -58,4 +58,4 @@ export const isUrl = url => {
     return !!pattern.test(url);
   }
   return false;
-};
+}; 

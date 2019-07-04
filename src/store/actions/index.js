@@ -33,9 +33,6 @@ export const fetchSearchResult = (body, cb, email) => dispatch => {
   axios
     .post(`${constants.devURL}`, body.requestObject)
     .then(res => {
-      // console.log("accessing names: ", res.data.query.names)
-      // console.log("accessing emials: ", res.data.query.emails)
-      console.log("RES DATA QUERY!!", res.data.possible_persons.names)
       if (res.data.possible_persons) {
         options = createOptions(res.data.possible_persons.length, null, null);
         dispatch({
