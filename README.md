@@ -83,6 +83,12 @@ People Search API [development api](https://dev.search.connectourkids.org/)
 - Xcode https://developer.apple.com/xcode/
 - iOS Simulator https://docs.expo.io/versions/v33.0.0/workflow/ios-simulator/ 
 
+## Screen Flow
+
+- part 1 
+![Screen Flow 1](screens1.PNG)
+![Screen Flow 2](loginSignUpPaths.PNG)
+
 ## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
