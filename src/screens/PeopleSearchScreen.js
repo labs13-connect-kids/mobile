@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   SafeAreaView,
   StyleSheet,
@@ -188,53 +187,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 5
   },
-
-  header: {
-    flexDirection: 'row',
-    textAlign: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 25
-  },
-  loginContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   intro: {
     padding: 10,
-
     fontFamily: constants.fontFamily,
     fontSize: 18
   },
-
-  textInput: {
-    borderColor: constants.highlightColor,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    flex: 2
-  },
-
-  textInputSmall: {
-    flex: 1
-  },
-  nameInput: {
-    flexDirection: 'row'
-  },
-
-  button: {
-    margin: 10,
-    padding: 10,
-    backgroundColor: '#508DB3'
-  },
-
-  tab: {
-    backgroundColor: 'white'
-  },
-
-  buttonText: {
-    color: 'white'
-  },
-
   link: {
     color: `${constants.highlightColor}`,
     lineHeight: 17,
@@ -245,14 +202,9 @@ const styles = StyleSheet.create({
   },
   matchesText: {
     fontSize: 20,
-    color: '#508DB3',
-    marginBottom: 20
-  },
-
-  greyButton: {
-    backgroundColor: 'grey',
-    margin: 10,
-    padding: 10
+    color: `${constants.highlightColor}`,
+    marginBottom: 20,
+    marginLeft: 10
   }
 });
 
