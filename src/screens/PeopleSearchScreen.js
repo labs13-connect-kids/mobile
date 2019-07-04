@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  StatusBar
 } from 'react-native';
 import { connect } from 'react-redux';
 import {
@@ -105,6 +106,7 @@ class PeopleSearchScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <SafeAreaView>
+          <StatusBar barStyle="dark-content" />
           <RegisterModalsContainer
             modalVisible={this.props.modalVisible}
             setAgreeModalVisible={this.props.setAgreeModalVisible}

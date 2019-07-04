@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, Text, Linking } from 'react-native';
+import { SafeAreaView, Text, Linking, StatusBar } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AsyncStorage } from 'react-native';
 import { setUserCreds, logOut } from '../store/actions';
@@ -42,6 +42,7 @@ class BestPracticesScreen extends Component {
     return (
       <ScreenContainer>
         <SafeAreaView>
+          <StatusBar barStyle="dark-content" />
           <ScrollView>
             <MainText>
               Connect Our Kids makes free tools for social workers engaged in
