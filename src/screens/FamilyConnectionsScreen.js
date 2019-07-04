@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  WebView,
-  Platform,
-  Modal
-} from 'react-native';
-import { Container, Button } from 'native-base';
+import { SafeAreaView, StyleSheet, Text, View, Modal } from 'react-native';
+import { Button } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import headerConfig from '../helpers/headerConfig';
 import { sendEvent } from './../helpers/createEvent';
 import FamilyConnectionsModal from './../components/FamilyConnectionsModal/FamilyConnectionsModal';
+import Video from '../components/Video/Video';
 import constants from '../helpers/constants';
+import MainText from '../UI/MainText';
+import ScreenContainer from '../UI/ScreenContainer';
 class FamilyConnectionsScreen extends Component {
   static navigationOptions = ({ navigation }) =>
     headerConfig('Family Connections', navigation);
@@ -56,7 +51,7 @@ class FamilyConnectionsScreen extends Component {
 
   render() {
     return (
-      <Container style={styles.container}>
+      <ScreenContainer>
         <SafeAreaView>
           <View>
             <Modal
@@ -74,24 +69,19 @@ class FamilyConnectionsScreen extends Component {
             </Modal>
           </View>
           <ScrollView>
-            <Text style={styles.mainText}>
+            <MainText>
               Learn about a revolutionary way to discover and engage extended
               families for at-risk foster youth.
-            </Text>
-            <View style={styles.videoContainer}>
-              <WebView
-                style={styles.WebViewContainer}
-                javaScriptEnabled={true}
-                domStorageEnabled={true}
-                source={{ uri: 'https://www.youtube.com/embed/eMivJgf7RNA' }}
-              />
-            </View>
+            </MainText>
+
+            <Video uri={constants.familyConnectionsURI} />
 
             <Button style={styles.button} block onPress={this.openModal}>
               <Text style={styles.buttonText}>
                 I Want To Access Family Connections
               </Text>
             </Button>
+
             {this.state.message && (
               <View style={styles.messageContainer}>
                 <Text style={styles.thankyouMessage}>
@@ -102,28 +92,12 @@ class FamilyConnectionsScreen extends Component {
             )}
           </ScrollView>
         </SafeAreaView>
-      </Container>
+      </ScreenContainer>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    padding: 20
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 25
-  },
-  mainText: {
-    fontFamily: constants.fontFamily,
-    fontSize: 18,
-    lineHeight: 26,
-    marginBottom: 20
-  },
   button: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -133,17 +107,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: '700'
-  },
-  textInput: {
-    borderColor: 'black',
-    borderWidth: 1,
-    borderStyle: 'solid'
-  },
-  red: {
-    backgroundColor: 'red'
-  },
-  WebViewContainer: {
-    marginTop: Platform.OS == 'ios' ? 20 : 0
   },
   loginContainer: {
     flex: 1,
@@ -167,7 +130,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  // console.log('redux state FCS: ', state);
   return {
     email: state.auth.user ? state.auth.user.email : null
   };

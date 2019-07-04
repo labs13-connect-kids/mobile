@@ -1,5 +1,7 @@
-import constants from './constants';
 import axios from 'axios';
+import getEnvVars from '../../environment';
+
+const { eventTrackingURL } = getEnvVars();
 
 // possiblePersonIndex: 0
 // emailIndex: 0
@@ -10,7 +12,7 @@ import axios from 'axios';
 
 export const sendUserInfo = emailAddress => {
   console.log(emailAddress);
-  axios.post(constants.devEventTrackingURL, { emailAddress });
+  axios.post(eventTrackingURL, { emailAddress });
 };
 
 export const sendEvent = (
@@ -38,7 +40,7 @@ export const sendEvent = (
   }
   console.log(bodyObject);
   return axios
-    .post(constants.devEventTrackingURL, JSON.stringify(bodyObject))
+    .post(eventTrackingURL, JSON.stringify(bodyObject))
     .then(res => {
       console.log('EVENT TRACKING RES: ', res);
       return res;

@@ -62,6 +62,22 @@ const PeopleSearchNavigator = createStackNavigator(
   }
 );
 
+const AccountNavigator = createStackNavigator(
+  {
+    MyAccount: {
+      screen: AuthenticationView
+    }
+  },
+  {
+    initialRouteName: 'MyAccount',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 80
+      }
+    }
+  }
+);
+
 const AppDrawerNavigator = createDrawerNavigator(
   {
     'Best Practices': {
@@ -73,8 +89,8 @@ const AppDrawerNavigator = createDrawerNavigator(
     'People Search': {
       screen: PeopleSearchNavigator
     },
-    'Log In / Sign Up \n\nLog Out': {
-      screen: AuthenticationView
+    'My Account': {
+      screen: AccountNavigator
     }
   },
   {
