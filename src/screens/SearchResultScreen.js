@@ -5,7 +5,8 @@ import {
   Text,
   View,
   TouchableHighlight,
-  Modal
+  Modal,
+  StatusBar
 } from 'react-native';
 
 import { Container, Button } from 'native-base';
@@ -124,6 +125,7 @@ class SearchResultScreen extends React.Component {
     const { isLoggedIn, person, user } = this.props;
     return (
       <Container style={styles.container}>
+        <StatusBar barStyle="dark-content" />
         <View>
           <Modal
             animationType="slide"
@@ -176,7 +178,7 @@ class SearchResultScreen extends React.Component {
                   </Text>
                 </TouchableHighlight>
               )}
-              {this.props.error && <ErrorMessage/>}
+              {this.props.error && <ErrorMessage />}
               {!person ? (
                 <Loader />
               ) : (
@@ -187,7 +189,7 @@ class SearchResultScreen extends React.Component {
                   isLoggedIn={isLoggedIn}
                   showConModal={this.showConModal}
                   navigation={this.props.navigation}
-                  setData = {this.setData}
+                  setData={this.setData}
                 />
               )}
             </View>
