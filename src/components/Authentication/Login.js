@@ -49,14 +49,12 @@ const Login = props => {
           <NavigationButton
             titleText="People Search"
             subTitleText="Find Contact Information for Anyone"
-            handlePress={() => this.props.navigation.navigate('PeopleSearch')}
+            handlePress={() => props.navigation.navigate('PeopleSearch')}
           />
           <NavigationButton
             titleText="Family Connections"
             subTitleText="Family Trees for Permanency"
-            handlePress={() =>
-              this.props.navigation.navigate('FamilyConnections')
-            }
+            handlePress={() => props.navigation.navigate('FamilyConnections')}
           />
           <NavigationButton
             titleText="Resources"
