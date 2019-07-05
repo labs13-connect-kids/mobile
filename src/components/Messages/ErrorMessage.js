@@ -1,12 +1,11 @@
 import React from 'react';
-import { Linking, Text, TouchableHighlight, View } from 'react-native';
+import { Linking, Text, View } from 'react-native';
 import {
   isName,
   isEmail,
   isAddress,
   isPhone,
   isUrl,
-  isCityState
 } from '../../helpers/inputValidators';
 
 const handleOpenEmail = () => {
@@ -24,7 +23,6 @@ const handleOpenEmail = () => {
 };
 
 const ErrorMessage = (props) => {
-
   renderMessage = () => {
     if (props.data.inputKey && props.data.inputValue) {
       if (props.data.inputKey === "name") {
@@ -57,45 +55,44 @@ const ErrorMessage = (props) => {
       console.log('fetching...')
     }
 
+
     if (props.query) {
-      // const name = props.query.names[0]["display"];
-      // const email = props.query.emails[0]["address"];
-      // const address = props.query.addresses[0]["display"];
-      // const phone = props.query.phones[0]["number"];
       if (props.query.names) {
-        // if (isName(props.query.names[0].display)) {
-        if (isName(props.query.names[0]["display"])) {
+        // if (isName(props.query.names[0]["display"])) {
+        if (props.query.names[0]["display"]) {
           return <Text>Sorry, no results were found for your search. Check the spelling and try again. </Text>
         }
       }
       else if (props.query.emails) {
-        if (isEmail(props.query.emails[0]["address"])) {
+        // if (isEmail(props.query.emails[0]["address"])) {
+        if (props.query.emails[0]["address"]) {
           return <Text>Sorry, no results were found for your search. Check the spelling and try again.</Text>
         }
       }
 
       else if (props.query.addresses) {
-        if (isAddress(props.query.addresses[0]["display"])) {
+        // if (isAddress(props.query.addresses[0]["display"])) {
+        if (props.query.addresses[0]["display"]) {
           return (<Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
           </Text>)
         }
       }
       else if (props.query.phones) {
-        if (isPhone(props.query.phones[0]["number"])) {
+        // if (isPhone(props.query.phones[0]["number"])) {
+        if (props.query.phones[0]["number"]) {
           return (<Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
           </Text>)
         }
       }
-      else if (isUrl(props.query.urls[0]["@source_id"])) {
-        return <Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
-       </Text>
-      }
+      // else if (isUrl(props.query.urls[0]["@source_id"])) {
+      //   return <Text style={{ color: '#856404' }}>There was an error during the search. Please try again later, or <Text style={{ color: '#508db3' }} onPress={handleOpenEmail}>Contact Support.</Text>
+      //  </Text>
+      // }
     }
-    else{
+    else {
       console.log("ERROR in ErrorMessage.js")
     }
   }
-
   return (
     <View style={{ backgroundColor: '#fff3cd', padding: 15 }}>
       {this.renderMessage()}
