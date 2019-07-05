@@ -2,7 +2,21 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, Tabs, Tab, Input } from 'native-base';
 import constants from '../../helpers/constants';
-import { isName, isEmail, isPhone, isUrl } from '../../helpers/inputValidators';
+import {
+  isName,
+  isEmail,
+  isAddress,
+  isPhone,
+  isUrl,
+  isCityState
+} from '../../helpers/inputValidators';
+import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
+import { connect } from 'react-redux';
+import {
+  getInfo,
+  stopSearchMe,
+  sendSearchErrorMessage
+} from '../../store/actions';
 
 class SearchForm extends Component {
   state = {
@@ -12,8 +26,20 @@ class SearchForm extends Component {
     address: '',
     phone: '',
     url: '',
+    inputValidate: true,
     tabPage: 0
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    // console.log('SF CDU', this.props);
+    if (this.props.searchMe && this.props.queryType) {
+      this.inputHandler(this.props.queryType, this.props.info);
+      this.handleFormSubmit();
+      this.props.stopSearchMe();
+      // console.log('Search Success');
+    }
+    // console.log('its not starting');
+  }
 
   inputHandler = (name, value) => {
     const inputName = name;
@@ -43,6 +69,24 @@ class SearchForm extends Component {
       });
     }
     this.setState({ [name]: value });
+
+    if (name === 'name') {
+      if (this.state.name) {
+        this.setState({ inputValidate: isName(value) });
+      }
+    } else if (name === 'cityState') {
+      if (this.state.cityState) {
+        this.setState({ inputValidate: isCityState(value) });
+      }
+    } else if (name === 'email') {
+      this.setState({ inputValidate: isEmail(value) });
+    } else if (name === 'address') {
+      this.setState({ inputValidate: isAddress(value) });
+    } else if (name === 'phone') {
+      this.setState({ inputValidate: isPhone(value) });
+    } else if (name === 'url') {
+      this.setState({ inputValidate: isUrl(value) });
+    }
   };
 
   handleFormSubmit = () => {
@@ -53,7 +97,7 @@ class SearchForm extends Component {
     const inputObj = this.findInputWithLength();
 
     if (!inputObj) {
-      console.log('No input');
+      // console.log('No input');
       return;
     }
 
@@ -61,34 +105,46 @@ class SearchForm extends Component {
       inputKey = key;
       inputValue = value;
     }
-
+    let searchType;
     if (isName(inputValue)) {
       if (!this.state.name) {
         this.setState({ name: inputValue, [inputKey]: '', tabPage: 0 });
       }
+      searchType = 'name';
       formattedObject = this.formatRequestObject(inputValue, 'name');
     } else if (isEmail(inputValue)) {
       if (!this.state.email) {
         this.setState({ email: inputValue, [inputKey]: '', tabPage: 1 });
       }
+      searchType = 'email';
       formattedObject = this.formatRequestObject(inputValue, 'email');
+    } else if (isAddress(inputValue)) {
+      if (!this.state.address) {
+        this.setState({ address: inputValue, [inputKey]: '', tabPage: 2 });
+      }
+      searchType = 'address';
+      formattedObject = this.formatRequestObject(inputValue, 'address');
     } else if (isPhone(inputValue)) {
       if (!this.state.phone) {
         this.setState({ phone: inputValue, [inputKey]: '', tabPage: 3 });
       }
+      searchType = 'phone';
       formattedObject = this.formatRequestObject(inputValue, 'phone');
     } else if (isUrl(inputValue)) {
       if (!this.state.url) {
         this.setState({ url: inputValue, [inputKey]: '', tabPage: 4 });
       }
+      searchType = 'url';
       formattedObject = this.formatRequestObject(inputValue, 'url');
     } else {
       console.log('your input is not valid');
     }
+
     if (formattedObject) {
-      this.props.handleSearch(formattedObject);
+      this.props.handleSearch(formattedObject, searchType, inputValue);
     } else {
       console.log('formattedObject: error');
+      this.props.sendSearchErrorMessage({ inputKey, inputValue });
     }
   };
 
@@ -107,7 +163,7 @@ class SearchForm extends Component {
     if (name && input) {
       return { [name]: input };
     } else {
-      console.log('Something went wrong!');
+      // console.log('Something went wrong!');
     }
   };
 
@@ -117,31 +173,13 @@ class SearchForm extends Component {
     switch (type) {
       case 'name':
         person.names = [];
-        let splitName = inputValue
-          .trim()
-          .replace(/,/g, '')
-          .split(' ');
-        if (splitName.length === 2) {
-          person.names.push({ first: splitName[0], last: splitName[1] });
-        } else if (splitName.length === 3) {
-          person.names.push({
-            first: splitName[0],
-            middle: splitName[2],
-            last: splitName[1]
-          });
-        }
+        const parsedName = parseName(inputValue);
+        person.names.push(parsedName);
 
         if (this.state.cityState.length) {
           person.addresses = [];
-          let splitAddress = this.state.cityState.trim().split(' ');
-          if (splitAddress.length > 1) {
-            let state = splitAddress.pop();
-            let city = splitAddress.join(' ').replace(/,/g, '');
-            person.addresses.push({
-              state: state,
-              city: city
-            });
-          }
+          const location = parseCityState(this.state.cityState);
+          person.addresses.push(location);
         }
         break;
 
@@ -150,6 +188,11 @@ class SearchForm extends Component {
         person.emails.push({
           address: inputValue
         });
+        break;
+      case 'address':
+        person.addresses = [];
+        const addresses = parseAddress(inputValue);
+        person.addresses.push(addresses);
         break;
 
       case 'phone':
@@ -167,7 +210,7 @@ class SearchForm extends Component {
         break;
 
       default:
-        console.log('Something happened ERROR');
+        // console.log('Something happened ERROR');
         break;
     }
     return person;
@@ -185,9 +228,15 @@ class SearchForm extends Component {
     });
   };
 
+  // toggleCityStateInput = (data) => {
+  //   console.log(data.i)
+  //   this.setState({ showCityStateInput: data.i == 0 ? true : false, tabPage: data.i });
+  // }
+
   render() {
+    // console.log('IN RENDER', this.props);
     return (
-      <View>
+      <View style={{ marginBottom: 20 }}>
         <Tabs
           style={styles.container}
           activeTextStyle={{ color: '#64aab8' }}
@@ -199,74 +248,118 @@ class SearchForm extends Component {
             style={[styles.nameInput, { color: '#64aab8' }]}
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View style={styles.nameInputFullWidth}>
               <Input
                 placeholder="First and last, middle optional"
-                style={styles.textInput}
+                style={[
+                  styles.textInput,
+                  !this.state.inputValidate ? styles.error : null
+                ]}
                 value={this.state.name}
                 onChangeText={text => this.inputHandler('name', text)}
               />
-              <Input
-                placeholder="City, State"
-                style={styles.textInput}
-                value={this.state.cityState}
-                onChangeText={text => this.inputHandler('cityState', text)}
-              />
+              <View>
+                <Input
+                  placeholder="City, State"
+                  // style={styles.textInput}
+                  style={[
+                    styles.textInput,
+                    !this.state.inputValidate ? styles.error : null
+                  ]}
+                  value={this.state.cityState}
+                  onChangeText={text => this.inputHandler('cityState', text)}
+                />
+              </View>
             </View>
+            {/*this.state.showCityStateInput ?
+              <InputDisplay
+                inputValidate={this.state.inputValidate}
+                name={this.state.name}
+                cityState={this.state.cityState}
+                inputHandlerName={text => this.inputHandler('name', text)}
+                inputHandlerCityState={text => this.inputHandler('cityState', text)}
+              />
+            : styles.displayNoneInput*/}
           </Tab>
 
           <Tab
             heading="Email"
-            activeTextStyle={styles.activeTextStyle}
+            activeTextStyle={[styles.activeTextStyle]}
             textStyle={styles.textStyle}
+            activeTabStyle={[{ backgroundColor: '#fff' }]}
+            tabStyle={[{ backgroundColor: '#fff' }]}
+            style={[{ flex: 0 }]}
           >
             <View>
               <Input
                 placeholder="Email address"
-                style={styles.textInput}
+                style={[
+                  styles.textInput,
+                  !this.state.inputValidate ? styles.error : null
+                ]}
                 value={this.state.email}
                 onChangeText={text => this.inputHandler('email', text)}
               />
             </View>
           </Tab>
+
           <Tab
             heading="Address"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
                 placeholder="Mailing address"
-                style={styles.textInput}
+                style={[
+                  styles.textInput,
+                  !this.state.inputValidate ? styles.error : null
+                ]}
                 value={this.state.address}
                 onChangeText={text => this.inputHandler('address', text)}
               />
             </View>
           </Tab>
+
           <Tab
             heading="Phone"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
                 placeholder="Phone any format, no letters"
-                style={styles.textInput}
+                style={[
+                  styles.textInput,
+                  !this.state.inputValidate ? styles.error : null
+                ]}
                 value={this.state.phone}
                 onChangeText={text => this.inputHandler('phone', text)}
               />
             </View>
           </Tab>
+
           <Tab
             heading="URL"
             activeTextStyle={styles.activeTextStyle}
             textStyle={styles.textStyle}
+            activeTabStyle={{ backgroundColor: '#fff' }}
+            tabStyle={{ backgroundColor: '#fff' }}
           >
             <View>
               <Input
                 placeholder="Social profile link or any URL"
-                style={styles.textInput}
+                style={[
+                  styles.textInput,
+                  !this.state.inputValidate ? styles.error : null
+                ]}
                 value={this.state.url}
                 onChangeText={text => this.inputHandler('url', text)}
               />
@@ -274,13 +367,17 @@ class SearchForm extends Component {
           </Tab>
         </Tabs>
         <View style={{ flexDirection: 'row' }}>
-          <Button info style={styles.button} onPress={this.handleFormSubmit}>
+          <Button style={styles.button} onPress={this.handleFormSubmit}>
             <Text style={styles.buttonText}> Search </Text>
           </Button>
 
-          <Button info style={styles.greyButton} onPress={this.startOver}>
+          <Button style={styles.greyButton} onPress={this.startOver}>
             <Text style={styles.buttonText}> Start Over </Text>
           </Button>
+
+          {/* <Button info style={styles.greyButton} onPress={this.getData}>
+            <Text style={styles.buttonText}> get object </Text>
+          </Button> */}
         </View>
       </View>
     );
@@ -290,7 +387,8 @@ class SearchForm extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    margin: 5
+    margin: 5,
+    flex: 0
   },
   textInput: {
     borderColor: '#64aab8',
@@ -309,7 +407,7 @@ const styles = StyleSheet.create({
   button: {
     margin: 10,
     padding: 10,
-    backgroundColor: '#508DB3'
+    backgroundColor: `${constants.highlightColor}`
   },
 
   tab: {
@@ -324,13 +422,13 @@ const styles = StyleSheet.create({
     color: '#64aab8',
     lineHeight: 17,
     padding: 15,
-    backgroundColor: 'rgb(216,236,240)',
+    backgroundColor: `${constants.highlightColor}`,
     borderRadius: 10,
     marginBottom: 20
   },
   matchesText: {
     fontSize: 20,
-    color: '#508DB3',
+    color: `${constants.highlightColor}`,
     marginBottom: 20
   },
   greyButton: {
@@ -353,4 +451,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SearchForm;
+const mapStateToProps = state => {
+  const { info, queryType, searchMe } = state.confirmationModal;
+  return {
+    info,
+    queryType,
+    searchMe
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { getInfo, stopSearchMe, sendSearchErrorMessage }
+)(SearchForm);

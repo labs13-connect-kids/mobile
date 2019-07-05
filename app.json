@@ -1,11 +1,12 @@
 {
   "expo": {
-    "name": "connectOurKids",
+    "name": "Connect Our Kids",
     "slug": "connectOurKids",
+    "scheme": "connectourkids",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -18,7 +19,12 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.connectourkids.connect-our-kids"
+    },
+    "android": {
+      "package": "com.connectOurKids.connectOurKids",
+      "versionCode": 2
     }
   }
 }

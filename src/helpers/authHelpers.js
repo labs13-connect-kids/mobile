@@ -1,8 +1,9 @@
 import { AsyncStorage } from 'react-native';
 import { AuthSession } from 'expo';
+import getEnvVars from '../../environment';
+import jwtDecode from 'jwt-decode';
 
-const auth0Domain = `lambda-connect-kids.auth0.com`;
-const auth0ClientId = 'CxJ6UkC11uAAwCyvdTW20fudtLtJ21gz';
+const { auth0Domain, auth0ClientId } = getEnvVars();
 
 const toQueryString = params => {
   return (
@@ -15,34 +16,20 @@ const toQueryString = params => {
       .join('&')
   );
 };
-const getToken = async () => {
-  try {
-    const value = await AsyncStorage.getItem('token');
-    if (value !== null) {
-      // value previously stored
-      console.log('TOKEN VALUE FROM ASYNC', JSON.parse(value));
-    } else {
-      console.log('NOTHING HERE');
-    }
-  } catch (e) {
-    // error reading value
-    console.log('ERROR IN GET DATA');
-  }
-};
 const setItem = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
   } catch (e) {
-    console.log('SET TOKEN ERROR', e);
+    // console.log('SET TOKEN ERROR', e);
   }
 };
-const _loginWithAuth0 = async handleResponse => {
+const _loginWithAuth0 = async () => {
   const redirectUrl = AuthSession.getRedirectUrl();
   let authUrl =
     `https://${auth0Domain}/authorize` +
     toQueryString({
       client_id: auth0ClientId,
-      response_type: 'token',
+      response_type: 'token id_token',
       scope: 'openid profile email',
       redirect_uri: redirectUrl,
       nonce:
@@ -54,17 +41,25 @@ const _loginWithAuth0 = async handleResponse => {
           .substring(2, 15)
     });
 
-  const result = await AuthSession.startAsync({ authUrl });
-  console.log('RESULT', result);
-
-  if (result.type === 'success') {
-    handleResponse(result);
-  }
+  return await AuthSession.startAsync({ authUrl });
+};
+const handleLogin = async (authSession, setUserCreds) => {
+  // Retrieve the JWT token and decode it
+  let result = await authSession();
+  // if users cancels login process, terminate method
+  if (result.type === 'dismiss') return;
+  const jwtToken = result.params.id_token;
+  const decoded = jwtDecode(jwtToken);
+  // SET THE TIME TOKEN EXPIRES IN ASYNC STORAGE
+  const expiresAt = result.params.expires_in * 1000 + new Date().getTime();
+  setItem('expiresAt', expiresAt);
+  setItem('auth0Data', result);
+  setUserCreds(decoded, result);
 };
 
 export default {
   toQueryString,
   setItem,
-  getToken,
-  _loginWithAuth0
+  _loginWithAuth0,
+  handleLogin
 };

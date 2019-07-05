@@ -7,24 +7,42 @@ export const isName = name => {
     return isNumberOfWordsTwoOrThree && nameIsNotANumber;
   }
   return false;
-};
+}; 
 
 export const isEmail = email => {
   if (email.length) {
     let isValidEmail = email.trim().split('@').length;
-    return isValidEmail === 2;
+    return isValidEmail === 2; 
   }
   return false;
 };
+
+export const isCityState = citystate => {
+  if (citystate.length) {
+    let isValidCityState = citystate.trim().split(' ').length;
+    return isValidCityState === 2;
+  }
+  return false;
+};
+
+export const isAddress = address => {
+  if (address.length) {
+    let isValidAddress = address.trim().split(' ').length;
+    return isValidAddress > 3;
+  }
+  return false;
+};
+
 
 export const isPhone = phone => {
   if (phone.length) {
     let numbersOnly = phone.replace(/[^0-9]+/g, '');
+    console.log(numbersOnly.length)
 
     return numbersOnly.length === 10;
   }
-  return false;
 };
+
 
 export const isUrl = url => {
   if (url.length) {

@@ -10,7 +10,7 @@ import FamilyConnectionsScreen from '../screens/FamilyConnectionsScreen';
 import PeopleSearchScreen from '../screens/PeopleSearchScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
 import constants from '../helpers/constants';
-import AuthenticationView from '../screens/AuthenticationView';
+import AuthenticationView from '../screens/AuthenticationScreen';
 
 const BestPracticeNavigator = createStackNavigator(
   {
@@ -62,19 +62,19 @@ const PeopleSearchNavigator = createStackNavigator(
   }
 );
 
-const AuthenticationViewNavigator = createStackNavigator(
+const AccountNavigator = createStackNavigator(
   {
-    Authentication: {
+    MyAccount: {
       screen: AuthenticationView
     }
   },
   {
-    // initialRouteName: 'Login/Register',
-    // defaultNavigationOptions: {
-    //   headerStyle: {
-    //     height: 80
-    //   }
-    // }
+    initialRouteName: 'MyAccount',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 80
+      }
+    }
   }
 );
 
@@ -89,8 +89,8 @@ const AppDrawerNavigator = createDrawerNavigator(
     'People Search': {
       screen: PeopleSearchNavigator
     },
-    'Login/Register': {
-      screen: AuthenticationViewNavigator
+    'My Account': {
+      screen: AccountNavigator
     }
   },
   {
@@ -103,7 +103,7 @@ const AppSwitchNavigator = createSwitchNavigator({
   BestPractices: { screen: AppDrawerNavigator },
   FamilyConnections: { screen: AppDrawerNavigator },
   PeopleSearch: { screen: AppDrawerNavigator },
-  Authentication: { screen: AuthenticationViewNavigator }
+  Authentication: { screen: AuthenticationView }
 });
 
 const AppContainer = createAppContainer(AppSwitchNavigator);
