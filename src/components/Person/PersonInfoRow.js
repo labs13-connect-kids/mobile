@@ -149,12 +149,12 @@ const PersonInfoRow = ({
                       {key['@last_seen'].split('-')[0]}
                     </Text>
                   ) : (
-                    key['@valid_since'] && (
-                      <Text style={styles.colListLabelText}>
-                        {key['@valid_since'].split('-')[0]}
-                      </Text>
-                    )
-                  )}
+                      key['@valid_since'] && (
+                        <Text style={styles.colListLabelText}>
+                          {key['@valid_since'].split('-')[0]}
+                        </Text>
+                      )
+                    )}
                 </TouchableOpacity>
               );
             }
