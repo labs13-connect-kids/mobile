@@ -1,11 +1,12 @@
 import React from 'react';
-
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  StatusBar,
+  Modal
 } from 'react-native';
 import { connect } from 'react-redux';
 import {
@@ -19,19 +20,24 @@ import {
   getInfo
 } from '../store/actions';
 
-import { Container, Button } from 'native-base';
+import { Container } from 'native-base';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 
 import PersonRow from '../components/Person/PersonRow';
 import headerConfig from '../helpers/headerConfig';
 import constants from '../helpers/constants';
 import SearchForm from '../components/SearchForm/SearchForm';
+import { sendEvent } from '../helpers/createEvent';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/Messages/ErrorMessage';
 import RecentSearches from '../components/RecentSearches/RecentSearches';
 
 import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
+import Video from '../components/Video/Video';
+import SearchFooter from '../components/SearchFooter/SearchFooter';
+import TermsOfService from '../components/SearchFooter/TermsOfService';
+import PrivacyPolicy from '../components/SearchFooter/PrivacyPolicy';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -39,7 +45,11 @@ class PeopleSearchScreen extends React.Component {
 
   state = {
     data: this.props.info,
-    type: this.props.type
+    type: this.props.type,
+    videoPlayerOpen: false,
+    modalVisible: false,
+    terms: false,
+    privacy: false
   };
 
   handleEncodeURI = person => {
@@ -91,6 +101,36 @@ class PeopleSearchScreen extends React.Component {
     });
   };
 
+  openVideo = () => {
+    this.setState({ videoPlayerOpen: true });
+    sendEvent(
+      this.props.isLoggedIn ? this.props.user.email : 'anonymous@unknown.org',
+      'open',
+      'introduction-video'
+    );
+  };
+
+  closeVideo = () => {
+    this.setState({ videoPlayerOpen: false });
+    sendEvent(
+      this.props.isLoggedIn ? this.props.user.email : 'anonymous@unknown.org',
+      'close',
+      'introduction-video'
+    );
+  };
+
+  closeModal = () => {
+    this.setState({ modalVisible: false });
+  };
+
+  openModal = () => {
+    this.setState({ modalVisible: true });
+  };
+
+  controlModal = (key, value) => {
+    this.setState({ [key]: value });
+  };
+
   resetReduxState = () => {
     const { resetState } = this.props;
     resetState();
@@ -105,6 +145,30 @@ class PeopleSearchScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <SafeAreaView>
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={this.closeModal}
+            >
+              {this.state.terms && (
+                <TermsOfService
+                  closeModal={this.closeModal}
+                  controlModal={this.controlModal}
+                  user={this.props.user}
+                  isLoggedIn={this.props.isLoggedIn}
+                />
+              )}
+              {this.state.privacy && (
+                <PrivacyPolicy
+                  closeModal={this.closeModal}
+                  controlModal={this.controlModal}
+                />
+              )}
+            </Modal>
+          </View>
+          <StatusBar barStyle="dark-content" />
           <RegisterModalsContainer
             modalVisible={this.props.modalVisible}
             setAgreeModalVisible={this.props.setAgreeModalVisible}
@@ -140,7 +204,12 @@ class PeopleSearchScreen extends React.Component {
                 </TouchableHighlight>
               )}
               {this.props.isFetching && <Loader />}
-              {this.props.error && <ErrorMessage data={this.props.error} query={this.props.query}/>}
+              {this.props.error && (
+                <ErrorMessage
+                  data={this.props.error}
+                  query={this.props.query}
+                />
+              )}
               {!!this.props.possiblePersons.length ? (
                 <>
                   <Text style={styles.matchesText}>Possible Matches</Text>
@@ -168,7 +237,36 @@ class PeopleSearchScreen extends React.Component {
                   navigation={navigation}
                 />
               )}
+              {this.state.videoPlayerOpen ? (
+                <View>
+                  <Video uri={constants.peopleSearchURI} />
+                  <TouchableHighlight
+                    style={[
+                      styles.videoButton,
+                      { borderColor: 'red', marginTop: 5, marginBottom: 20 }
+                    ]}
+                    onPress={this.closeVideo}
+                  >
+                    <Text style={[styles.videoButtonText, { color: 'red' }]}>
+                      Close Video
+                    </Text>
+                  </TouchableHighlight>
+                </View>
+              ) : (
+                <TouchableHighlight
+                  style={styles.videoButton}
+                  onPress={this.openVideo}
+                >
+                  <Text style={styles.videoButtonText}>
+                    Watch a 2 minute quick introductory video
+                  </Text>
+                </TouchableHighlight>
+              )}
             </View>
+            <SearchFooter
+              openModal={this.openModal}
+              controlModal={this.controlModal}
+            />
           </ScrollView>
         </SafeAreaView>
       </Container>
@@ -181,53 +279,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     margin: 5
   },
-
-  header: {
-    flexDirection: 'row',
-    textAlign: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 25
-  },
-  loginContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   intro: {
     padding: 10,
-
     fontFamily: constants.fontFamily,
     fontSize: 18
   },
-
-  textInput: {
-    borderColor: constants.highlightColor,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    flex: 2
-  },
-
-  textInputSmall: {
-    flex: 1
-  },
-  nameInput: {
-    flexDirection: 'row'
-  },
-
-  button: {
-    margin: 10,
-    padding: 10,
-    backgroundColor: '#508DB3'
-  },
-
-  tab: {
-    backgroundColor: 'white'
-  },
-
-  buttonText: {
-    color: 'white'
-  },
-
   link: {
     color: `${constants.highlightColor}`,
     lineHeight: 17,
@@ -238,19 +294,34 @@ const styles = StyleSheet.create({
   },
   matchesText: {
     fontSize: 20,
-    color: '#508DB3',
-    marginBottom: 20
+    color: `${constants.highlightColor}`,
+    marginBottom: 20,
+    marginLeft: 10
   },
-
-  greyButton: {
-    backgroundColor: 'grey',
-    margin: 10,
-    padding: 10
+  videoButton: {
+    alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: constants.highlightColor,
+    borderStyle: 'solid',
+    borderRadius: 5
+  },
+  videoButtonText: {
+    color: constants.highlightColor,
+    fontWeight: 'bold',
+    textTransform: 'uppercase'
   }
 });
 
 const mapStateToProps = state => {
-  const { error, isFetching, person, possiblePersons, data, query } = state.people;
+  const {
+    error,
+    isFetching,
+    person,
+    possiblePersons,
+    data,
+    query
+  } = state.people;
   const {
     accessToken,
     idToken,

@@ -12,7 +12,11 @@ import {
 } from '../../helpers/inputValidators';
 import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
 import { connect } from 'react-redux';
-import { getInfo, stopSearchMe, sendSearchErrorMessage } from '../../store/actions';
+import {
+  getInfo,
+  stopSearchMe,
+  sendSearchErrorMessage
+} from '../../store/actions';
 
 class SearchForm extends Component {
   state = {
@@ -22,8 +26,8 @@ class SearchForm extends Component {
     address: '',
     phone: '',
     url: '',
-    tabPage: 0,
-    showCityStateInput: false
+    inputValidate: true,
+    tabPage: 0
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -115,8 +119,7 @@ class SearchForm extends Component {
       }
       searchType = 'url';
       formattedObject = this.formatRequestObject(inputValue, 'url');
-    } 
-    else {
+    } else {
       console.log('your input is not valid');
     }
 
@@ -124,7 +127,7 @@ class SearchForm extends Component {
       this.props.handleSearch(formattedObject, searchType, inputValue);
     } else {
       console.log('formattedObject: error');
-      this.props.sendSearchErrorMessage({inputKey, inputValue});
+      this.props.sendSearchErrorMessage({ inputKey, inputValue });
     }
   };
 
@@ -204,7 +207,7 @@ class SearchForm extends Component {
       email: '',
       address: '',
       phone: '',
-      url: '',
+      url: ''
     });
   };
 
@@ -216,7 +219,7 @@ class SearchForm extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{ marginBottom: 20 }}>
         <Tabs
           style={styles.container}
           activeTextStyle={{ color: '#64aab8' }}
@@ -298,8 +301,7 @@ class SearchForm extends Component {
                 placeholder="Phone any format, no letters"
                 style={styles.textInput}
                 value={this.state.phone}
-                onChangeText={text =>
-                  this.inputHandler('phone', text)}
+                onChangeText={text => this.inputHandler('phone', text)}
               />
             </View>
           </Tab>
@@ -331,14 +333,15 @@ class SearchForm extends Component {
           </Button>
         </View>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    margin: 5, flex: 0
+    margin: 5,
+    flex: 0
   },
   textInput: {
     borderColor: '#64aab8',

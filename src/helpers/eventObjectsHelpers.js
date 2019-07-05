@@ -15,8 +15,8 @@ const notLoggedIn = {
   // signUp: 'click-sign-up',
   // watchVideo: 'click-watch-video',
   // confirmSocialWorker: 'click-yes-i-am-a-social-worker',
-  closeVideo: 'close-introduction-video', // Need to add link to open modal PeopleSearchScreen
-  openVideo: 'open-introduction-video' // Need to add link to open modal PeopleSearchScreen
+  // closeVideo: 'close-introduction-video', // Need to add link to open modal PeopleSearchScreen
+  // openVideo: 'open-introduction-video' // Need to add link to open modal PeopleSearchScreen
   // successfulSearch: 'search-person-success'
 };
 const loggedIn = {
@@ -32,8 +32,8 @@ const loggedIn = {
   // clickUrlSearch: 'click-person_url_search',
   // clickUrlView: 'click-person_url_view',
   // personClick: 'click-possible_person',
-  closeVideo: 'close-introduction-video', // Need to add link to open modal PeopleSearchScreen
-  openVideo: 'open-introduction-video', // Need to add link to open modal PeopleSearchScreen
+  // closeVideo: 'close-introduction-video', // Need to add link to open modal PeopleSearchScreen
+  // openVideo: 'open-introduction-video', // Need to add link to open modal PeopleSearchScreen
   // successfulSearch: 'search-person-success',
   servedChild: 'served-child-success' // Need to add link to open modal serving new child?
 };

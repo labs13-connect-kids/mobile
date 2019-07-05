@@ -5,7 +5,14 @@ import PersonInfoHeader from './PersonInfoHeader';
 
 const PersonRow = ({ handlePress, item }) => {
   return (
-    <Card>
+    <Card
+      style={{
+        shadowOffset: { width: 0, height: 0 },
+        shadowColor: 'transparent',
+        shadowOpacity: 0,
+        borderColor: 'transparent'
+      }}
+    >
       <CardItem button onPress={handlePress}>
         <Grid style={styles.rowContainer}>
           <PersonInfoHeader item={item} listItem />

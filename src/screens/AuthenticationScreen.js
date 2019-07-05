@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import LoginWithAuth0 from '../components/Authentication/LoginWithAuth0';
 import { connect } from 'react-redux';
 import RegisterModalsContainer from '../components/AuthModals/RegisterModalsContainer';
 import {
-  setModalVisible, 
+  setModalVisible,
   setAgreeModalVisible,
   setVideoPlayerModalVisible,
   setUserCreds
 } from '../store/actions';
 import authHelpers from '../helpers/authHelpers';
+import headerConfig from '../helpers/headerConfig';
 class AuthenticationView extends Component {
+  static navigationOptions = ({ navigation }) =>
+    headerConfig('My Account', navigation);
+
   render() {
     return (
       <View style={styles.registerContainer}>
+        <StatusBar barStyle="dark-content" />
         <RegisterModalsContainer
           modalVisible={this.props.modalVisible}
           setAgreeModalVisible={this.props.setAgreeModalVisible}
