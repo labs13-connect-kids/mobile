@@ -5,7 +5,8 @@ import {
   Text,
   View,
   TouchableHighlight,
-  StatusBar
+  StatusBar,
+  Modal
 } from 'react-native';
 import { connect } from 'react-redux';
 import {
@@ -35,6 +36,8 @@ import authHelpers from '../helpers/authHelpers';
 import RegisterModalsContainer from './../components/AuthModals/RegisterModalsContainer';
 import Video from '../components/Video/Video';
 import SearchFooter from '../components/SearchFooter/SearchFooter';
+import TermsOfService from '../components/SearchFooter/TermsOfService';
+import PrivacyPolicy from '../components/SearchFooter/PrivacyPolicy';
 
 class PeopleSearchScreen extends React.Component {
   static navigationOptions = ({ navigation }) =>
@@ -43,7 +46,10 @@ class PeopleSearchScreen extends React.Component {
   state = {
     data: this.props.info,
     type: this.props.type,
-    videoPlayerOpen: false
+    videoPlayerOpen: false,
+    modalVisible: false,
+    terms: false,
+    privacy: false
   };
 
   handleEncodeURI = person => {
@@ -113,6 +119,18 @@ class PeopleSearchScreen extends React.Component {
     );
   };
 
+  closeModal = () => {
+    this.setState({ modalVisible: false });
+  };
+
+  openModal = () => {
+    this.setState({ modalVisible: true });
+  };
+
+  controlModal = (key, value) => {
+    this.setState({ [key]: value });
+  };
+
   resetReduxState = () => {
     const { resetState } = this.props;
     resetState();
@@ -123,11 +141,33 @@ class PeopleSearchScreen extends React.Component {
   };
 
   render() {
-    console.log('PROPS', this.props);
     const { isLoggedIn, navigation } = this.props;
     return (
       <Container style={styles.container}>
         <SafeAreaView>
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={this.closeModal}
+            >
+              {this.state.terms && (
+                <TermsOfService
+                  closeModal={this.closeModal}
+                  controlModal={this.controlModal}
+                  user={this.props.user}
+                  isLoggedIn={this.props.isLoggedIn}
+                />
+              )}
+              {this.state.privacy && (
+                <PrivacyPolicy
+                  closeModal={this.closeModal}
+                  controlModal={this.controlModal}
+                />
+              )}
+            </Modal>
+          </View>
           <StatusBar barStyle="dark-content" />
           <RegisterModalsContainer
             modalVisible={this.props.modalVisible}
@@ -223,7 +263,10 @@ class PeopleSearchScreen extends React.Component {
                 </TouchableHighlight>
               )}
             </View>
-            <SearchFooter />
+            <SearchFooter
+              openModal={this.openModal}
+              controlModal={this.controlModal}
+            />
           </ScrollView>
         </SafeAreaView>
       </Container>
