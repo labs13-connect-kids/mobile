@@ -8,7 +8,6 @@ import {
   isAddress,
   isPhone,
   isUrl,
-  isCityState
 } from '../../helpers/inputValidators';
 import { parseAddress, parseCityState, parseName } from '../../helpers/parsers';
 import { connect } from 'react-redux';
@@ -26,7 +25,6 @@ class SearchForm extends Component {
     address: '',
     phone: '',
     url: '',
-    inputValidate: true,
     tabPage: 0
   };
 
@@ -211,12 +209,6 @@ class SearchForm extends Component {
     });
   };
 
-
-  toggleCityStateInput = (data) => {
-    console.log(data.i === 0 ? 'show cityState input!!' : 'hide!')
-    this.setState({ showCityStateInput: data.i === 0 ? true : false, tabPage: data.i });
-  }
-
   render() {
     return (
       <View style={{ marginBottom: 20 }}>
@@ -224,7 +216,6 @@ class SearchForm extends Component {
           style={styles.container}
           activeTextStyle={{ color: '#64aab8' }}
           tabBarUnderlineStyle={{ backgroundColor: '#000' }}
-          onChangeTab={this.toggleCityStateInput}
           page={this.state.tabPage}
         >
           <Tab
@@ -245,7 +236,6 @@ class SearchForm extends Component {
               <View>
               <Input
                 placeholder="City, State"
-                // style={styles.textInput}
                 style={[styles.textInput, this.state.showCityStateInput ? null : styles.displayNone]}
                 value={this.state.cityState}
                 onChangeText={text => this.inputHandler('cityState', text)}
@@ -401,9 +391,6 @@ const styles = StyleSheet.create({
   },
   nameInputFullWidth: {
     width: '100%'
-  },
-  displayNone: {
-    display:'none'
   }
 });
 
