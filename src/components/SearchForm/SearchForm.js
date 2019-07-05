@@ -236,7 +236,7 @@ class SearchForm extends Component {
               <View>
               <Input
                 placeholder="City, State"
-                style={[styles.textInput, this.state.showCityStateInput ? null : styles.displayNone]}
+                style={styles.textInput}
                 value={this.state.cityState}
                 onChangeText={text => this.inputHandler('cityState', text)}
               />
