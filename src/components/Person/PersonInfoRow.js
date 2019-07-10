@@ -114,7 +114,7 @@ const PersonInfoRow = ({
                   </Text>
                 </TouchableOpacity>
               );
-            } else if (isLoggedIn && itemKey === 'relationships') {
+            } else if (itemKey === 'relationships') {
               return (
                 <TouchableOpacity
                   style={styles.colListContainer}
@@ -124,7 +124,9 @@ const PersonInfoRow = ({
                   }
                 >
                   <Text style={styles.colListText}>
-                    {renderMaskedOrResult(key[itemValue][0].display, itemKey)}
+                    {isLoggedIn
+                      ? renderMaskedOrResult(key[itemValue][0].display, itemKey)
+                      : '**** ********* **'}
                   </Text>
                 </TouchableOpacity>
               );
@@ -147,12 +149,12 @@ const PersonInfoRow = ({
                       {key['@last_seen'].split('-')[0]}
                     </Text>
                   ) : (
-                    key['@valid_since'] && (
-                      <Text style={styles.colListLabelText}>
-                        {key['@valid_since'].split('-')[0]}
-                      </Text>
-                    )
-                  )}
+                      key['@valid_since'] && (
+                        <Text style={styles.colListLabelText}>
+                          {key['@valid_since'].split('-')[0]}
+                        </Text>
+                      )
+                    )}
                 </TouchableOpacity>
               );
             }
