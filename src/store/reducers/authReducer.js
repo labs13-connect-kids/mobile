@@ -52,7 +52,11 @@ export const authReducer = (state = initialState, action) => {
         videoVisible: true
       };
     case LOG_OUT:
+        
+      AsyncStorage.clear();
       AsyncStorage.removeItem('auth0Data');
+      AsyncStorage.removeItem('expiresAt');
+      AsyncStorage.removeItem('recentSearchesCache');
       return initialState;
     default:
       return state;

@@ -8,7 +8,8 @@ import {
 import { sendEvent } from './../../helpers/createEvent';
 
 export const logOut = email => {
-  sendEvent(email, 'click', 'logout');
+  console.log('logout called');
+  // sendEvent(email, 'click', 'logout');
   return { type: LOG_OUT };
 };
 

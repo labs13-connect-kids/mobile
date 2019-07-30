@@ -22,12 +22,12 @@ const PersonInfoRow = ({
     handlePressDirections = (data, postalCode, city) => {
       if (postalCode === undefined) {
         let address = `${city}, ${data}`;
-        console.log(address);
+        // console.log(address);
         const type = 'address';
         showConModal(address, type);
       } else {
         let address = `${city}, ${data} ${postalCode}`;
-        console.log(address);
+        // console.log(address);
         const type = 'address404';
         showConModal(address, type);
       }
@@ -49,9 +49,9 @@ const PersonInfoRow = ({
       if (isLoggedIn && itemKey === 'addresses') {
         if (key.zip_code === undefined) {
           let address = `${key.display}`;
-          console.log('NO ZIP_CODE FOUND');
+          // console.log('NO ZIP_CODE FOUND');
           let type = 'address';
-          console.log('ADDRESS', `${key.display}`);
+          // console.log('ADDRESS', `${key.display}`);
           showConModal(address, type, index);
         } else if (key.house === undefined) {
           if (key.street === undefined) {
@@ -64,12 +64,12 @@ const PersonInfoRow = ({
         } else if (key.zip_code === undefined) {
           let address = `${key.display}`;
           let type = 'address';
-          console.log('ADDRESS', `${key.display}`);
+          // console.log('ADDRESS', `${key.display}`);
           showConModal(address, type, index);
         } else {
           let address = `${key.display}, ${key.zip_code}`;
           let type = 'address';
-          console.log('ADDRESS', `${key.display}`);
+          // console.log('ADDRESS', `${key.display}`);
           showConModal(address, type, index);
         }
       }

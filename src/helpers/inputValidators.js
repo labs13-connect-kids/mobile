@@ -37,7 +37,7 @@ export const isAddress = address => {
 export const isPhone = phone => {
   if (phone.length) {
     let numbersOnly = phone.replace(/[^0-9]+/g, '');
-    console.log(numbersOnly.length)
+    // console.log(numbersOnly.length)
 
     return numbersOnly.length === 10;
   }
