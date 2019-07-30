@@ -6,6 +6,7 @@ import { sendEvent } from '../../helpers/createEvent';
 import NavigationButton from '../../UI/NavigationButton';
 import ScreenContainer from '../../UI/ScreenContainer';
 import MainText from '../../UI/MainText';
+// import {logOut} from '../../store/actions';
 
 const Login = props => {
   return (
@@ -45,6 +46,15 @@ const Login = props => {
             </View>
           )}
         </View>
+        {/* <View>
+          <Button 
+            onPress={()=>{
+              logOut();
+            }}
+            style={{width: 300, backgroundColor: 'red'}}>
+            <Text>log out!!</Text>
+          </Button>
+        </View> */}
         <View>
           <NavigationButton
             titleText="People Search"

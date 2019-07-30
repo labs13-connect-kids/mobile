@@ -82,7 +82,7 @@ class FamilyConnectionsScreen extends Component {
               families for at-risk foster youth.
             </MainText>
 
-            <Video uri={constants.familyConnectionsURI} />
+            {/* <Video uri={constants.familyConnectionsURI} /> */}
 
             <Button style={styles.button} block onPress={this.openModal}>
               <Text style={styles.buttonText}>
