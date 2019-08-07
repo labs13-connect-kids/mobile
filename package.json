@@ -19,6 +19,8 @@
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-auth0": "^1.4.2",
+    "react-native-elements": "^1.1.0",
+    "react-native-picker-dropdown": "^0.1.2",
     "react-native-web": "^0.11.4",
     "react-navigation": "^3.11.0",
     "react-redux": "^7.1.0",
